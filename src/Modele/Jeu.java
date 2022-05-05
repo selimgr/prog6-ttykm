@@ -1,6 +1,6 @@
 package Modele;
 
-import Global.Observable;
+import Patterns.Observable;
 
 public class Jeu extends Observable {
     Niveau niveau;

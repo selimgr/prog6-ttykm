@@ -1,4 +1,4 @@
-package Global;
+package Patterns;
 
 import java.util.List;
 

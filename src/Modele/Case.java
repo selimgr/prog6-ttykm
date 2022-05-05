@@ -6,7 +6,10 @@ public class Case {
     int contenu;
 
     Case(int l, int c, TypePlateau plateau, int contenu) {
-
+        this.l = l;
+        this.c = c;
+        this.plateau = plateau;
+        this.contenu = contenu;
     }
 
     public int ligne() {

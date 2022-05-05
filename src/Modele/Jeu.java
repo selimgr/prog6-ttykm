@@ -12,11 +12,16 @@ public class Jeu extends Observable {
     boolean partieTerminee;
 
     public Jeu() {
-
+        this.niveau = new Niveau();
+        
     }
 
     public void nouveauJoueur(String nom, TypeJoueur type) {
-
+        if(this.joueur1 == null){
+            this.joueur1 = new Joueur(nom, type) ;
+        }else{
+            this.joueur2 = new Joueur(nom,type);
+        }
     }
 
     public void nouvellePartie() {

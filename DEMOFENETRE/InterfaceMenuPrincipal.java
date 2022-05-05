@@ -13,7 +13,6 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
     public InterfaceMenuPrincipal() {
         this.windowTitle = "Menu principal";
         this.windowSize = new Dimension(400, 500);
-
         // ----------
 
         this.setLayout(new GridLayout(4, 1));
@@ -55,6 +54,7 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
     @Override
     public void onSwitch() {
         super.onSwitch();
+
         i++;
         fg.frame.setTitle("Menu principal | i:" + i);
     }

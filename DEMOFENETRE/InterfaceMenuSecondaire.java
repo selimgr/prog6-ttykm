@@ -13,7 +13,6 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
     public InterfaceMenuSecondaire() {
         this.windowTitle = "Menu secondaire";
         this.windowSize = new Dimension(500, 400);
-
         // ----------
 
         this.setLayout(new GridLayout(3, 1));

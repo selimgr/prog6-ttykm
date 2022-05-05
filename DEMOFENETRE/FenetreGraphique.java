@@ -1,63 +1,94 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 class FenetreGraphique implements Runnable {
 
     JFrame frame;
-    InterfaceGraphique[] menus;
-    int actualIndex = 0;
+    Dictionary<String, InterfaceGraphique> interfacesGraphique;
+    String currentWindow;
 
+    public FenetreGraphique(String defaultWindow) {
+        this.interfacesGraphique = new Hashtable<>();
+        this.currentWindow = defaultWindow;
+    }
+    
     /**
-     * Créer la fenêtre et initialise celle-ci avec la première InterfaceGraphique de `menus`
+     * Créer la fenêtre et initialise celle-ci
      */
-    public void demarrer() {
+    public void create() throws Exception {
         this.frame = new JFrame("Jeu");
         this.frame.setSize(new Dimension(400, 400));
         this.frame.setLocationRelativeTo(null);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // --
-        this.menus = new InterfaceGraphique[2];
-        this.menus[0] = new InterfaceMenuPrincipal(this);
-        this.menus[1] = new InterfaceMenuSecondaire(this);
-        // --
-        actualIndex = 0;
-        this.setMenu(actualIndex);
+        if (currentWindow.isEmpty()) throw new Exception("NoWindowSpecified");
+        this.setCurrentWindow(this.currentWindow);
         this.frame.setVisible(true);
     }
 
     /**
      * Échange l'affichage courant avec un nouveau
-     * @param index indice du menu dans le tableau
+     * @param name nom de la fenêtre à afficher
      */
-    public void setMenu(int index) {
-        // TODO: Gérer les erreurs en cas d'index invalide
-        this.menus[index].repaint();
-        this.menus[index].onSwitch();
-        this.frame.setTitle(this.menus[index].windowTitle);
-        this.frame.setContentPane(this.menus[index]);
+    public void setCurrentWindow(String name) {
+        InterfaceGraphique s = this.interfacesGraphique.get(name);
+        if (s.fg == null) s.fg = this;
+
+        this.frame.setTitle(s.windowTitle);
+        this.frame.setSize(s.windowSize);
+
+        s.repaint();
+        s.onSwitch();
+        this.frame.setContentPane(s);
         this.frame.revalidate();
         this.frame.repaint();
-        actualIndex = index;
+        this.currentWindow = name;
     }
 
     /**
-     * Obtient l'affichage d'indice i
-     * @param index indice du menu dans le tableau
+     * Ajoute une fenêtre
+     * @param name nom
+     * @param g interface graphique
      */
-    public InterfaceGraphique getMenu(int index) {
-        return this.menus[index];
+    public void addWindow(String name, InterfaceGraphique g) {
+        this.interfacesGraphique.put(name, g);
+    }
+
+    /**
+     * Retourne la fenêtre souhaitée
+     * @param name nom de la fenêtre
+     * @return InterfaceGraphique
+     */
+    public InterfaceGraphique getWindow(String name) {
+        return this.interfacesGraphique.get(name);
+    }
+
+    /**
+     * Retourne la fenêtre actuelle
+     * @return InterfaceGraphique
+     */
+    public InterfaceGraphique getWindow() {
+        return this.interfacesGraphique.get(currentWindow);
     }
 
     /**
      * Ferme la fenêtre
      */
-    public void fermer() {
+    public void close() {
+        this.frame.setVisible(true);
         this.frame.dispose();
     }
 
     @Override
     public void run() {
-        this.demarrer();
+        try {
+            this.create();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

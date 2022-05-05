@@ -9,15 +9,16 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
     JLabel texte;
     JTextField nomInput;
     int i = 0;
-    public InterfaceMenuPrincipal(FenetreGraphique fg) {
-        super(fg);
+
+    public InterfaceMenuPrincipal() {
         this.windowTitle = "Menu principal";
+        this.windowSize = new Dimension(400, 500);
 
         // ----------
 
         this.setLayout(new GridLayout(4, 1));
         // --
-        this.texte = new JLabel("Menu principal - i = " + i);
+        this.texte = new JLabel("Menu principal");
         this.texte.setHorizontalAlignment(SwingConstants.CENTER);
         // --
         this.nomInput = createText("Votre nom?");
@@ -28,14 +29,10 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
 
-                // Incrémentation du compteur
-                i ++;
-                texte.setText("Menu principal - i = " + i);
-
                 // Changement de la variable "nom" dans le menu secondaire
-                InterfaceMenuSecondaire s = (InterfaceMenuSecondaire)fg.getMenu(1);
+                InterfaceMenuSecondaire s = (InterfaceMenuSecondaire)fg.getWindow("secondaire");
                 s.nom = nomInput.getText();
-                fg.setMenu(1); // switch
+                fg.setCurrentWindow("secondaire"); // switch
             }
         });
         // --
@@ -44,7 +41,7 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                fg.fermer();
+                fg.close();
             }
         });
 
@@ -53,5 +50,12 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
         this.add(nomInput);
         this.add(menuSuivant);
         this.add(exit);
+    }
+
+    @Override
+    public void onSwitch() {
+        super.onSwitch();
+        i++;
+        fg.frame.setTitle("Menu principal | i:" + i);
     }
 }

@@ -5,19 +5,17 @@ import java.awt.event.*;
 abstract class InterfaceGraphique extends JPanel {
 
     String windowTitle;
+    Dimension windowSize;
     FenetreGraphique fg;
 
-    public InterfaceGraphique(FenetreGraphique fg) {
-        this.fg = fg;
-        fg.frame.setTitle(windowTitle);
+    public InterfaceGraphique() {
+        this.windowSize = new Dimension(500, 500);
     }
 
     /**
      * Évènement onSwitch(): appelé lors d'un changement de menu
      */
-    public void onSwitch() {
-
-    }
+    public void onSwitch() { }
 
     /**
      * Créer un bouton

@@ -10,9 +10,9 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
     JLabel afficheNom;
     String nom = "";
 
-    public InterfaceMenuSecondaire(FenetreGraphique fg) {
-        super(fg);
+    public InterfaceMenuSecondaire() {
         this.windowTitle = "Menu secondaire";
+        this.windowSize = new Dimension(500, 400);
 
         // ----------
 
@@ -26,7 +26,7 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 texte.setText("Vous avez déjà cliqué sur le bouton Retour menu!!");
-                fg.setMenu(0); // switch
+                fg.setCurrentWindow("principal"); // switch
             }
         });
         // --

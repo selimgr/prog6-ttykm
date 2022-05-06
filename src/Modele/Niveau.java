@@ -1,6 +1,5 @@
 package Modele;
 
-import java.util.ArrayList;
 
 public class Niveau {
     final static int NOMBRE_PLATEAUX = 3;

@@ -6,7 +6,7 @@ public class Jeu extends Observable {
     Niveau niveau;
     Joueur joueur1;
     Joueur joueur2;
-    int joueurActuel;
+    int joueurActuel; // 1 ou 2 ?
     Tour tourActuel;
     boolean partieCommencee;
     boolean partieTerminee;
@@ -54,23 +54,31 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueur1() {
-        return null;
+        return this.joueur1;
     }
 
     public Joueur joueur2() {
-        return null;
+        return this.joueur2;
     }
 
     public Joueur joueurActuel() {
-        return null;
+        if(joueurActuel==1){
+            return joueur1;
+        }else{
+            return joueur2;
+        }
     }
 
     public Joueur joueurSuivant() {
-        return null;
+        if(joueurActuel()==joueur1){
+            return joueur2;
+        }else{
+            return joueur1;
+        }
     }
 
     public boolean partieTerminee() {
-        return false;
+        return partieTerminee;
     }
 
     public Joueur vainqueur() {

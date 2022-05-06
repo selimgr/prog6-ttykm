@@ -31,6 +31,10 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
                 // Changement de la variable "nom" dans le menu secondaire
                 InterfaceMenuSecondaire s = (InterfaceMenuSecondaire) getFg().getWindow("secondaire");
                 s.nom = nomInput.getText();
+                /*
+                 Alternative possible:
+                 ((InterfaceMenuSecondaire) getFg().getWindow("secondaire")).nom = nomInput.getText();
+                */
                 getFg().setCurrentWindow("secondaire"); // switch
             }
         });

@@ -1,5 +1,7 @@
 package Vue;
 
+import Vue.Ecrans.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,6 +11,7 @@ public class InterfaceGraphique implements Runnable {
     GraphicsEnvironment env;
     GraphicsDevice device;
     boolean maximized;
+    int width, height;
 
     InterfaceGraphique(CollecteurEvenements c) {
         collecteur = c;
@@ -28,24 +31,16 @@ public class InterfaceGraphique implements Runnable {
         device = env.getDefaultScreenDevice();
         DisplayMode dm = device.getDisplayMode();
 
-        int width = dm.getWidth() / 2;
-        int height = dm.getHeight() / 2;
+        width = dm.getWidth() / 2;
+        height = dm.getHeight() / 2;
 
         CardLayout layout = new CardLayout();
-
-        EcouteurInterface listener = new EcouteurInterface(frame);
+        frame.setLayout(layout);
 
         // Ajout de nos composants de dessin dans la fenetre
-        EcranDemarrage demarrage = new EcranDemarrage(listener);
-        EcranMenuPrincipal menuPrincipal = new EcranMenuPrincipal(listener);
-
-        demarrage.setSize(width, height);
-        menuPrincipal.setSize(width, height);
-//        ecranJeu.setSize(width, height);
-
-        frame.setLayout(layout);
-        frame.getContentPane().add(demarrage, "Démarrage");
-        frame.getContentPane().add(menuPrincipal, "Menu Principal");
+        Ecran.nouvelEcran(Ecran.DEMARRAGE, frame);
+        Ecran.nouvelEcran(Ecran.MENU_PRINCIPAL, frame);
+        Ecran.nouvelEcran(Ecran.NOUVELLE_PARTIE, frame);
 
         // Ajout des listeners
 

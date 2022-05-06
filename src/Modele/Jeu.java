@@ -49,7 +49,7 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueur1() {
-        return null;
+        return joueur1;
     }
 
     public Joueur joueur2() {

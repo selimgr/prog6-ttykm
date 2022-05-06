@@ -61,6 +61,7 @@ abstract class InterfaceGraphique extends JPanel {
     // Setters
     public void setWindowTitle(String windowTitle) {
         this.windowTitle = windowTitle;
+        if(getFg() != null) getFrame().setTitle(windowTitle);
     }
 
     public void setWindowSize(Dimension windowSize) {
@@ -87,4 +88,5 @@ abstract class InterfaceGraphique extends JPanel {
     public JFrame getFrame() {
         return fg.frame;
     }
+
 }

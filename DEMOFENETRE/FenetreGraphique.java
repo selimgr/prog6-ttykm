@@ -73,6 +73,14 @@ class FenetreGraphique implements Runnable {
     }
 
     /**
+     * Réinitialise une fenêtre
+     * @param name nom de la fenêtre
+     */
+    public void resetWindow(String name) throws Exception {
+        this.interfacesGraphique.put(name, this.interfacesGraphique.get(name).getClass().getDeclaredConstructor().newInstance());
+    }
+
+    /**
      * Ferme la fenêtre
      */
     public void close() {

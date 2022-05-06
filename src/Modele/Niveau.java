@@ -1,10 +1,16 @@
 package Modele;
 
+import java.util.ArrayList;
+
 public class Niveau {
     final static int NOMBRE_PLATEAUX = 3;
     Plateau[] plateaux;
 
     Niveau() {
+        this.plateaux = new Plateau[NOMBRE_PLATEAUX];
+        for(int i = 0 ; i < NOMBRE_PLATEAUX ; i++){
+            this.plateaux[i] = new Plateau();
+        }
 
     }
 

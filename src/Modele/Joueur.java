@@ -62,6 +62,15 @@ public class Joueur {
     }
 
     void nouvelleVictoire() {
-        this.nombreVictoires++;
+        try{
+            if( this.nombreVictoires >= 0 ){
+                this.nombreVictoires++;
+            }else{
+                System.out.println("nombreVictoires invalide");
+            }
+        }catch(Exception e){
+            System.out.println("nombreVictoires invalide" + e);
+        }
+
     }
 }

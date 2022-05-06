@@ -11,9 +11,14 @@ public class Jeu extends Observable {
     boolean partieCommencee;
     boolean partieTerminee;
 
-    public Jeu() {
+    public Jeu( String nom1, TypeJoueur t1, String nom2, TypeJoueur t2, int joueurActuel, Tour tourActuel) {
         this.niveau = new Niveau();
-        
+        this.joueurActuel = joueurActuel;
+        this.tourActuel = tourActuel;
+        this.partieCommencee = true;
+        this.partieTerminee = false;
+        nouveauJoueur( nom1 , t1 );
+        nouveauJoueur( nom2 , t2 );
     }
 
     public void nouveauJoueur(String nom, TypeJoueur type) {

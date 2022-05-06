@@ -1,9 +1,10 @@
-import javax.swing.*;
+import Controleur.ControleurMediateur;
+import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
 
 public class Main {
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new FenetreGraphique());
+        CollecteurEvenements controleur = new ControleurMediateur();
+        InterfaceGraphique.demarrer(controleur);
     }
-
 }

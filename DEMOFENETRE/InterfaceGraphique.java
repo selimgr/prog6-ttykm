@@ -73,6 +73,8 @@ abstract class InterfaceGraphique extends JPanel {
         this.fg = fg;
     }
 
+    // Getters
+
     public String getWindowTitle() {
         return windowTitle;
     }

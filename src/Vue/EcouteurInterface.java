@@ -22,6 +22,10 @@ public class EcouteurInterface implements ActionListener {
                 frame.setTitle("Menu Principal");
                 break;
             case "Jeu":
+
+                EcranJeu ecranJeu = new EcranJeu(this, "Tu viens de " + frame.getTitle());
+                frame.getContentPane().add(ecranJeu, "Jeu");
+
                 layout.show(frame.getContentPane(), "Jeu");
                 frame.setTitle("Jeu");
                 break;

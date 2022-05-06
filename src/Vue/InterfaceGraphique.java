@@ -38,16 +38,14 @@ public class InterfaceGraphique implements Runnable {
         // Ajout de nos composants de dessin dans la fenetre
         EcranDemarrage demarrage = new EcranDemarrage(listener);
         EcranMenuPrincipal menuPrincipal = new EcranMenuPrincipal(listener);
-        EcranJeu ecranJeu = new EcranJeu(listener);
 
         demarrage.setSize(width, height);
         menuPrincipal.setSize(width, height);
-        ecranJeu.setSize(width, height);
+//        ecranJeu.setSize(width, height);
 
         frame.setLayout(layout);
         frame.getContentPane().add(demarrage, "Démarrage");
         frame.getContentPane().add(menuPrincipal, "Menu Principal");
-        frame.getContentPane().add(ecranJeu, "Jeu");
 
         // Ajout des listeners
 

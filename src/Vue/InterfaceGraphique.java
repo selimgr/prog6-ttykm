@@ -32,6 +32,7 @@ public class InterfaceGraphique implements Runnable {
         int height = dm.getHeight() / 2;
 
         CardLayout layout = new CardLayout();
+
         EcouteurInterface listener = new EcouteurInterface(frame);
 
         // Ajout de nos composants de dessin dans la fenetre
@@ -43,15 +44,10 @@ public class InterfaceGraphique implements Runnable {
         menuPrincipal.setSize(width, height);
         ecranJeu.setSize(width, height);
 
-        demarrage.setVisible(true);
-        menuPrincipal.setVisible(true);
-        ecranJeu.setVisible(true);
-
-        layout.addLayoutComponent(demarrage, "Démarrage");
-        layout.addLayoutComponent(menuPrincipal, "Menu Principal");
-        layout.addLayoutComponent(ecranJeu, "Jeu");
-
-        frame.getContentPane().setLayout(layout);
+        frame.setLayout(layout);
+        frame.getContentPane().add(demarrage, "Démarrage");
+        frame.getContentPane().add(menuPrincipal, "Menu Principal");
+        frame.getContentPane().add(ecranJeu, "Jeu");
 
         // Ajout des listeners
 

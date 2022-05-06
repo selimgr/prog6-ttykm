@@ -18,11 +18,11 @@ public class EcouteurInterface implements ActionListener {
 
         switch (e.getActionCommand()) {
             case "Menu Principal":
-                layout.show(frame, "Menu Principal");
+                layout.show(frame.getContentPane(), "Menu Principal");
                 frame.setTitle("Menu Principal");
                 break;
             case "Jeu":
-                layout.show(frame, "Jeu");
+                layout.show(frame.getContentPane(), "Jeu");
                 frame.setTitle("Jeu");
                 break;
             default:

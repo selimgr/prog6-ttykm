@@ -25,6 +25,10 @@ public class Configuration {
         return null;
     }
 
+    public void ecrirePropriete(String nomPropriete, String valeurPropriete) {
+
+    }
+
     public Logger logger() {
         return null;
     }

@@ -11,8 +11,8 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
     int i = 0;
 
     public InterfaceMenuPrincipal() {
-        this.windowTitle = "Menu principal";
-        this.windowSize = new Dimension(400, 500);
+        setWindowTitle("Menu principal");
+        setWindowSize(new Dimension(400, 500));
         // ----------
 
         this.setLayout(new GridLayout(4, 1));
@@ -29,9 +29,9 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
                 super.mousePressed(e);
 
                 // Changement de la variable "nom" dans le menu secondaire
-                InterfaceMenuSecondaire s = (InterfaceMenuSecondaire)fg.getWindow("secondaire");
+                InterfaceMenuSecondaire s = (InterfaceMenuSecondaire) getFg().getWindow("secondaire");
                 s.nom = nomInput.getText();
-                fg.setCurrentWindow("secondaire"); // switch
+                getFg().setCurrentWindow("secondaire"); // switch
             }
         });
         // --
@@ -40,7 +40,7 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                fg.close();
+                getFg().close();
             }
         });
 
@@ -56,6 +56,6 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
         super.onSwitch();
 
         i++;
-        fg.frame.setTitle("Menu principal | i:" + i);
+        getFrame().setTitle("Menu principal | i:" + i);
     }
 }

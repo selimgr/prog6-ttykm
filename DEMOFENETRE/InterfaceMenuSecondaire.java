@@ -11,8 +11,8 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
     String nom = "";
 
     public InterfaceMenuSecondaire() {
-        this.windowTitle = "Menu secondaire";
-        this.windowSize = new Dimension(500, 400);
+        setWindowTitle("Menu secondaire");
+        setWindowSize(new Dimension(500, 400));
         // ----------
 
         this.setLayout(new GridLayout(3, 1));
@@ -25,7 +25,7 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 texte.setText("Vous avez déjà cliqué sur le bouton Retour menu!!");
-                fg.setCurrentWindow("principal"); // switch
+                getFg().setCurrentWindow("principal"); // switch
             }
         });
         // --

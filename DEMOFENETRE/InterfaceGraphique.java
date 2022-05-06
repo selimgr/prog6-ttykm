@@ -4,9 +4,9 @@ import java.awt.event.*;
 
 abstract class InterfaceGraphique extends JPanel {
 
-    String windowTitle;
-    Dimension windowSize;
-    FenetreGraphique fg;
+    private String windowTitle;
+    private Dimension windowSize;
+    private FenetreGraphique fg;
 
     public InterfaceGraphique() {
         this.windowSize = new Dimension(500, 500);
@@ -24,7 +24,7 @@ abstract class InterfaceGraphique extends JPanel {
      */
     public JButton createButton(String s) {
         JButton button = new JButton(s);
-        button.setAlignmentX(Component.TOP_ALIGNMENT);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setPreferredSize(new Dimension(120, 50));
         button.setFocusable(false);
         return button;
@@ -58,4 +58,32 @@ abstract class InterfaceGraphique extends JPanel {
         return T1;
     }
 
+    // Setters
+    public void setWindowTitle(String windowTitle) {
+        this.windowTitle = windowTitle;
+    }
+
+    public void setWindowSize(Dimension windowSize) {
+        this.windowSize = windowSize;
+    }
+
+    public void setFg(FenetreGraphique fg) {
+        this.fg = fg;
+    }
+
+    public String getWindowTitle() {
+        return windowTitle;
+    }
+
+    public Dimension getWindowSize() {
+        return windowSize;
+    }
+
+    public FenetreGraphique getFg() {
+        return fg;
+    }
+
+    public JFrame getFrame() {
+        return fg.frame;
+    }
 }

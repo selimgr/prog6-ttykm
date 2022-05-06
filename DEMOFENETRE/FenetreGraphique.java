@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -65,14 +63,6 @@ class FenetreGraphique implements Runnable {
      */
     public InterfaceGraphique getWindow(String name) {
         return this.interfacesGraphique.get(name);
-    }
-
-    /**
-     * Retourne la fenêtre actuelle
-     * @return InterfaceGraphique
-     */
-    public InterfaceGraphique getWindow() {
-        return this.interfacesGraphique.get(currentWindow);
     }
 
     /**

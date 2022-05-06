@@ -8,10 +8,12 @@ class FenetreGraphique implements Runnable {
     JFrame frame;
     Dictionary<String, InterfaceGraphique> interfacesGraphique;
     String currentWindow;
+    String defaultWindow;
 
     public FenetreGraphique(String defaultWindow) {
         this.interfacesGraphique = new Hashtable<>();
-        this.currentWindow = defaultWindow;
+        this.defaultWindow = defaultWindow;
+        this.currentWindow = "";
     }
     
     /**
@@ -23,8 +25,8 @@ class FenetreGraphique implements Runnable {
         this.frame.setLocationRelativeTo(null);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        if (currentWindow.isEmpty()) throw new Exception("NoWindowSpecified");
-        this.setCurrentWindow(this.currentWindow);
+        if (defaultWindow.isEmpty()) throw new Exception("NoWindowSpecified");
+        this.setCurrentWindow(this.defaultWindow);
         this.frame.setVisible(true);
     }
 
@@ -45,10 +47,10 @@ class FenetreGraphique implements Runnable {
         this.frame.setSize(s.getWindowSize());
 
         s.repaint();
-        s.onSwitch();
         this.frame.setContentPane(s);
         this.frame.revalidate();
         this.frame.repaint();
+        if (!this.currentWindow.isEmpty()) s.onSwitch();
         this.currentWindow = name;
     }
 

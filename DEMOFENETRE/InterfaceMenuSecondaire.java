@@ -43,5 +43,6 @@ public class InterfaceMenuSecondaire extends InterfaceGraphique {
     public void onSwitch() {
         super.onSwitch();
         this.afficheNom.setText("Votre nom est: " + nom);
+        JOptionPane.showMessageDialog(null, "Votre nom est: " + nom);
     }
 }

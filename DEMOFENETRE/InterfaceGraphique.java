@@ -65,6 +65,7 @@ abstract class InterfaceGraphique extends JPanel {
 
     public void setWindowSize(Dimension windowSize) {
         this.windowSize = windowSize;
+        if (getFg() != null) getFrame().setSize(windowSize);
     }
 
     public void setFg(FenetreGraphique fg) {

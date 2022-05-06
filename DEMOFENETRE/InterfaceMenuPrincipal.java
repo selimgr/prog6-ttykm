@@ -56,6 +56,6 @@ public class InterfaceMenuPrincipal extends InterfaceGraphique {
         super.onSwitch();
 
         i++;
-        getFrame().setTitle("Menu principal | i:" + i);
+        setWindowTitle("Menu principal | i:" + i);
     }
 }

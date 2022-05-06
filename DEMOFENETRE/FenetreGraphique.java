@@ -34,6 +34,11 @@ class FenetreGraphique implements Runnable {
      */
     public void setCurrentWindow(String name) {
         InterfaceGraphique s = this.interfacesGraphique.get(name);
+        if (s == null) {
+            System.err.println("NoSuchWindow: " + name);
+            this.close();
+            return;
+        }
         if (s.getFg() == null) s.setFg(this);
 
         this.frame.setTitle(s.getWindowTitle());

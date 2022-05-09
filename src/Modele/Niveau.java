@@ -1,6 +1,6 @@
 package Modele;
 
-public class Niveau {
+class Niveau {
     final static int NOMBRE_PLATEAUX = 3;
     Plateau[] plateaux;
 

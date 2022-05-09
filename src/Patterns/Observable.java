@@ -1,13 +1,13 @@
 package Patterns;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Observable {
     List<Observateur> observateurs;
 
     public Observable() {
-        observateurs = new LinkedList<>();
+        observateurs = new ArrayList<>(1);
     }
 
     public void ajouteObservateur(Observateur o) {

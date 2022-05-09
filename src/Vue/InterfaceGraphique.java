@@ -1,20 +1,17 @@
 package Vue;
 
-import Vue.Ecrans.*;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class InterfaceGraphique implements Runnable {
-    CollecteurEvenements collecteur;
+    CollecteurEvenements controleur;
     JFrame frame;
     GraphicsEnvironment env;
     GraphicsDevice device;
     boolean maximized;
-    int width, height;
 
     InterfaceGraphique(CollecteurEvenements c) {
-        collecteur = c;
+        controleur = c;
     }
 
     public static void demarrer(CollecteurEvenements c) {
@@ -31,16 +28,21 @@ public class InterfaceGraphique implements Runnable {
         device = env.getDefaultScreenDevice();
         DisplayMode dm = device.getDisplayMode();
 
-        width = dm.getWidth() / 2;
-        height = dm.getHeight() / 2;
+        int width = dm.getWidth() / 2;
+        int height = dm.getHeight() / 2;
 
-        CardLayout layout = new CardLayout();
-        frame.setLayout(layout);
+        // On fixe le layout du conteneur contenant les différentes vues de la fenêtre
+        frame.getContentPane().setLayout(new CardLayout());
 
-        // Ajout de nos composants de dessin dans la fenetre
-        Ecran.nouvelEcran(Ecran.DEMARRAGE, frame);
-        Ecran.nouvelEcran(Ecran.MENU_PRINCIPAL, frame);
-        Ecran.nouvelEcran(Ecran.NOUVELLE_PARTIE, frame);
+        // Ajout de nos vues dans la fenêtre
+        Vues vues = new Vues(frame);
+
+        ajouterVue(Vues.DEMARRAGE);
+        ajouterVue(Vues.MENU_PRINCIPAL);
+        ajouterVue(Vues.MENU_NOUVELLE_PARTIE);
+        ajouterVue(Vues.JEU);
+
+        controleur.fixerMediateurVues(vues);
 
         // Ajout des listeners
 
@@ -66,5 +68,27 @@ public class InterfaceGraphique implements Runnable {
             device.setFullScreenWindow(frame);
             maximized = true;
         }
+    }
+
+    void ajouterVue(String nom) {
+        JPanel vue;
+
+        switch (nom) {
+            case Vues.DEMARRAGE:
+                vue = new VueDemarrage(controleur);
+                break;
+            case Vues.MENU_PRINCIPAL:
+                vue = new VueMenuPrincipal(controleur);
+                break;
+            case Vues.MENU_NOUVELLE_PARTIE:
+                vue = new VueMenuNouvellePartie(controleur);
+                break;
+            case Vues.JEU:
+                frame.getContentPane().add(new VueJeu(controleur), Vues.JEU);
+                return;
+            default:
+                throw new IllegalArgumentException("Nom de vue incorrect : " + nom);
+        }
+        frame.getContentPane().add(vue, nom);
     }
 }

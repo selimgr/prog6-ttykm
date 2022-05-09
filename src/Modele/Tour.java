@@ -1,6 +1,6 @@
 package Modele;
 
-public class Tour {
+class Tour {
     Niveau niveau;
     Case pion;
     Coup coup1, coup2;

@@ -1,16 +1,12 @@
 package Vue;
 
-import Vue.Ecrans.EcranJeu;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class AdaptateurSouris extends MouseAdapter {
-    EcranJeu ecranJeu;
+class AdaptateurSouris extends MouseAdapter {
     CollecteurEvenements controleur;
 
-    AdaptateurSouris(EcranJeu ecran, CollecteurEvenements c) {
-        ecranJeu = ecran;
+    AdaptateurSouris(CollecteurEvenements c) {
         controleur = c;
     }
 

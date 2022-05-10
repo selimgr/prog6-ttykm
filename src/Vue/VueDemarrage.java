@@ -9,7 +9,7 @@ class VueDemarrage extends JPanel {
         setBackground(Color.BLUE);
 
         JButton boutonMenu = new JButton("Menu Principal");
-        boutonMenu.addActionListener(new EcouteurMenuPrincipal(c));
+        boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());
         add(boutonMenu);
     }
 }

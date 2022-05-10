@@ -3,9 +3,9 @@ package Vue;
 import javax.swing.*;
 
 class VueJeu extends JPanel {
-    CollecteurEvenements controleur;
+    VueNiveau vueNiveau;
 
     VueJeu(CollecteurEvenements c) {
-        controleur = c;
+        vueNiveau = new VueNiveau(c);
     }
 }

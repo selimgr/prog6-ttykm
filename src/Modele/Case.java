@@ -1,15 +1,25 @@
 package Modele;
 
 public class Case {
-    int l, c;
-    TypePlateau plateau;
-    int contenu;
+    private final int l, c;
+    private final int typePlateau;
+    private final int typeCase;
+    final static int VIDE = 0;
+    final static int BLANC = 1;
+    final static int NOIR = 2;
+    final static int GRAINE = 4;
+    final static int ARBUSTE = 8;
+    final static int ARBRE = 16;
+    final static int ARBRE_COUCHE = 32;
 
-    Case(int l, int c, TypePlateau plateau, int contenu) {
+    Case(int l, int c, int typePlateau, int typeCase) {
         this.l = l;
         this.c = c;
-        this.plateau = plateau;
-        this.contenu = contenu;
+        if (typePlateau == Plateau.PASSE || typePlateau == Plateau.PRESENT || typePlateau == Plateau.FUTUR) {
+            this.typePlateau = typePlateau;
+        } else {
+            throw new IllegalArgumentException("Impossible de créer la case : type de plateau " + typePlateau + " inconnu");
+        }
     }
 
     public int ligne() {
@@ -20,16 +30,12 @@ public class Case {
         return c;
     }
 
-    public TypePlateau plateau() {
-        return plateau;
+    public int typePlateau() {
+        return typePlateau;
     }
 
-    public int contenu() {
-        return contenu;
+    @Override
+    public String toString() {
+        return "(" + l + ", " + c + ")";
     }
-
-    void setContenu(int cont) {
-        contenu = cont;
-    }
-
 }

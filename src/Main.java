@@ -1,13 +1,10 @@
-import javax.swing.*;
+import Controleur.ControleurMediateur;
+import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
 
 public class Main {
-
     public static void main(String[] args) {
-        FenetreGraphique fg = new FenetreGraphique("principal");
-        fg.addWindow("principal", new InterfaceMenuPrincipal());
-        fg.addWindow("secondaire", new InterfaceMenuSecondaire());
-
-        SwingUtilities.invokeLater(fg);
+        CollecteurEvenements controleur = new ControleurMediateur();
+        InterfaceGraphique.demarrer(controleur);
     }
-
 }

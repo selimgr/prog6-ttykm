@@ -1,24 +1,19 @@
 package Modele;
 
-import Global.Observable;
+import Patterns.Observable;
 
 public class Jeu extends Observable {
     Niveau niveau;
     Joueur joueur1;
     Joueur joueur2;
-    int joueurActuel; // 1 ou 2 ?
+    int joueurActuel;
     Tour tourActuel;
     boolean partieCommencee;
     boolean partieTerminee;
 
-    public Jeu( String nom1, TypeJoueur t1, String nom2, TypeJoueur t2, int joueurActuel, Tour tourActuel) {
+    public Jeu() {
         this.niveau = new Niveau();
-        this.joueurActuel = joueurActuel;
-        this.tourActuel = tourActuel;
-        this.partieCommencee = true;
-        this.partieTerminee = false;
-        nouveauJoueur( nom1 , t1 );
-        nouveauJoueur( nom2 , t2 );
+        
     }
 
     public void nouveauJoueur(String nom, TypeJoueur type) {
@@ -54,31 +49,23 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueur1() {
-        return this.joueur1;
+        return joueur1;
     }
 
     public Joueur joueur2() {
-        return this.joueur2;
+        return null;
     }
 
     public Joueur joueurActuel() {
-        if(joueurActuel==1){
-            return joueur1;
-        }else{
-            return joueur2;
-        }
+        return null;
     }
 
     public Joueur joueurSuivant() {
-        if(joueurActuel()==joueur1){
-            return joueur2;
-        }else{
-            return joueur1;
-        }
+        return null;
     }
 
     public boolean partieTerminee() {
-        return partieTerminee;
+        return false;
     }
 
     public Joueur vainqueur() {

@@ -1,26 +1,23 @@
 package Modele;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Coup {
-    List<Mouvement> mouvements;
-    Niveau niveau;
-
+    Deque<Mouvement> mouvements;
 
     Coup(Case depart, Case arrivee) {
-        this.mouvements = new ArrayList<>();
-        this.mouvements.add(new Mouvement(depart, arrivee));
+        mouvements = new ArrayDeque<>();
+        mouvements.push(new Mouvement(depart, arrivee));
     }
 
     void ajouterMouvement(Case depart, Case arrivee) {
-        mouvements.add(new Mouvement(depart , arrivee));
+        mouvements.push(new Mouvement(depart , arrivee));
     }
 
+    void listeMouvementsCoup() {
 
-    void listeMouvementsCoup(){
-
-        }
+    }
 }
 
 

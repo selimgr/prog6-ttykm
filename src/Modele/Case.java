@@ -27,4 +27,9 @@ public class Case {
     public int contenu() {
         return contenu;
     }
+
+    void setContenu(int cont) {
+        contenu = cont;
+    }
+
 }

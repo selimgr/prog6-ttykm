@@ -1,5 +1,8 @@
 package Modele;
 
+/**
+ * Gérer ordres des mouvements
+ */
 public class Mouvement {
     Case depart, arrivee;
 
@@ -15,4 +18,7 @@ public class Mouvement {
     Case arrivee() {
         return arrivee;
     }
+
+
+
 }

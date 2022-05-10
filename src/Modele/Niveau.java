@@ -85,7 +85,7 @@ class Niveau {
         if (pDep.estCaseCorrecte(depart.ligne(),depart.colonne()) && pArr.estCaseCorrecte(depart.ligne(),depart.colonne())){
             // Déplacements dans le même plateau
             if (arrivee.plateau().ordinal() == depart.plateau().ordinal()){
-                return pDep.verifierDeplacementCorrect(depart.ligne() + (arrivee.ligne() -depart.ligne()),
+                return pDep.estDeplacementCorrect(depart.ligne() + (arrivee.ligne() -depart.ligne()),
                         depart.colonne() + (arrivee.colonne() -depart.colonne()));
             } else { // Changement de plateau
                 //Passé

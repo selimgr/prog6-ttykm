@@ -58,8 +58,13 @@ public class Niveau {
         return estVide(c) || aGraine(c);
     }
 
-    public boolean estDeplacementCorrect(int dL, int dC) {
-        return Math.abs(dL) + Math.abs(dC) < 2 && dL + dC != 0;
+    public boolean estDeplacementCorrect(Case depart, Case arrivee) {
+        int dL = arrivee.ligne() - depart.ligne();
+        int dC = arrivee.colonne() - depart.colonne();
+        int dPlateau = arrivee.indicePlateau() - depart.indicePlateau();
+
+        return (Math.abs(dL) + Math.abs(dC) < 2 && dL + dC != 0) ||
+               ((dPlateau == -1 || dPlateau == 1) && dL == 0 && dC == 0);
     }
 
     public boolean aMur(int l, int c) {

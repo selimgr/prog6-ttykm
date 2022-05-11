@@ -3,7 +3,7 @@ package Modele;
 import Patterns.Observable;
 
 public class Jeu extends Observable {
-    Niveau niveau;
+    NiveauASupprimer niveau;
     Joueur joueur1;
     Joueur joueur2;
     int joueurActuel;
@@ -12,7 +12,7 @@ public class Jeu extends Observable {
     boolean partieTerminee;
 
     public Jeu() {
-        this.niveau = new Niveau();
+        this.niveau = new NiveauASupprimer();
         
     }
 

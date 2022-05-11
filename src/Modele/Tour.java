@@ -5,8 +5,7 @@ class Tour {
     Case pion;
     Coup coup1, coup2;
 
-    Tour(Case depart, Niveau n) {
-        this.niveau = n;
+    Tour(Case depart) {
         this.pion = depart;
     }
 

@@ -7,11 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 
 class VueNiveau extends JComponent implements Observateur {
-    Jeu jeu;
+    CollecteurEvenements controleur;
 
-    VueNiveau(Jeu j) {
-        jeu = j;
-        jeu.ajouteObservateur(this);
+    VueNiveau(CollecteurEvenements c) {
+        controleur = c;
+        c.jeu().ajouteObservateur(this);
     }
 
     @Override

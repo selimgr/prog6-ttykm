@@ -14,7 +14,7 @@ class VueDemarrage extends JPanel {
         add(texte);
 
         JButton boutonMenu = new JButton("Menu Principal");
-        boutonMenu.addActionListener(new EcouteurMenuPrincipal(c));
+        boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());
         add(boutonMenu);
     }
 }

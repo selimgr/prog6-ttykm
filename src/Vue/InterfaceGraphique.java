@@ -84,8 +84,8 @@ public class InterfaceGraphique implements Runnable {
                 vue = new VueMenuNouvellePartie(controleur);
                 break;
             case Vues.JEU:
-                frame.getContentPane().add(new VueJeu(controleur), Vues.JEU);
-                return;
+                vue = new VueJeu(controleur);
+                break;
             default:
                 throw new IllegalArgumentException("Nom de vue incorrect : " + nom);
         }

@@ -1,7 +1,7 @@
 package Modele;
 
 class Tour {
-    Niveau niveau;
+    NiveauASupprimer niveau;
     Case pion;
     Coup coup1, coup2;
 

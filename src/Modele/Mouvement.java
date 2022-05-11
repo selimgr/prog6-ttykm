@@ -6,7 +6,7 @@ package Modele;
 public class Mouvement {
     Case depart, arrivee;
 
-    Mouvement(Case depart, Case arrivee) {
+    Mouvement(Case depart, Case arrivee, int typeCase) {
         this.depart = depart;
         this.arrivee = arrivee;
     }

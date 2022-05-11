@@ -46,6 +46,9 @@ public class Jeu extends Observable {
             tourActuel.changerTour();
             // TODO : Attendre Vue pour changement de plateau
             //joueurActuel().fixerPlateau();
+            if (partieTerminee(joueurActuel().pions())){
+                // TODO : Gérer la fin de partie;
+            }
             joueurActuel = (joueurActuel+1) %2;
         }
     }
@@ -80,15 +83,48 @@ public class Jeu extends Observable {
         }
     }
 
-    public boolean partieTerminee() {
-        return false;
+    public boolean partieTerminee(TypePion pions) {
+        int[] pla = {0, 0, 0};
+        int i, j, k;
+        i = j = k = 0;
+        switch (pions) {
+            case BLANC:
+                while (i < Plateau.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Plateau.TAILLE && pla[i] <= 0) {
+                        while (k < Plateau.TAILLE && pla[i] <= 0) {
+                            if (niveau.aNoir(new Case(j, k, i))) {//TODO : Modifier pour l'implem finale de case
+                                pla[i] = 1;
+                            }
+                            k++;
+                        }
+                        j++;
+                    }
+                    i++;
+                }
+                break;
+            case NOIR:
+                while (i < Plateau.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Plateau.TAILLE && pla[i] <= 0) {
+                        while (k < Plateau.TAILLE && pla[i] <= 0) {
+                            if (niveau.aBlanc(new Case(j, j, i))) { //TODO : Modifier pour l'implem finale de case
+                                pla[i] = 1;
+                            }
+                            k++;
+                        }
+                        j++;
+                    }
+                    i++;
+                }
+                break;
+        }
+        return (pla[0] + pla[1] + pla[2]) < 2;
     }
 
     public Joueur vainqueur() {
-        return null;
+        return joueurActuel();
     }
 
     private void tourSuivant() {
-
+        //inutile gérer dans tour et jeu.jouerTour;
     }
 }

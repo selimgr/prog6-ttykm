@@ -9,7 +9,9 @@ class VueMenuPrincipal extends JPanel {
         setBackground(Color.BLACK);
 
         JButton nouvellePartie = new JButton("Nouvelle Partie");
-        nouvellePartie.addActionListener((e) -> c.afficherMenuNouvellePartie());
+        nouvellePartie.addActionListener((e) -> {
+            c.afficherMenuNouvellePartie();
+        });
         add(nouvellePartie);
 
         JButton chargerPartie, regles, didacticiel, quitter, parametres;

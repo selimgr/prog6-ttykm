@@ -13,9 +13,20 @@ public class Niveau {
         ajouter(new Case(Plateau.TAILLE - 1, Plateau.TAILLE - 1, Plateau.FUTUR), Piece.NOIR);
     }
 
+    Niveau (Niveau n) { // Utile pour l'IA
+        contenu = new int[Plateau.NOMBRE_PLATEAUX][Plateau.TAILLE][Plateau.TAILLE];
+        for (int i =0; i < Plateau.NOMBRE_PLATEAUX; i++ )
+            for (int j =0; j < Plateau.TAILLE; j++ )
+                for (int k =0; k < Plateau.TAILLE; k++ )
+                    contenu[i][j][k] = n.getPlateau(i)[j][k];
+    }
+
     int contenu(Case c) {
         Objects.requireNonNull(c);
         return contenu[c.indicePlateau()][c.ligne()][c.colonne()];
+    }
+    int[][] getPlateau(int epoque){
+        return contenu[epoque];
     }
 
     boolean aPiece(Case c, Piece p) {

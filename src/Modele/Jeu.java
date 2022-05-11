@@ -3,7 +3,7 @@ package Modele;
 import Patterns.Observable;
 
 public class Jeu extends Observable {
-    NiveauASupprimer niveau;
+    Niveau niveau;
     Joueur joueur1;
     Joueur joueur2;
     int joueurActuel;
@@ -12,7 +12,7 @@ public class Jeu extends Observable {
     boolean partieTerminee;
 
     public Jeu() {
-        this.niveau = new NiveauASupprimer();
+        this.niveau = new Niveau();
         
     }
 
@@ -28,20 +28,26 @@ public class Jeu extends Observable {
 
     }
 
-    public Plateau plateauPasse() {
-        return null;
+    public int[][] plateauPasse() {
+        return niveau.getPlateau(Plateau.PASSE.ordinal());
     }
 
-    public Plateau plateauPresent() {
-        return null;
+    public int[][] plateauPresent() {
+        return niveau.getPlateau(Plateau.PRESENT.ordinal());
     }
 
-    public Plateau plateauFutur() {
-        return null;
+    public int[][] plateauFutur() {
+        return niveau.getPlateau(Plateau.FUTUR.ordinal());
     }
 
-    public void jouerCoup() {
-
+    public void jouerTour(Case depart, Case arrivee) {
+        tourActuel.jouerCoup(depart,arrivee);
+        if (tourActuel.changerJoueur()){
+            tourActuel.changerTour();
+            // TODO : Attendre Vue pour changement de plateau
+            //joueurActuel().fixerPlateau();
+            joueurActuel = (joueurActuel+1) %2;
+        }
     }
 
     public void annulerCoup() {
@@ -53,15 +59,25 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueur2() {
-        return null;
+        return joueur2;
     }
 
     public Joueur joueurActuel() {
-        return null;
+        if (joueurActuel % 2 == 0){
+            return joueur1();
+        }
+        else {
+            return joueur2();
+        }
     }
 
     public Joueur joueurSuivant() {
-        return null;
+        if (joueurActuel % 2 == 0){
+            return joueur2();
+        }
+        else {
+            return joueur1();
+        }
     }
 
     public boolean partieTerminee() {

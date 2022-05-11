@@ -3,7 +3,7 @@ package Modele;
 public class Joueur {
     String nom;
     TypeJoueur type;
-    TypePlateau plateau;
+    int plateau;
     TypePion pions;
     int nombrePionsReserve;
     int nombreVictoires;
@@ -13,7 +13,7 @@ public class Joueur {
         this.type = type;
     }
 
-    void fixerPlateau(TypePlateau plateau) {
+    void fixerPlateau(int plateau) {
         this.plateau = plateau;
     }
 
@@ -33,7 +33,7 @@ public class Joueur {
         return type;
     }
 
-    public TypePlateau plateau() {
+    public int plateau() {
         return plateau;
     }
 

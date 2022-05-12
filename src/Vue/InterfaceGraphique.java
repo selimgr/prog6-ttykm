@@ -57,6 +57,7 @@ public class InterfaceGraphique implements Runnable {
         // On fixe la taille et centre la fenêtre
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
+        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
         frame.setVisible(true);
     }

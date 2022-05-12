@@ -1,20 +1,32 @@
 package Modele;
 
+
+
 public class Joueur {
     String nom;
     TypeJoueur type;
-    int plateau;
+    int plateauFocus; // 0=passé 1=present 2=futur
     TypePion pions;
     int nombrePionsReserve;
     int nombreVictoires;
 
-    Joueur(String nom, TypeJoueur type) {
+
+    Joueur(String nom, TypeJoueur type, TypePion pions, int handicap) {
         this.nom = nom;
         this.type = type;
+
+        fixerPions(pions);
+        if(pions == TypePion.BLANC){
+            fixerPlateauFocus(0); //blanc commence dans le passé
+        }else{
+            fixerPlateauFocus(2); //noir commence dans le futur
+        }
+
+        fixerNombrePionsReserve(handicap);
     }
 
-    void fixerPlateau(int plateau) {
-        this.plateau = plateau;
+    void fixerPlateauFocus(int plateau) {
+        this.plateauFocus = plateau;
     }
 
     void fixerPions(TypePion pions) {
@@ -34,7 +46,7 @@ public class Joueur {
     }
 
     public int plateau() {
-        return plateau;
+        return plateauFocus;
     }
 
     public TypePion pions() {

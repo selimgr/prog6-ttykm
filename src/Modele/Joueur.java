@@ -41,11 +41,11 @@ public class Joueur {
         return pions;
     }
 
-    int nombrePionsReserve() {
+    public int nombrePionsReserve() {
         return nombrePionsReserve;
     }
 
-    int nombreVictoires() {
+    public int nombreVictoires() {
         return nombreVictoires;
     }
 

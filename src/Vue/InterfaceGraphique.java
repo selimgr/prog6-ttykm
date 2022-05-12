@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class InterfaceGraphique implements Runnable {
     CollecteurEvenements controleur;
+    Vues vues;
     JFrame frame;
     GraphicsEnvironment env;
     GraphicsDevice device;
@@ -35,7 +36,7 @@ public class InterfaceGraphique implements Runnable {
         frame.getContentPane().setLayout(new CardLayout());
 
         // Ajout de nos vues dans la fenêtre
-        Vues vues = new Vues(frame);
+        vues = new Vues(frame);
 
         ajouterVue(Vues.DEMARRAGE);
         ajouterVue(Vues.MENU_PRINCIPAL);
@@ -85,6 +86,7 @@ public class InterfaceGraphique implements Runnable {
                 break;
             case Vues.JEU:
                 vue = new VueJeu(controleur);
+                vues.fixerVueJeu((VueJeu) vue);
                 break;
             default:
                 throw new IllegalArgumentException("Nom de vue incorrect : " + nom);

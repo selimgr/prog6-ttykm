@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class Vues {
     JFrame frame;
+    VueJeu vueJeu;
 
     final static String DEMARRAGE = "Démarrage";
     final static String MENU_PRINCIPAL = "Menu Principal";
@@ -13,6 +14,17 @@ public class Vues {
 
     Vues(JFrame f) {
         frame = f;
+    }
+
+    void fixerVueJeu(VueJeu vue) {
+        vueJeu = vue;
+    }
+
+    public void nouvellePartie() {
+        if (vueJeu == null) {
+            throw new IllegalStateException("Impossible de créer une nouvelle partie : vue du jeu non fixée");
+        }
+        vueJeu.nouvellePartie();
     }
 
     private void afficher(String nom) {

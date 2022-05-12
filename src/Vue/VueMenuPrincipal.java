@@ -13,23 +13,6 @@ class VueMenuPrincipal extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
 
-
-//        Image logoImage = new ImageIcon(getClass().getResource("/assets/logo.png")).getImage();
-//        float ratio = 0.35F;
-//        logoImage = logoImage.getScaledInstance((int) (logoImage.getWidth(null) * ratio), (int) (logoImage.getHeight(null) * ratio), Image.SCALE_SMOOTH);
-//        JLabel logo = new JLabel(new ImageIcon(logoImage));
-//        logo.setPreferredSize(new Dimension(logoImage.getWidth(null), logoImage.getHeight(null)));
-//        logo.setAlignmentX(CENTER_ALIGNMENT);
-//        add(logo);
-        Image logo = new ImageIcon(getClass().getResource("/assets/logo.png")).getImage();
-
-        int width = (int) (getWidth() * 0.2);
-        logoHeight = (logo.getHeight(null) * width) / logo.getWidth(null);
-        System.out.println(logoHeight);
-        logoB = Box.createRigidArea(new Dimension(getWidth(), logoHeight));
-        add(logoB);
-
-
         JButton nouvellePartie = new JButton("Nouvelle Partie");
         nouvellePartie.addActionListener((e) -> {
             c.afficherMenuNouvellePartie();
@@ -56,8 +39,9 @@ class VueMenuPrincipal extends JPanel {
         width = (int) (getWidth() * 0.2);
         logoHeight = (logo.getHeight(null) * width) / logo.getWidth(null);
 
-        int x = (int) ((getWidth() - width) / 2);
+        int x = (int) ((getWidth() - width) / 2) - 5;
 
         g.drawImage(logo, x, 20, width, logoHeight, null);
+        setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
     }
 }

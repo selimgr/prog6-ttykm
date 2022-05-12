@@ -14,59 +14,61 @@ public class ControleurMediateur implements CollecteurEvenements {
         vues = v;
     }
 
+    private void verifierMediateurVues(String message) {
+        if (vues == null) {
+            throw new IllegalStateException(message + " : médiateur de vues non fixé");
+        }
+    }
+
+    private void verifierJeu(String message) {
+        if (jeu == null) {
+            throw new IllegalStateException(message + " : aucune partie commencée");
+        }
+    }
+
     @Override
     public void afficherDemarrage() {
-        if (vues == null) {
-            throw new IllegalStateException("Impossible d'afficher le démarrage : médiateur de vues non fixé");
-        }
+        verifierMediateurVues("Impossible d'afficher le démarrage");
         vues.afficherDemarrage();
     }
 
     @Override
     public void afficherMenuPrincipal() {
-        if (vues == null) {
-            throw new IllegalStateException("Impossible d'afficher le menu principal : médiateur de vues non fixé");
-        }
+        verifierMediateurVues("Impossible d'afficher le menu principal");
         vues.afficherMenuPrincipal();
     }
 
     @Override
     public void afficherMenuNouvellePartie() {
-        if (vues == null) {
-            throw new IllegalStateException("Impossible d'afficher le menu nouvelle partie : médiateur de vues non fixé");
-        }
+        verifierMediateurVues("Impossible d'afficher le menu nouvelle partie");
         vues.afficherMenuNouvellePartie();
     }
 
     @Override
     public void afficherJeu() {
-        if (vues == null) {
-            throw new IllegalStateException("Impossible d'afficher le jeu : médiateur de vues non fixé");
-        }
+        verifierMediateurVues("Impossible d'afficher le jeu");
         vues.afficherJeu();
     }
 
     @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, String nomJ2, TypeJoueur typeJ2) {
+        verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1);
         jeu.nouveauJoueur(nomJ2, typeJ2);
         jeu.nouvellePartie();
+        vues.nouvellePartie();
     }
 
     @Override
     public void partieSuivante() {
-        if (jeu == null) {
-            throw new IllegalStateException("Impossible de passer à la partie suivante : aucune partie commencée");
-        }
+        verifierJeu("Impossible de passer à la partie suivante");
         jeu.nouvellePartie();
     }
 
     @Override
     public Jeu jeu() {
-        if (jeu == null) {
-            throw new IllegalStateException("Impossible de renvoyer un jeu : aucun jeu existant");
-        }
+        verifierJeu("Impossible de renvoyer un jeu");
         return jeu;
     }
 

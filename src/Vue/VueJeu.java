@@ -18,6 +18,8 @@ class VueJeu extends JPanel {
     private  JPanel plateaux;
     private  JPanel present;
     private  JPanel top;
+    private CInfoJoueur j1;
+    private CInfoJoueur j2;
 
     VueJeu(CollecteurEvenements c) {
         controleur = c;
@@ -101,12 +103,8 @@ class VueJeu extends JPanel {
         joueur1infos.setOpaque(false);
         joueur1infos.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
 
-        joueur1infos.add(new CInfoJoueur("joueur 1", 2, 0));
-
-//        JLabel joueur1_nom = new JLabel("Joueur 1");
-//        joueur1_nom.setForeground(Color.WHITE);
-//        joueur1infos.add(joueur1_nom);
-
+        j1 = new CInfoJoueur(0);
+        joueur1infos.add(j1);
         //----
         top.add(boutons, BorderLayout.PAGE_START);
         top.add(joueur1infos, BorderLayout.CENTER);
@@ -127,11 +125,8 @@ class VueJeu extends JPanel {
         joueur2infos.setLayout(new FlowLayout(FlowLayout.LEFT));
         joueur2infos.setOpaque(false);
 
-        joueur2infos.add(new CInfoJoueur("j2", 4, 1));
-//        JLabel joueur2_nom = new JLabel("Joueur 2");
-//        joueur2_nom.setForeground(Color.WHITE);
-//
-//        joueur2infos.add(joueur2_nom);
+        j2 = new CInfoJoueur(1);
+        joueur2infos.add(j2);
         // -
         JPanel controles = new JPanel();
         controles.setLayout(new FlowLayout(FlowLayout.RIGHT, -6, 0));
@@ -154,5 +149,12 @@ class VueJeu extends JPanel {
     void nouvellePartie() {
         vueNiveau = new VueNiveau(controleur);
         controleur.jeu().ajouteObservateur(vueNiveau);
+
+//        j1 = new CInfoJoueur(controleur.jeu().joueur1().nom(), 4, 0);
+        j1.setName(controleur.jeu().joueur1().nom());
+        j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
+        j2.setName(controleur.jeu().joueur2().nom());
+        j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
+
     }
 }

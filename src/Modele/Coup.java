@@ -5,16 +5,26 @@ import java.util.Deque;
 import java.util.Iterator;
 
 public class Coup {
-    Plateau plateau;
-    Deque<Etat> etats;
+    private final Plateau plateau;
+    private final Joueur joueur;
+    private Deque<Etat> etats;
 
-    Coup(Plateau p) {
+    Coup(Plateau p, Joueur j) {
         plateau = p;
+        joueur = j;
         etats = new ArrayDeque<>();
     }
 
-    void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
+    private void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
         etats.push(new Etat(l, c, e, contenuAvant, contenuApres));
+    }
+
+    void ajouterPion() {
+        joueur.ajouterPionReserve();
+    }
+
+    void supprimerPion() {
+        joueur.enleverPionReserve();
     }
 
     void ajout(int l, int c, Epoque e, Piece p) {
@@ -34,19 +44,20 @@ public class Coup {
             if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuAvant()) {
                 throw new IllegalStateException("Etat du plateau incorrect");
             }
-            plateau.modifierCase(q.ligne(),q.colonne(),q.epoque(),q.contenuApres());
+            plateau.fixerCase(q.ligne(),q.colonne(),q.epoque(),q.contenuApres());
         }
     }
 
     public void annuler() {
         Iterator<Etat> it = etats.descendingIterator();
 
-        while (it.hasNext()){
+        while (it.hasNext()) {
             Etat q = it.next();
 
             if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuApres()) {
                 throw new IllegalStateException("Etat du plateau incorrect");
             }
-            plateau.modifierCase(q.ligne(),q.colonne(),q.epoque(),q.contenuAvant());
+            plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuAvant());
         }
+    }
 }

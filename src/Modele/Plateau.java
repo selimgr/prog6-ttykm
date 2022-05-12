@@ -71,6 +71,10 @@ public class Plateau {
         return Math.abs(dL) + Math.abs(dC) < 2 && dL + dC != 0 && dEpoque == 0;
     }
 
+    public boolean estChangementPlateauCorrect(int dL, int dC,int dEpoque) {
+        return (dEpoque == 1 || dEpoque == -1) && dL == 0 && dC == 0;
+    }
+
     public boolean aObstacleMortel(int l, int c, Epoque e, int dL, int dC) {
         if (!estDeplacementCorrect(dL, dC, 0)) {
             throw new IllegalArgumentException("Déplacement incorrect : " + dL + ", " + dC);
@@ -168,6 +172,20 @@ public class Plateau {
         return d;
     }
 
+    ChangementPlateau creerChangementPlateau(int l, int c, Epoque eDepart, Epoque eArrivee) {
+        ChangementPlateau cP = new ChangementPlateau(this);
+        int dEpoque = eDepart.indice() - eArrivee.indice();
+        if (estOccupable(l, c, eArrivee) && !estChangementPlateauCorrect(0, 0, dEpoque)){
+            return null;
+        }
+        Piece pion = Piece.depuisValeur(contenu(l, c, eDepart));
+        cP.ajout(l,c,eArrivee, pion);
+        if (dEpoque == 1) {
+            cP.suppression(l, c, eDepart, pion);
+        }
+        return cP;
+    }
+
     void jouerCoup(Coup c) {
         c.jouer();
     }
@@ -189,6 +207,10 @@ public class Plateau {
         contenu[e.indice()][l][c] = ajout(l, c, e, p);
     }
 
+    void modifierCase(int l, int c, Epoque e, int contenu){
+        this.contenu[l][c][e.indice()] = contenu;
+    }
+
     int suppression(int l, int c, Epoque e, Piece p) {
         if (!aPiece(l, c, e, p)) {
             throw new IllegalStateException(
@@ -204,11 +226,13 @@ public class Plateau {
 
     // casesJouables(int l, int c)
 
-    Plateau copie(Plateau n) { // Utile pour l'IA
-        contenu = new int[Epoque.NOMBRE_PLATEAUX][Epoque.TAILLE][Epoque.TAILLE];
-        for (int i = 0; i < Epoque.NOMBRE_PLATEAUX; i++ )
-            for (int j = 0; j < Epoque.TAILLE; j++ )
-                for (int k = 0; k < Epoque.TAILLE; k++ )
-                    contenu[i][j][k] = n.getPlateau(i)[j][k];
+    //TODO : Modifier la méthode en copie.
+    public Plateau copie(Plateau n) { // Utile pour l'IA
+        Plateau retour = new Plateau();
+        for (int i = 0; i < Epoque.NOMBRE; i++ )
+            for (int j = 0; j < TAILLE; j++ )
+                for (int k = 0; k < TAILLE; k++ )
+                    contenu[j][k][i] = n.contenu(j,k,Epoque.depuisIndice(i));
+        return retour;
     }
 }

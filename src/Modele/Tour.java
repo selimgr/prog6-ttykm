@@ -1,12 +1,12 @@
 package Modele;
 
 class Tour {
-    Plateau niveau;
+    Plateau plateau;
     Case pion;
     int nbCoups;
 
-    Tour(Plateau niv) {
-        niveau = niv;
+    Tour(Plateau pla) {
+        plateau = pla;
         nbCoups =0;
     }
 
@@ -18,10 +18,18 @@ class Tour {
         }
     }*/
 
-    void jouerCoup(Case depart, Case arrivee){
-        if (niveau.estJouable(depart,arrivee)){
-            niveau.jouerCoup(depart, arrivee);
-            nbCoups++;
+    void jouerCoup(int lDepart,int cDepart,int lArrivee, int cArrivee, Epoque eDep, Epoque eArr){
+        Coup c = plateau.creerChangementPlateau(lDepart,cDepart,eDep,eArr);
+        if ( c != null) {
+            plateau.jouerCoup(c);
+            nbCoups ++;
+        }
+        else {
+            c = plateau.creerDeplacement(lDepart,cDepart,lArrivee,cArrivee,eDep);
+            if ( c != null) {
+                plateau.jouerCoup(c);
+                nbCoups ++;
+            }
         }
     }
     boolean changerJoueur(){

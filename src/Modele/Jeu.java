@@ -3,7 +3,7 @@ package Modele;
 import Patterns.Observable;
 
 public class Jeu extends Observable {
-    Niveau niveau;
+    Plateau niveau;
     Joueur joueur1;
     Joueur joueur2;
     int joueurActuel;
@@ -12,7 +12,7 @@ public class Jeu extends Observable {
     boolean partieTerminee;
 
     public Jeu() {
-        this.niveau = new Niveau();
+        this.niveau = new Plateau();
         
     }
 
@@ -29,15 +29,15 @@ public class Jeu extends Observable {
     }
 
     public int[][] plateauPasse() {
-        return niveau.getPlateau(Plateau.PASSE.ordinal());
+        return niveau.getPlateau(Epoque.PASSE.ordinal());
     }
 
     public int[][] plateauPresent() {
-        return niveau.getPlateau(Plateau.PRESENT.ordinal());
+        return niveau.getPlateau(Epoque.PRESENT.ordinal());
     }
 
     public int[][] plateauFutur() {
-        return niveau.getPlateau(Plateau.FUTUR.ordinal());
+        return niveau.getPlateau(Epoque.FUTUR.ordinal());
     }
 
     public void jouerTour(Case depart, Case arrivee) {
@@ -89,9 +89,9 @@ public class Jeu extends Observable {
         i = j = k = 0;
         switch (pions) {
             case BLANC:
-                while (i < Plateau.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
-                    while (j < Plateau.TAILLE && pla[i] <= 0) {
-                        while (k < Plateau.TAILLE && pla[i] <= 0) {
+                while (i < Epoque.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Epoque.TAILLE && pla[i] <= 0) {
+                        while (k < Epoque.TAILLE && pla[i] <= 0) {
                             if (niveau.aNoir(new Case(j, k, i))) {//TODO : Modifier pour l'implem finale de case
                                 pla[i] = 1;
                             }
@@ -103,9 +103,9 @@ public class Jeu extends Observable {
                 }
                 break;
             case NOIR:
-                while (i < Plateau.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
-                    while (j < Plateau.TAILLE && pla[i] <= 0) {
-                        while (k < Plateau.TAILLE && pla[i] <= 0) {
+                while (i < Epoque.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Epoque.TAILLE && pla[i] <= 0) {
+                        while (k < Epoque.TAILLE && pla[i] <= 0) {
                             if (niveau.aBlanc(new Case(j, j, i))) { //TODO : Modifier pour l'implem finale de case
                                 pla[i] = 1;
                             }

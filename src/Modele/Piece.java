@@ -20,6 +20,25 @@ enum Piece {
         return valeur;
     }
 
+    static Piece depuisValeur(int valeur) {
+        switch (valeur) {
+            case 1:
+                return BLANC;
+            case 2:
+                return NOIR;
+            case 4:
+                return GRAINE;
+            case 8:
+                return ARBUSTE;
+            case 16:
+                return ARBRE;
+            case 32:
+                return ARBRE_COUCHE;
+            default:
+                throw new IllegalArgumentException("Aucune pièce correspondant à cette valeur");
+        }
+    }
+
     @Override
     public String toString() {
         return nom;

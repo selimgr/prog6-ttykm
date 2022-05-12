@@ -3,21 +3,20 @@ package Modele;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class Coup {
-    Deque<Mouvement> mouvements;
+public abstract class Coup {
+    Plateau plateau;
+    Deque<Etat> etats;
 
-    Coup(Case depart, Case arrivee) {
-        mouvements = new ArrayDeque<>();
-        mouvements.push(new Mouvement(depart, arrivee));
+    Coup(Plateau p) {
+        plateau = p;
+        etats = new ArrayDeque<>();
     }
 
-    void ajouterMouvement(Case depart, Case arrivee) {
-        mouvements.push(new Mouvement(depart , arrivee));
+    void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
+        etats.push(new Etat(l, c, e, contenuAvant, contenuApres));
     }
 
-    void listeMouvementsCoup() {
+    public void jouer();
 
-    }
+    public void annuler();
 }
-
-

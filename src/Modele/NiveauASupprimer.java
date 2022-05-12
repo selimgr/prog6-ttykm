@@ -2,13 +2,13 @@ package Modele;
 
 class NiveauASupprimer {
     static final int NOMBRE_PLATEAUX = 3;
-    Plateau[] plateaux;
+    Epoque[] plateaux;
 
     NiveauASupprimer() {
-        plateaux = new Plateau[NOMBRE_PLATEAUX];
+        plateaux = new Epoque[NOMBRE_PLATEAUX];
 
         for (int i = 0; i < NOMBRE_PLATEAUX; i++) {
-            plateaux[i] = new Plateau();
+            plateaux[i] = new Epoque();
         }
     }
 
@@ -20,7 +20,7 @@ class NiveauASupprimer {
 
     }
 
-    Plateau plateau(int typePlateau) {
+    Epoque plateau(int typePlateau) {
         return plateaux[typePlateau];
     }
 
@@ -167,8 +167,8 @@ class NiveauASupprimer {
             int dC = arrivee.colonne() - depart.colonne();
             pousser(coup, depart, dL, dC);
 
-            Plateau p = plateau(depart.typePlateau());
-            int pieceDepart = p.contenu(depart.ligne(), depart.colonne()) & (Plateau.BLANC | Plateau.NOIR);
+            Epoque p = plateau(depart.typePlateau());
+            int pieceDepart = p.contenu(depart.ligne(), depart.colonne()) & (Epoque.BLANC | Epoque.NOIR);
 
             p.supprimer(depart.ligne(), depart.colonne(), pieceDepart);
             p.ajouter(arrivee.ligne(), arrivee.colonne(), pieceDepart);
@@ -178,8 +178,8 @@ class NiveauASupprimer {
 
     private void pousser(Coup coup, Case depart, int dL, int dC) { // pion poussé, non pousseur
         Case arrivee = new Case(depart.ligne() + dL, depart.colonne() + dC, depart.typePlateau());
-        Plateau p = plateau(depart.typePlateau());
-        int pieceDepart = p.contenu(depart.ligne(), depart.colonne()) & (Plateau.BLANC | Plateau.NOIR);
+        Epoque p = plateau(depart.typePlateau());
+        int pieceDepart = p.contenu(depart.ligne(), depart.colonne()) & (Epoque.BLANC | Epoque.NOIR);
 
         if (aObstacleMortel(arrivee)) { // TODO: vérifier les règles
             p.supprimer(depart.ligne(), depart.colonne(), pieceDepart);

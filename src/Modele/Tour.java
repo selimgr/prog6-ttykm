@@ -1,11 +1,11 @@
 package Modele;
 
 class Tour {
-    Niveau niveau;
+    Plateau niveau;
     Case pion;
     int nbCoups;
 
-    Tour(Niveau niv) {
+    Tour(Plateau niv) {
         niveau = niv;
         nbCoups =0;
     }

@@ -84,7 +84,7 @@ class VueJeu extends JPanel {
         fond.setLayout(new GridLayout(2, 0));
 
         // DESSIN DE LA PARTIE DU HAUT (bouton menu + info joueur 1)
-        top.setBackground(new Color(40, 40, 40));
+        top.setBackground(new Color(23, 23, 23));
         top.setLayout(new BorderLayout());
 
         //--
@@ -113,7 +113,7 @@ class VueJeu extends JPanel {
 
         //-----
         // DESSIN DE LA PARTIE DU BAS (boutons + infos joueur 2)
-        bottom.setBackground(new Color(55, 55, 55));
+        bottom.setBackground(new Color(254, 125, 97));
         bottom.setLayout(new BorderLayout());
         bottom.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 

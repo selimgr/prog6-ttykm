@@ -7,7 +7,6 @@ import java.awt.event.ComponentEvent;
 
 class VueMenuPrincipal extends JPanel {
 
-    Component logoB;
     int logoHeight;
     Image t;
     Image logo;

@@ -30,7 +30,7 @@ public class InterfaceGraphique implements Runnable {
         DisplayMode dm = device.getDisplayMode();
 
         int width = dm.getWidth() / 2;
-        int height = dm.getHeight() / 2;
+        int height = dm.getHeight() / 2 + 80;
 
         // On fixe le layout du conteneur contenant les différentes vues de la fenêtre
         frame.getContentPane().setLayout(new CardLayout());
@@ -57,7 +57,6 @@ public class InterfaceGraphique implements Runnable {
         // On fixe la taille et centre la fenêtre
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
-        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
         frame.setVisible(true);
     }

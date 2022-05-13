@@ -28,18 +28,6 @@ public class Jeu extends Observable {
 
     }
 
-    public int[][] plateauPasse() {
-        return niveau.getPlateau(Epoque.PASSE.ordinal());
-    }
-
-    public int[][] plateauPresent() {
-        return niveau.getPlateau(Epoque.PRESENT.ordinal());
-    }
-
-    public int[][] plateauFutur() {
-        return niveau.getPlateau(Epoque.FUTUR.ordinal());
-    }
-
     public void jouerTour(Case depart, Case arrivee) {
         tourActuel.jouerCoup(depart,arrivee);
         if (tourActuel.changerJoueur()){
@@ -89,9 +77,9 @@ public class Jeu extends Observable {
         i = j = k = 0;
         switch (pions) {
             case BLANC:
-                while (i < Epoque.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
-                    while (j < Epoque.TAILLE && pla[i] <= 0) {
-                        while (k < Epoque.TAILLE && pla[i] <= 0) {
+                while (i < Epoque.NOMBRE && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Plateau.TAILLE && pla[i] <= 0) {
+                        while (k < Plateau.TAILLE && pla[i] <= 0) {
                             if (niveau.aNoir(new Case(j, k, i))) {//TODO : Modifier pour l'implem finale de case
                                 pla[i] = 1;
                             }
@@ -103,9 +91,9 @@ public class Jeu extends Observable {
                 }
                 break;
             case NOIR:
-                while (i < Epoque.NOMBRE_PLATEAUX && (pla[0] + pla[1] + pla[2]) < 2) {
-                    while (j < Epoque.TAILLE && pla[i] <= 0) {
-                        while (k < Epoque.TAILLE && pla[i] <= 0) {
+                while (i < Epoque.NOMBRE && (pla[0] + pla[1] + pla[2]) < 2) {
+                    while (j < Plateau.TAILLE && pla[i] <= 0) {
+                        while (k < Plateau.TAILLE && pla[i] <= 0) {
                             if (niveau.aBlanc(new Case(j, j, i))) { //TODO : Modifier pour l'implem finale de case
                                 pla[i] = 1;
                             }

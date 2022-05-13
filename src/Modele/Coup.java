@@ -35,6 +35,24 @@ public class Coup {
         ajouterEtat(l, c, e, plateau.contenu(l, c, e), plateau.suppression(l, c, e, p));
     }
 
+    void subNbPionPlateau(int contenuAvant, int contenuApres,Epoque e, Piece p){
+        if ((contenuAvant & p.valeur()) > 0 && (contenuApres & p.valeur()) == 0){
+            plateau.subPionPlateau(p, e);
+        }
+    }
+
+    void addNbPionPlateau(int contenuAvant, int contenuApres,Epoque e, Piece p){
+        if ((contenuApres & p.valeur()) > 0 && (contenuAvant & p.valeur()) == 0){
+            plateau.addPionPlateau(p, e);
+        }
+    }
+    void gestionPionJoueurPlateau(Etat q){
+        subNbPionPlateau(q.contenuAvant(), q.contenuApres(),q.epoque(), Piece.BLANC);
+        addNbPionPlateau(q.contenuAvant(), q.contenuApres(),q.epoque(), Piece.BLANC);
+        subNbPionPlateau(q.contenuAvant(), q.contenuApres(),q.epoque(), Piece.NOIR);
+        addNbPionPlateau(q.contenuAvant(), q.contenuApres(),q.epoque(), Piece.NOIR);
+    }
+
     public void jouer() {
         Iterator<Etat> it = etats.iterator();
 
@@ -45,6 +63,7 @@ public class Coup {
                 throw new IllegalStateException("Etat du plateau incorrect");
             }
             plateau.fixerCase(q.ligne(),q.colonne(),q.epoque(),q.contenuApres());
+            gestionPionJoueurPlateau(q);
         }
     }
 

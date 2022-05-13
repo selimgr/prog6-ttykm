@@ -2,14 +2,50 @@ package Modele;
 
 public class Plateau {
     private int[][][] contenu;
+    private int[] nbBlancParPlateau;
+    private int[] nbNoirParPlateau;
     public static final int TAILLE = 4;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
+        nbBlancParPlateau = new int[]{1, 1, 1};
+        nbNoirParPlateau = new int[]{1, 1, 1};
 
         // ajout des pions dans les coins
         ajouter(0, 0, Epoque.PASSE, Piece.BLANC);
         ajouter(TAILLE - 1, TAILLE - 1, Epoque.FUTUR, Piece.NOIR);
+    }
+
+    public int nbPionPlateau(TypePion pion, Epoque e){
+        switch (pion) {
+            case BLANC:
+                return nbBlancParPlateau[e.indice()];
+            case NOIR:
+                return nbNoirParPlateau[e.indice()];
+        }
+        throw new IllegalArgumentException("Type de Pion inconnu");
+    }
+
+    public void addPionPlateau(Piece pion, Epoque e){
+        switch (pion) {
+            case BLANC:
+                nbBlancParPlateau[e.indice()]++;
+            case NOIR:
+                nbNoirParPlateau[e.indice()]++;
+            default:
+                throw new IllegalArgumentException("Mauvaise pièces en paramètres");
+        }
+    }
+
+    public void subPionPlateau(Piece pion, Epoque e){
+        switch (pion) {
+            case BLANC:
+                nbBlancParPlateau[e.indice()]--;
+            case NOIR:
+                nbNoirParPlateau[e.indice()]--;
+            default:
+                throw new IllegalArgumentException("Mauvaise pièces en paramètres");
+        }
     }
 
     public boolean aMur(int l, int c) {

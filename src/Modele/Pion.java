@@ -1,6 +1,6 @@
 package Modele;
 
-public enum TypePion {
+public enum Pion {
     BLANC,
     NOIR
 }

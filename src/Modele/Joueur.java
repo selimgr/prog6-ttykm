@@ -3,15 +3,31 @@ package Modele;
 public class Joueur {
     private final String nom;
     private TypeJoueur type;
-    private int plateau;
-    private TypePion pions;
+    private Epoque focus;
+    private Pion pions;
     private int nombrePionsReserve;
     private int nombreVictoires;
 
     Joueur(String nom, TypeJoueur type) {
         this.nom = nom;
         this.type = type;
-        nombrePionsReserve = 4;
+    }
+
+    void initialiserJoueur(Pion p, int handicap) {
+        pions = p;
+
+        //blanc commence dans le passé
+        if (p == Pion.BLANC) {
+            fixerFocus(Epoque.PASSE);
+        }
+        //noir commence dans le futur
+        else {
+            fixerFocus(Epoque.FUTUR);
+        }
+        if (handicap < 0 || handicap > 3) {
+            throw new IllegalStateException("Handicap " + handicap + " incorrect");
+        }
+        nombrePionsReserve = 4 - handicap;
     }
 
     public String nom() {
@@ -22,23 +38,19 @@ public class Joueur {
         return type;
     }
 
-    public int plateau() {
-        return plateau;
+    public Epoque focus() {
+        return focus;
     }
 
-    void fixerPlateau(int plateau) {
-        this.plateau = plateau;
+    void fixerFocus(Epoque e) {
+        focus = e;
     }
 
-    public TypePion pions() {
+    public Pion pions() {
         return pions;
     }
 
-    void fixerPions(TypePion pions) {
-        this.pions = pions;
-    }
-
-    int nombrePionsReserve() {
+    public int nombrePionsReserve() {
         return nombrePionsReserve;
     }
 
@@ -50,7 +62,7 @@ public class Joueur {
         nombrePionsReserve--;
     }
 
-    int nombreVictoires() {
+    public int nombreVictoires() {
         return nombreVictoires;
     }
 

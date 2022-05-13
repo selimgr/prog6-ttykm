@@ -2,6 +2,7 @@ package Controleur;
 
 import Modele.Jeu;
 import Modele.TypeJoueur;
+import Modele.TypePion;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
 
@@ -51,11 +52,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, String nomJ2, TypeJoueur typeJ2) {
+    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, TypePion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, TypePion pionsJ2, int handicapJ2) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
-        jeu.nouveauJoueur(nomJ1, typeJ1);
-        jeu.nouveauJoueur(nomJ2, typeJ2);
+        jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
+        jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
         jeu.nouvellePartie();
         vues.nouvellePartie();
     }

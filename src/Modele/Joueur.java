@@ -1,33 +1,40 @@
 package Modele;
 
-public class Joueur {
-    private final String nom;
-    private TypeJoueur type;
-    private Epoque focus;
-    private Pion pions;
-    private int nombrePionsReserve;
-    private int nombreVictoires;
 
-    Joueur(String nom, TypeJoueur type) {
+
+public class Joueur {
+    String nom;
+    TypeJoueur type;
+    int plateauFocus; // 0=passé 1=present 2=futur
+    TypePion pions;
+    int nombrePionsReserve;
+    int nombreVictoires;
+
+
+    Joueur(String nom, TypeJoueur type, TypePion pions, int handicap) {
         this.nom = nom;
         this.type = type;
+
+        fixerPions(pions);
+        if(pions == TypePion.BLANC){
+            fixerPlateauFocus(0); //blanc commence dans le passé
+        }else{
+            fixerPlateauFocus(2); //noir commence dans le futur
+        }
+
+        fixerNombrePionsReserve(handicap);
     }
 
-    void initialiserJoueur(Pion p, int handicap) {
-        pions = p;
+    void fixerPlateauFocus(int plateau) {
+        this.plateauFocus = plateau;
+    }
 
-        //blanc commence dans le passé
-        if (p == Pion.BLANC) {
-            fixerFocus(Epoque.PASSE);
-        }
-        //noir commence dans le futur
-        else {
-            fixerFocus(Epoque.FUTUR);
-        }
-        if (handicap < 0 || handicap > 3) {
-            throw new IllegalStateException("Handicap " + handicap + " incorrect");
-        }
-        nombrePionsReserve = 4 - handicap;
+    void fixerPions(TypePion pions) {
+        this.pions = pions;
+    }
+
+    void fixerNombrePionsReserve(int nombrePionsReserve) {
+        this.nombrePionsReserve = nombrePionsReserve;
     }
 
     public String nom() {
@@ -38,39 +45,44 @@ public class Joueur {
         return type;
     }
 
-    public Epoque focus() {
-        return focus;
+    public int plateau() {
+        return plateauFocus;
     }
 
-    void fixerFocus(Epoque e) {
-        focus = e;
-    }
-
-    public Pion pions() {
+    public TypePion pions() {
         return pions;
     }
 
-    public int nombrePionsReserve() {
+    int nombrePionsReserve() {
         return nombrePionsReserve;
     }
 
-    void ajouterPionReserve() {
-        nombrePionsReserve++;
-    }
-
-    void enleverPionReserve() {
-        nombrePionsReserve--;
-    }
-
-    public int nombreVictoires() {
+    int nombreVictoires() {
         return nombreVictoires;
     }
 
-    void ajouterVictoire() {
-        nombreVictoires++;
+    void enleverPionReserve() {
+        try{
+            if(nombrePionsReserve > 0 ){
+                nombrePionsReserve--;
+            }else{
+                System.out.println("Tentative d'enlever un pion ; plus de pions dispo!"); //log message d'erreur?
+            }
+        }catch(Exception e){
+            System.out.println("nombre de pions invalides ! " + e);
+        }
     }
 
-    void enleverVictoire() {
-        nombreVictoires--;
+    void nouvelleVictoire() {
+        try{
+            if( this.nombreVictoires >= 0 ){
+                this.nombreVictoires++;
+            }else{
+                System.out.println("nombreVictoires invalide");
+            }
+        }catch(Exception e){
+            System.out.println("nombreVictoires invalide" + e);
+        }
+
     }
 }

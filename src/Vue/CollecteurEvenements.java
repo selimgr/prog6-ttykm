@@ -2,6 +2,7 @@ package Vue;
 
 import Modele.Jeu;
 import Modele.TypeJoueur;
+import Modele.TypePion;
 
 public interface CollecteurEvenements {
     void fixerMediateurVues(Vues v);
@@ -14,7 +15,7 @@ public interface CollecteurEvenements {
 
     void afficherJeu();
 
-    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, String nomJ2, TypeJoueur typeJ2);
+    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, TypePion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, TypePion pionsJ2, int handicapJ2);
 
     void partieSuivante();
 

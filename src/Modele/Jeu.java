@@ -16,11 +16,11 @@ public class Jeu extends Observable {
         
     }
 
-    public void nouveauJoueur(String nom, TypeJoueur type) {
+    public void nouveauJoueur(String nom, TypeJoueur type, TypePion pions, int handicap) {
         if(this.joueur1 == null){
-            this.joueur1 = new Joueur(nom, type) ;
+            this.joueur1 = new Joueur(nom, type, pions , handicap) ;
         }else{
-            this.joueur2 = new Joueur(nom,type);
+            this.joueur2 = new Joueur(nom,type, pions , handicap);
         }
     }
 
@@ -33,8 +33,8 @@ public class Jeu extends Observable {
         if (tourActuel.changerJoueur()){
             tourActuel.changerTour();
             // TODO : Attendre Vue pour changement de plateau
-            //joueurActuel().fixerPlateau();
-            if (partieTerminee(joueurActuel().pions())){
+            //joueurActuel().fixerPlateauFocus();
+            if(partieTerminee(joueurActuel().pions())){
                 // TODO : Gérer la fin de partie;
             }
             joueurActuel = (joueurActuel+1) %2;

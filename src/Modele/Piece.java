@@ -6,7 +6,10 @@ enum Piece {
     GRAINE("Graine", 4),
     ARBUSTE("Arbuste", 8),
     ARBRE("Arbre", 16),
-    ARBRE_COUCHE("Arbre couché", 32);
+    ARBRE_COUCHE_HAUT("Arbre couché vers le haut", 32),
+    ARBRE_COUCHE_DROITE("Arbre couché vers la droite", 64),
+    ARBRE_COUCHE_BAS("Arbre couché vers le bas", 128),
+    ARBRE_COUCHE_GAUCHE("Arbre couché vers la gauche", 256);
 
     private final String nom;
     private final int valeur;
@@ -33,7 +36,13 @@ enum Piece {
             case 16:
                 return ARBRE;
             case 32:
-                return ARBRE_COUCHE;
+                return ARBRE_COUCHE_HAUT;
+            case 64:
+                return ARBRE_COUCHE_DROITE;
+            case 128:
+                return ARBRE_COUCHE_BAS;
+            case 256:
+                return ARBRE_COUCHE_GAUCHE;
             default:
                 throw new IllegalArgumentException("Aucune pièce correspondant à cette valeur");
         }

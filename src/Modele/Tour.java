@@ -1,45 +1,51 @@
 package Modele;
 
+import java.util.NoSuchElementException;
+
 class Tour {
-    Plateau plateau;
+    Coup coup1, coup2;
     Case pion;
-    int nbCoups;
 
-    Tour(Plateau pla) {
-        plateau = pla;
-        nbCoups =0;
+    boolean estVide() {
+        return coup1 == null && coup2 == null;
     }
 
-   /* void nouveauCoup(Case nouvelleCase) {
-        if(coup1 == null){
-            coup1 = new Coup( pion , nouvelleCase);
-        }else{
-            coup2 = new Coup( pion , nouvelleCase);
-        }
-    }*/
+    boolean estTermine() {
+        return coup1 != null && coup2 != null;
+    }
 
-    void jouerCoup(int lDepart,int cDepart,int lArrivee, int cArrivee, Epoque eDep, Epoque eArr){
-        Coup c = plateau.creerChangementPlateau(lDepart,cDepart,eDep,eArr);
-        if ( c != null) {
-            plateau.jouerCoup(c);
-            nbCoups ++;
+    boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
+        if (estTermine()) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
         }
-        else {
-            c = plateau.creerDeplacement(lDepart,cDepart,lArrivee,cArrivee,eDep);
-            if ( c != null) {
-                plateau.jouerCoup(c);
-                nbCoups ++;
+        if (!coup.creer(destL, destC, eDest)) {
+            return false;
+        }
+        if (estVide()) {
+            pion = new Case(coup.lignePion(), coup.colonnePion(), coup.epoquePion());
+            coup1 = coup;
+        } else {
+            if (pion.ligne() != coup.lignePion() || pion.colonne() != coup.colonnePion() ||
+                    pion.epoque() != coup.epoquePion()) {
+                return false;
             }
+            coup2 = coup;
+        }
+        coup.jouer();
+        return true;
+    }
+
+    void annulerCoup() {
+        if (estVide()) {
+            throw new NoSuchElementException("Impossible d'annuler un coup : aucun coup joué ce tour");
+        }
+        if (estTermine()) {
+            coup2.annuler();
+            coup2 = null;
+        } else {
+            coup1.annuler();
+            coup1 = null;
+            pion = null;
         }
     }
-    boolean changerJoueur(){
-        return nbCoups>=2;
-    }
-    void changerTour(){
-        nbCoups=0;
-    }
-
-
-
-
 }

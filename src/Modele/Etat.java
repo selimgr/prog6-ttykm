@@ -1,5 +1,7 @@
 package Modele;
 
+// TODO: faire en sorte de donner la pièce qui change au lieu du contenu
+
 public class Etat {
     private final int l, c;
     private final Epoque e;

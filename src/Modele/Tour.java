@@ -1,37 +1,51 @@
 package Modele;
 
+import java.util.NoSuchElementException;
+
 class Tour {
-    Niveau niveau;
+    Coup coup1, coup2;
     Case pion;
-    int nbCoups;
 
-    Tour(Niveau niv) {
-        niveau = niv;
-        nbCoups =0;
+    boolean estVide() {
+        return coup1 == null && coup2 == null;
     }
 
-   /* void nouveauCoup(Case nouvelleCase) {
-        if(coup1 == null){
-            coup1 = new Coup( pion , nouvelleCase);
-        }else{
-            coup2 = new Coup( pion , nouvelleCase);
+    boolean estTermine() {
+        return coup1 != null && coup2 != null;
+    }
+
+    boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
+        if (estTermine()) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
         }
-    }*/
+        if (!coup.creer(destL, destC, eDest)) {
+            return false;
+        }
+        if (estVide()) {
+            pion = new Case(coup.lignePion(), coup.colonnePion(), coup.epoquePion());
+            coup1 = coup;
+        } else {
+            if (pion.ligne() != coup.lignePion() || pion.colonne() != coup.colonnePion() ||
+                    pion.epoque() != coup.epoquePion()) {
+                return false;
+            }
+            coup2 = coup;
+        }
+        coup.jouer();
+        return true;
+    }
 
-    void jouerCoup(Case depart, Case arrivee){
-        if (niveau.estJouable(depart,arrivee)){
-            niveau.jouerCoup(depart, arrivee);
-            nbCoups++;
+    void annulerCoup() {
+        if (estVide()) {
+            throw new NoSuchElementException("Impossible d'annuler un coup : aucun coup joué ce tour");
+        }
+        if (estTermine()) {
+            coup2.annuler();
+            coup2 = null;
+        } else {
+            coup1.annuler();
+            coup1 = null;
+            pion = null;
         }
     }
-    boolean changerJoueur(){
-        return nbCoups>=2;
-    }
-    void changerTour(){
-        nbCoups=0;
-    }
-
-
-
-
 }

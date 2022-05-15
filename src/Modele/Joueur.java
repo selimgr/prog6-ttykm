@@ -1,40 +1,36 @@
 package Modele;
 
-
+import java.util.Objects;
 
 public class Joueur {
-    String nom;
-    TypeJoueur type;
-    int plateauFocus; // 0=passé 1=present 2=futur
-    TypePion pions;
-    int nombrePionsReserve;
-    int nombreVictoires;
+    private final String nom;
+    private TypeJoueur type;
+    private Epoque focus;
+    private Pion pions;
+    private int nombrePionsReserve;
+    private int nombreVictoires;
 
-
-    Joueur(String nom, TypeJoueur type, TypePion pions, int handicap) {
+    Joueur(String nom, TypeJoueur type, Pion p, int handicap) {
+        Objects.requireNonNull(nom);
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(p);
         this.nom = nom;
         this.type = type;
+        pions = p;
 
-        fixerPions(pions);
-        if(pions == TypePion.BLANC){
-            fixerPlateauFocus(0); //blanc commence dans le passé
-        }else{
-            fixerPlateauFocus(2); //noir commence dans le futur
+        // blanc commence dans le passé
+        if (pions == Pion.BLANC) {
+            fixerFocus(Epoque.PASSE);
+        }
+        // noir commence dans le futur
+        else {
+            fixerFocus(Epoque.FUTUR);
         }
 
-        fixerNombrePionsReserve(handicap);
-    }
-
-    void fixerPlateauFocus(int plateau) {
-        this.plateauFocus = plateau;
-    }
-
-    void fixerPions(TypePion pions) {
-        this.pions = pions;
-    }
-
-    void fixerNombrePionsReserve(int nombrePionsReserve) {
-        this.nombrePionsReserve = nombrePionsReserve;
+        if (handicap < 0 || handicap > 3) {
+            throw new IllegalStateException("Handicap " + handicap + " incorrect");
+        }
+        nombrePionsReserve = Pion.NOMBRE_RESERVE - handicap;
     }
 
     public String nom() {
@@ -45,11 +41,16 @@ public class Joueur {
         return type;
     }
 
-    public int plateau() {
-        return plateauFocus;
+    public Epoque focus() {
+        return focus;
     }
 
-    public TypePion pions() {
+    void fixerFocus(Epoque e) {
+        Objects.requireNonNull(e);
+        focus = e;
+    }
+
+    public Pion pions() {
         return pions;
     }
 
@@ -57,32 +58,29 @@ public class Joueur {
         return nombrePionsReserve;
     }
 
+    void ajouterPionReserve() {
+        nombrePionsReserve++;
+    }
+
+    void enleverPionReserve() {
+        if (nombrePionsReserve == 0) {
+            throw new IllegalStateException("Impossible d'enlever un pion au joueur : aucune pion en réserve");
+        }
+        nombrePionsReserve--;
+    }
+
     int nombreVictoires() {
         return nombreVictoires;
     }
 
-    void enleverPionReserve() {
-        try{
-            if(nombrePionsReserve > 0 ){
-                nombrePionsReserve--;
-            }else{
-                System.out.println("Tentative d'enlever un pion ; plus de pions dispo!"); //log message d'erreur?
-            }
-        }catch(Exception e){
-            System.out.println("nombre de pions invalides ! " + e);
-        }
+    void ajouterVictoire() {
+        nombreVictoires++;
     }
 
-    void nouvelleVictoire() {
-        try{
-            if( this.nombreVictoires >= 0 ){
-                this.nombreVictoires++;
-            }else{
-                System.out.println("nombreVictoires invalide");
-            }
-        }catch(Exception e){
-            System.out.println("nombreVictoires invalide" + e);
+    void enleverVictoire() {
+        if (nombreVictoires == 0) {
+            throw new IllegalStateException("Impossible d'enlever une victoire au joueur : aucune victoire");
         }
-
+        nombreVictoires--;
     }
 }

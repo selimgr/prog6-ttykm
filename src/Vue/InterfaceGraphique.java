@@ -93,4 +93,9 @@ public class InterfaceGraphique implements Runnable {
         }
         frame.getContentPane().add(vue, nom);
     }
+
+    public void close() {
+        frame.setVisible(true);
+        frame.dispose();
+    }
 }

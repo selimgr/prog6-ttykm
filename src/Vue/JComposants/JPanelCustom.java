@@ -12,11 +12,19 @@ public class JPanelCustom extends JPanel {
         Image plateauPasse = new ImageIcon("/assets/Passé.png").getImage();
         Image plateauPresent = new ImageIcon("/assets/Présent.png").getImage();
         Image plateauFutur = new ImageIcon("/assets/Futur.png").getImage();
-        switch (numero) {
-            case 1 -> current = plateauPasse;
-            case 2 -> current = plateauPresent;
-            case 3 -> current = plateauFutur;
-            default -> System.err.println("Mauvais numéro de boutons");
+        switch(numero) {
+            case 1:
+                current = plateauPasse;
+                break;
+            case 2:
+                current = plateauPresent;
+                break;
+            case 3:
+                current = plateauFutur;
+                break;
+            default:
+                System.err.println("Mauvais numéro de boutons");
+                break;
         }
     }
 

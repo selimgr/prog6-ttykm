@@ -91,7 +91,10 @@ public class ControleurMediateur implements CollecteurEvenements {
         //Appeler affichage des feedforwards
         if (caseSelectionne){
             caseArrivee = new Case(l,c, Epoque.depuisIndice(p));
-            jeu.jouerTour(caseDepart,caseArrivee);
+            // Gérer différent cas ( mouvements, recolte, plantation, ...)
+            jeu.jouerMouvement(caseDepart.ligne(),caseDepart.colonne(),caseDepart.epoque(),
+                    caseArrivee.ligne(),caseArrivee.colonne(),caseArrivee.epoque());
+
             caseSelectionne = false;
         }
         else {

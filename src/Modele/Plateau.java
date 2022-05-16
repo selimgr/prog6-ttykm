@@ -16,7 +16,7 @@ public class Plateau {
         ajouter(TAILLE - 1, TAILLE - 1, Epoque.FUTUR, Piece.NOIR);
     }
 
-    public int nbPionPlateau(TypePion pion, Epoque e){
+    public int nbPionPlateau(Pion pion, Epoque e){
         switch (pion) {
             case BLANC:
                 return nbBlancParPlateau[e.indice()];

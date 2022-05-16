@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Objects;
 
 class VueMenuPrincipal extends JPanel {
 
@@ -18,8 +19,8 @@ class VueMenuPrincipal extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
 
         // Chargement des assets
-        t = new ImageIcon(getClass().getResource("/assets/topbanner.png")).getImage();
-        logo = new ImageIcon(getClass().getResource("/assets/logo.png")).getImage();
+        t = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/topbanner.png"))).getImage();
+        logo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/logo.png"))).getImage();
 
         JButton nouvellePartie = new JButton("Nouvelle Partie");
         nouvellePartie.addActionListener((e) -> {
@@ -31,7 +32,11 @@ class VueMenuPrincipal extends JPanel {
         add(Box.createRigidArea(new Dimension(10, 30)));
         add(new JButton("Paramètres"));
 
-        add(new JButton("Quitter"));
+        JButton quitter = new JButton("Quitter");
+        quitter.addActionListener((e) -> {
+            c.toClose();
+        });
+        add(quitter);
 
         for (Component ca : getComponents()) {
             if (ca.getClass().getName().contains("Button")) {
@@ -48,7 +53,7 @@ class VueMenuPrincipal extends JPanel {
             }
         });
 
-        JButton chargerPartie, regles, didacticiel, quitter, parametres;
+        JButton chargerPartie, regles, didacticiel, parametres;
     }
 
     @Override

@@ -47,4 +47,9 @@ public class Vues {
     public void afficherJeu() {
         afficher(JEU);
     }
+
+    public void close() {
+        frame.setVisible(true);
+        frame.dispose();
+    }
 }

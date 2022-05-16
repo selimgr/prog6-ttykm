@@ -1,34 +1,43 @@
 package Vue;
 
 import Vue.JComposants.CInfoJoueur;
+import Vue.JComposants.JPanelCustom;
 
+import javax.imageio.ImageIO;
 import  javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 class VueJeu extends JPanel {
     CollecteurEvenements controleur;
     VueNiveau vueNiveau;
     private  JPanel bottom;
-    private  JPanel futur;
+    private  JPanelCustom futur;
     private  JLayeredPane jLayeredPane1;
     private  JPanel fond;
     private  JButton menu;
-    private  JPanel passe;
+    private JPanelCustom passe;
     private  JPanel plateaux;
-    private  JPanel present;
+    private  JPanelCustom present;
     private  JPanel top;
     private CInfoJoueur j1;
     private CInfoJoueur j2;
+    private int passeX ;
+    private int passeY ;
+    Image plateauPasse ;
 
     VueJeu(CollecteurEvenements c) {
         controleur = c;
 
         jLayeredPane1 = new JLayeredPane();
         plateaux = new  JPanel();
-        passe = new  JPanel();
-        present = new  JPanel();
-        futur = new  JPanel();
+        passe = new JPanelCustom(1);
+        present = new JPanelCustom(2);
+        futur = new JPanelCustom(3);
         fond = new  JPanel();
         top = new  JPanel();
         menu = new  JButton();
@@ -94,7 +103,7 @@ class VueJeu extends JPanel {
         menu.setBackground(new Color(51, 51, 51));
         menu.setBorder(BorderFactory.createEmptyBorder(12, 12, 1, 1));
         menu.setMargin(new Insets(10, 10, 2, 14));
-        menu.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/assets/white_burger.png")).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
         boutons.add(menu);
 
         //--
@@ -160,7 +169,6 @@ class VueJeu extends JPanel {
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
         j2.setName(controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
-
     }
 
 

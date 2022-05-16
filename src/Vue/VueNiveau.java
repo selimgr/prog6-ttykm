@@ -11,6 +11,7 @@ class VueNiveau extends JComponent implements Observateur {
 
     VueNiveau(CollecteurEvenements c) {
         controleur = c;
+
     }
 
     @Override

@@ -28,9 +28,9 @@ class VueJeu extends JPanel {
 
         jLayeredPane1 = new JLayeredPane();
         plateaux = new  JPanel();
-        passe = new JPanelCustom(1);
-        present = new JPanelCustom(2);
-        futur = new JPanelCustom(3);
+        passe = new JPanelCustom(1,controleur);
+        present = new JPanelCustom(2,controleur);
+        futur = new JPanelCustom(3,controleur);
         fond = new  JPanel();
         top = new  JPanel();
         menu = new  JButton();

@@ -144,6 +144,11 @@ class VueJeu extends JPanel {
         fond.add(bottom);
 
         add(fond);
+
+        // -- Add Listener
+        passe.addMouseListener(new AdaptateurSouris(c, this , "plateauPasse"));
+        present.addMouseListener(new AdaptateurSouris(c, this,"plateauPresent"));
+        futur.addMouseListener(new AdaptateurSouris(c,this,"plateauFutur"));
     }
 
     void nouvellePartie() {
@@ -156,5 +161,10 @@ class VueJeu extends JPanel {
         j2.setName(controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
+    }
+
+
+    public int getTaille(){
+        passe.getHeight();
     }
 }

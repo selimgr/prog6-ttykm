@@ -1,5 +1,7 @@
 package Controleur;
 
+import Modele.Case;
+import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
 import Vue.CollecteurEvenements;
@@ -8,6 +10,9 @@ import Vue.Vues;
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
+    Case caseDepart;
+    Case caseArrivee;
+    Boolean caseSelectionne;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -58,6 +63,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu.nouveauJoueur(nomJ2, typeJ2);
         jeu.nouvellePartie();
         vues.nouvellePartie();
+        caseSelectionne = false;
     }
 
     @Override
@@ -78,8 +84,17 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void clicSouris(int l, int c) {
-
+    public void clicSouris(int l, int c, int p) {
+        //Appeler affichage des feedforwards
+        if (caseSelectionne){
+            caseArrivee = new Case(l,c, Epoque.depuisIndice(p));
+            jeu.jouerTour(caseDepart,caseArrivee);
+            caseSelectionne = false;
+        }
+        else {
+            caseDepart = new Case(l,c, Epoque.depuisIndice(p));
+            caseSelectionne = true;
+        }
     }
 
     @Override

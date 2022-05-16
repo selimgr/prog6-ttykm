@@ -19,7 +19,7 @@ public enum Epoque {
         return indice;
     }
 
-    static Epoque depuisIndice(int indice) {
+    public static Epoque depuisIndice(int indice) {
         switch (indice) {
             case 0:
                 return PASSE;

@@ -22,7 +22,7 @@ public interface CollecteurEvenements {
 
     void toClose();
 
-    void clicSouris(int l, int c);
+    void clicSouris(int l, int c, int p);
 
     void toucheClavier(String touche);
 

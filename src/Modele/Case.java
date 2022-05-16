@@ -4,7 +4,7 @@ public class Case {
     private final int ligne, colonne;
     private final Epoque epoque;
 
-    Case(int ligne, int colonne, Epoque e) {
+    public Case(int ligne, int colonne, Epoque e) {
         if (Math.min(ligne, colonne) < 0 || Math.max(ligne, colonne) >= Plateau.TAILLE) {
             throw new IllegalArgumentException(
                     "Impossible de créer la case (" + ligne + ", " + colonne + ", " + e + ") : case invalide"

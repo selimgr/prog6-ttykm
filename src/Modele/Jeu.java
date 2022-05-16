@@ -32,7 +32,6 @@ public class Jeu extends Observable {
         tourActuel.jouerCoup(depart,arrivee);
         if (tourActuel.changerJoueur()){
             tourActuel.changerTour();
-            // TODO : Attendre Vue pour changement de plateau
             //joueurActuel().fixerPlateau();
             if (partieTerminee(joueurActuel().pions())){
                 // TODO : Gérer la fin de partie;

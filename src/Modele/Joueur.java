@@ -1,5 +1,7 @@
 package Modele;
 
+import java.util.Objects;
+
 public class Joueur {
     private final String nom;
     private TypeJoueur type;
@@ -8,26 +10,27 @@ public class Joueur {
     private int nombrePionsReserve;
     private int nombreVictoires;
 
-    Joueur(String nom, TypeJoueur type) {
+    Joueur(String nom, TypeJoueur type, Pion p, int handicap) {
+        Objects.requireNonNull(nom);
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(p);
         this.nom = nom;
         this.type = type;
-    }
-
-    void initialiserJoueur(Pion p, int handicap) {
         pions = p;
 
-        //blanc commence dans le passé
-        if (p == Pion.BLANC) {
+        // blanc commence dans le passé
+        if (pions == Pion.BLANC) {
             fixerFocus(Epoque.PASSE);
         }
-        //noir commence dans le futur
+        // noir commence dans le futur
         else {
             fixerFocus(Epoque.FUTUR);
         }
+
         if (handicap < 0 || handicap > 3) {
             throw new IllegalStateException("Handicap " + handicap + " incorrect");
         }
-        nombrePionsReserve = 4 - handicap;
+        nombrePionsReserve = Pion.NOMBRE_RESERVE - handicap;
     }
 
     public String nom() {
@@ -43,6 +46,7 @@ public class Joueur {
     }
 
     void fixerFocus(Epoque e) {
+        Objects.requireNonNull(e);
         focus = e;
     }
 
@@ -50,7 +54,7 @@ public class Joueur {
         return pions;
     }
 
-    public int nombrePionsReserve() {
+    int nombrePionsReserve() {
         return nombrePionsReserve;
     }
 
@@ -59,10 +63,13 @@ public class Joueur {
     }
 
     void enleverPionReserve() {
+        if (nombrePionsReserve == 0) {
+            throw new IllegalStateException("Impossible d'enlever un pion au joueur : aucune pion en réserve");
+        }
         nombrePionsReserve--;
     }
 
-    public int nombreVictoires() {
+    int nombreVictoires() {
         return nombreVictoires;
     }
 
@@ -71,6 +78,9 @@ public class Joueur {
     }
 
     void enleverVictoire() {
+        if (nombreVictoires == 0) {
+            throw new IllegalStateException("Impossible d'enlever une victoire au joueur : aucune victoire");
+        }
         nombreVictoires--;
     }
 }

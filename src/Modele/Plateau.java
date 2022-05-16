@@ -4,47 +4,22 @@ public class Plateau {
     private int[][][] contenu;
     private int[] nbBlancParPlateau;
     private int[] nbNoirParPlateau;
+    private int nombrePlateauVideBlanc;
+    private int nombrePlateauVideNoir;
+    private int nombreGrainesReserve;
     public static final int TAILLE = 4;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
-        nbBlancParPlateau = new int[]{1, 1, 1};
-        nbNoirParPlateau = new int[]{1, 1, 1};
+        nbBlancParPlateau = new int[Epoque.NOMBRE];
+        nbNoirParPlateau = new int[Epoque.NOMBRE];
 
         // ajout des pions dans les coins
-        ajouter(0, 0, Epoque.PASSE, Piece.BLANC);
-        ajouter(TAILLE - 1, TAILLE - 1, Epoque.FUTUR, Piece.NOIR);
-    }
-
-    public int nbPionPlateau(Pion pion, Epoque e){
-        switch (pion) {
-            case BLANC:
-                return nbBlancParPlateau[e.indice()];
-            case NOIR:
-                return nbNoirParPlateau[e.indice()];
-        }
-        throw new IllegalArgumentException("Type de Pion inconnu");
-    }
-
-    public void addPionPlateau(Piece pion, Epoque e){
-        switch (pion) {
-            case BLANC:
-                nbBlancParPlateau[e.indice()]++;
-            case NOIR:
-                nbNoirParPlateau[e.indice()]++;
-            default:
-                throw new IllegalArgumentException("Mauvaise pièces en paramètres");
-        }
-    }
-
-    public void subPionPlateau(Piece pion, Epoque e){
-        switch (pion) {
-            case BLANC:
-                nbBlancParPlateau[e.indice()]--;
-            case NOIR:
-                nbNoirParPlateau[e.indice()]--;
-            default:
-                throw new IllegalArgumentException("Mauvaise pièces en paramètres");
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            contenu[i][0][0] = Piece.BLANC.valeur();
+            contenu[i][TAILLE - 1][TAILLE - 1] = Piece.NOIR.valeur();
+            nbBlancParPlateau[i] = 1;
+            nbNoirParPlateau[i] = 1;
         }
     }
 
@@ -96,23 +71,16 @@ public class Plateau {
     }
 
     public boolean aArbreCouche(int l, int c, Epoque e) {
-        return aPiece(l, c, e, Piece.ARBRE_COUCHE);
+        return aPiece(l, c, e, Piece.ARBRE_COUCHE_HAUT) || aPiece(l, c, e, Piece.ARBRE_COUCHE_DROITE) ||
+                aPiece(l, c, e, Piece.ARBRE_COUCHE_BAS) || aPiece(l, c, e, Piece.ARBRE_COUCHE_GAUCHE);
     }
 
     public boolean estOccupable(int l, int c, Epoque e) {
         return estVide(l, c, e) || aGraine(l, c, e);
     }
 
-    public boolean estDeplacementCorrect(int dL, int dC, int dEpoque) {
-        return Math.abs(dL) + Math.abs(dC) < 2 && dL + dC != 0 && dEpoque == 0;
-    }
-
-    public boolean estChangementPlateauCorrect(int dL, int dC,int dEpoque) {
-        return (dEpoque == 1 || dEpoque == -1) && dL == 0 && dC == 0;
-    }
-
     public boolean aObstacleMortel(int l, int c, Epoque e, int dL, int dC) {
-        if (!estDeplacementCorrect(dL, dC, 0)) {
+        if (!Mouvement.estDeplacement(dL, dC, 0)) {
             throw new IllegalArgumentException("Déplacement incorrect : " + dL + ", " + dC);
         }
 
@@ -125,108 +93,8 @@ public class Plateau {
         return false;
     }
 
-    boolean creerDeplacementArbre(Coup coup, int departL, int departC, int arriveeL, int arriveeC, Epoque e) {
-        int dL = arriveeL - departL;
-        int dC = arriveeC - departC;
-
-        if (!aArbre(departL, departC, e)) {
-            throw new IllegalStateException("Arbre attendu sur la case (" + departL + ", " + departC + ", " + e + ")");
-        }
-        if (aObstacleMortel(arriveeL, arriveeC, e, dL, dC)) {
-            throw new IllegalStateException(
-                    "Aucun obstacle mortel attendu après la case (" + arriveeL + ", " + arriveeC + ", " + e + ")"
-            );
-        }
-        if (estVide(arriveeL, arriveeC, e)) {
-            coup.suppression(departL, departC, e, Piece.ARBRE);
-            coup.ajout(arriveeL, arriveeC, e, Piece.ARBRE_COUCHE);
-        }
-        else if (aGraine(arriveeL, arriveeC, e) || (aPion(arriveeL, arriveeC, e))) {
-            coup.suppression(departL, departC, e, Piece.ARBRE);
-            coup.suppression(arriveeL, arriveeC, e, Piece.BLANC);
-            coup.suppression(arriveeL, arriveeC, e, Piece.NOIR);
-            coup.suppression(arriveeL, arriveeC, e, Piece.GRAINE);
-            coup.ajout(arriveeL, arriveeC, e, Piece.ARBRE_COUCHE);
-        }
-        else if (aArbre(arriveeL, arriveeC, e)) {
-            creerDeplacementArbre(coup, arriveeL, arriveeC, arriveeL + dL, arriveeC + dC, e);
-            coup.suppression(departL, departC, e, Piece.ARBRE);
-            coup.ajout(arriveeL, arriveeC, e, Piece.ARBRE_COUCHE);
-        }
-        else {
-            throw new IllegalStateException("Déplacement invalide");
-        }
-        return true;
-    }
-
-    boolean creerDeplacementPion(Coup coup, int departL, int departC, int arriveeL, int arriveeC, Epoque e) {
-        int dL = arriveeL - departL;
-        int dC = arriveeC - departC;
-        Piece pion = Piece.depuisValeur(contenu(departL, departC, e));
-
-        if (!aPion(departL, departC, e)) {
-            return false;
-        }
-        if (estOccupable(arriveeL, arriveeC, e)) {
-            coup.suppression(departL, departC, e, pion);
-            coup.ajout(arriveeL, arriveeC, e, pion);
-        }
-        else if (aPion(arriveeL, arriveeC, e)) {
-            if (pion == Piece.depuisValeur(contenu(arriveeL, arriveeC, e))) {
-                coup.suppression(departL, departC, e, pion);
-                coup.suppression(arriveeL, arriveeC, e, pion);
-            } else {
-                creerDeplacementPion(coup, arriveeL, arriveeC, arriveeL + dL, arriveeC + dC, e);
-                coup.suppression(departL, departC, e, pion);
-                coup.ajout(arriveeL, arriveeC, e, pion);
-            }
-        }
-        else if (aObstacleMortel(arriveeL, arriveeC, e, dL, dC)) {
-            coup.suppression(departL, departC, e, pion);
-        }
-        else if (aArbre(arriveeL, arriveeC, e)) {
-            if (!creerDeplacementArbre(coup, arriveeL, arriveeC, arriveeL + dL, arriveeC + dC, e)) {
-                return false;
-            }
-            coup.suppression(departL, departC, e, pion);
-            coup.ajout(arriveeL, arriveeC, e, pion);
-        } else {
-            throw new IllegalStateException("Déplacement invalide");
-        }
-        return true;
-    }
-
-    boolean creerDeplacement(Coup coup, int departL, int departC, int arriveeL, int arriveeC, Epoque e) {
-        int dL = arriveeL - departL;
-        int dC = arriveeC - departC;
-
-        if (!estDeplacementCorrect(dL, dC, 0) || aObstacleMortel(arriveeL, arriveeC, e, dL, dC)) {
-            return false;
-        }
-        return creerDeplacementPion(coup, departL, departC, arriveeL, arriveeC, e);
-    }
-
-    boolean creerChangementPlateau(Coup coup, int l, int c, Epoque eDepart, Epoque eArrivee) {
-        int dEpoque = eDepart.indice() - eArrivee.indice();
-
-        if (estOccupable(l, c, eArrivee)) {
-            return false;
-        }
-        Piece pion = Piece.depuisValeur(contenu(l, c, eDepart));
-        coup.ajout(l,c,eArrivee, pion);
-
-        if (dEpoque == 1) {
-            coup.suppression(l, c, eDepart, pion);
-        }
-        return estChangementPlateauCorrect(0, 0, dEpoque);
-    }
-
-    void jouerCoup(Coup c) {
-        c.jouer();
-    }
-
-    void annulerCoup(Coup c) {
-        c.annuler();
+    void fixerCase(int l, int c, Epoque e, int contenu) {
+        this.contenu[e.indice()][l][c] = contenu;
     }
 
     int ajout(int l, int c, Epoque e, Piece p) {
@@ -238,14 +106,6 @@ public class Plateau {
         return contenu(l, c, e) | p.valeur();
     }
 
-    void ajouter(int l, int c, Epoque e, Piece p) {
-        contenu[e.indice()][l][c] = ajout(l, c, e, p);
-    }
-
-    void fixerCase(int l, int c, Epoque e, int contenu) {
-        this.contenu[e.indice()][l][c] = contenu;
-    }
-
     int suppression(int l, int c, Epoque e, Piece p) {
         if (!aPiece(l, c, e, p)) {
             throw new IllegalStateException(
@@ -255,21 +115,87 @@ public class Plateau {
         return contenu(l, c, e) & ~p.valeur();
     }
 
-    void supprimer(int l, int c, Epoque e, Piece p) {
-        contenu[e.indice()][l][c] = suppression(l, c, e, p);
+    public int nombrePlateauVide(Pion p) {
+        if (p == Pion.BLANC) {
+            return nombrePlateauVideBlanc;
+        }
+        return nombrePlateauVideNoir;
+    }
+
+    public int nombrePionPlateau(Pion pion, Epoque e) {
+        if (pion == Pion.BLANC) {
+            return nbBlancParPlateau[e.indice()];
+        }
+        return nbNoirParPlateau[e.indice()];
+    }
+
+    void modifierNombrePionPlateau(Piece pion, Epoque e, int nombre) {
+        if (nombre == 0) {
+            throw new IllegalArgumentException("Nombre ne doit pas être nul");
+        }
+        int nombreApres;
+
+        switch (pion) {
+            case BLANC:
+                nbBlancParPlateau[e.indice()] += nombre;
+                nombreApres = nbBlancParPlateau[e.indice()];
+
+                if (nombreApres < 0) {
+                    throw new IllegalArgumentException("Impossible d'enlever " + nombre + " pions blancs du plateau " + e);
+                } else if (nombreApres == nombre) {
+                    nombrePlateauVideBlanc--;
+                } else if (nombreApres == 0) {
+                    nombrePlateauVideBlanc++;
+                }
+                break;
+
+            case NOIR:
+                nbNoirParPlateau[e.indice()] += nombre;
+                nombreApres = nbNoirParPlateau[e.indice()];
+
+                if (nombreApres < 0) {
+                    throw new IllegalArgumentException("Impossible d'enlever " + nombre + " pions noirs du plateau " + e);
+                } else if (nombreApres == nombre) {
+                    nombrePlateauVideNoir--;
+                } else if (nombreApres == 0) {
+                    nombrePlateauVideNoir++;
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Mauvaise pièce en paramètre");
+        }
+    }
+
+    public int nombreGrainesReserve() {
+        return nombreGrainesReserve;
+    }
+
+    void ajouterGraineReserve() {
+        nombreGrainesReserve++;
+    }
+
+    void enleverGraineReserve() {
+        if (nombreGrainesReserve == 0) {
+            throw new IllegalStateException("Impossible d'enlever une graine : aucune graine en réserve");
+        }
+        nombreGrainesReserve--;
     }
 
     // TODO : Implémenter casesJouables
     // casesJouables(int l, int c)
 
     // Utile pour l'IA
-    public Plateau copie(Plateau n) {
+    public Plateau copier(Plateau n) {
         Plateau retour = new Plateau();
 
-        for (int i = 0; i < Epoque.NOMBRE; i++)
-            for (int j = 0; j < TAILLE; j++)
-                for (int k = 0; k < TAILLE; k++)
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
                     retour.contenu[i][j][k] = n.contenu(j, k, Epoque.depuisIndice(i));
+                }
+            }
+        }
         return retour;
     }
 }

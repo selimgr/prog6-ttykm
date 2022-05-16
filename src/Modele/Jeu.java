@@ -40,6 +40,11 @@ public class Jeu extends Observable {
             joueurActuel = (dernierVainqueur + 1) % 2;
         }
         tourActuel = new Tour();
+        metAJour();
+    }
+
+    public Plateau plateau() {
+        return plateau;
     }
 
     public Joueur joueur1() {
@@ -64,23 +69,30 @@ public class Jeu extends Observable {
         return joueur1();
     }
 
-    public boolean jouerMouvement(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
+    public void jouerMouvement(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Mouvement(plateau, joueurActuel(), departL, departC, eDepart);
-        return tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee);
+        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
+            metAJour();
+        }
     }
 
-    public boolean jouerPlantation(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
+    public void jouerPlantation(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Plantation(plateau, joueurActuel(), departL, departC, eDepart);
-        return tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee);
+        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
+            metAJour();
+        }
     }
 
-    public boolean jouerRecolte(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
+    public void jouerRecolte(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Recolte(plateau, joueurActuel(), departL, departC, eDepart);
-        return tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee);
+        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
+            metAJour();
+        }
     }
 
     public void annulerCoup() {
         tourActuel.annulerCoup();
+        metAJour();
     }
 
     public void changerFocus(Epoque nouveau) {
@@ -92,6 +104,7 @@ public class Jeu extends Observable {
         }
         joueurActuel().fixerFocus(nouveau);
         joueurActuel = (joueurActuel + 1) % 2;
+        metAJour();
 
         if (partieTerminee()) {
             if (vainqueur() == joueur1) {

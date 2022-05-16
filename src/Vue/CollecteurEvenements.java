@@ -20,6 +20,8 @@ public interface CollecteurEvenements {
 
     Jeu jeu();
 
+    void toClose();
+
     void clicSouris(int l, int c);
 
     void toucheClavier(String touche);

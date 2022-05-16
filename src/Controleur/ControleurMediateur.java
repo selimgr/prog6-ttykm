@@ -73,6 +73,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
+    public void toClose() {
+        vues.close();
+    }
+
+    @Override
     public void clicSouris(int l, int c) {
 
     }

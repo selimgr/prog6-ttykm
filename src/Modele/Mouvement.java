@@ -56,11 +56,11 @@ public class Mouvement extends Coup {
     private boolean creerDeplacementPion(int departL, int departC, int arriveeL, int arriveeC) {
         int dL = arriveeL - departL;
         int dC = arriveeC - departC;
-        Piece pion = Piece.depuisValeur(plateau.contenu(departL, departC, ePion));
-
         if (!plateau.aPion(departL, departC, ePion)) {
             return false;
         }
+        Piece pion = Piece.depuisValeur(plateau.contenu(departL, departC, ePion));
+
         if (plateau.estOccupable(arriveeL, arriveeC, ePion)) {
             deplacerPion(departL, departC, arriveeL, arriveeC, pion);
         }

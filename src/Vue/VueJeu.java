@@ -148,9 +148,9 @@ class VueJeu extends JPanel {
         add(fond);
 
         // -- Add Listener
-        passe.addMouseListener(new AdaptateurSouris(c, this , "plateauPasse"));
-        present.addMouseListener(new AdaptateurSouris(c, this,"plateauPresent"));
-        futur.addMouseListener(new AdaptateurSouris(c,this,"plateauFutur"));
+        passe.addMouseListener(new AdaptateurSouris(c, passe , "plateauPasse"));
+        present.addMouseListener(new AdaptateurSouris(c, present,"plateauPresent"));
+        futur.addMouseListener(new AdaptateurSouris(c,futur,"plateauFutur"));
     }
 
     void nouvellePartie() {

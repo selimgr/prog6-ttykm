@@ -15,7 +15,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     Jeu jeu;
     Case caseDepart;
     Case caseArrivee;
-    Boolean caseSelectionne;
+    boolean caseSelectionne;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -87,10 +87,10 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void clicSouris(int l, int c, int p) {
+    public void clicSouris(int l, int c, Epoque e) {
         //Appeler affichage des feedforwards
-        if (caseSelectionne){
-            caseArrivee = new Case(l,c, Epoque.depuisIndice(p));
+        if (caseSelectionne) {
+            caseArrivee = new Case(l, c, e);
             // Gérer différent cas ( mouvements, recolte, plantation, ...)
             jeu.jouerMouvement(caseDepart.ligne(),caseDepart.colonne(),caseDepart.epoque(),
                     caseArrivee.ligne(),caseArrivee.colonne(),caseArrivee.epoque());
@@ -98,7 +98,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             caseSelectionne = false;
         }
         else {
-            caseDepart = new Case(l,c, Epoque.depuisIndice(p));
+            caseDepart = new Case(l, c, e);
             caseSelectionne = true;
         }
     }

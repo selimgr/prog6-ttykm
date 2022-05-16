@@ -165,6 +165,6 @@ class VueJeu extends JPanel {
 
 
     public int getTaille(){
-        passe.getHeight();
+        return passe.getHeight();
     }
 }

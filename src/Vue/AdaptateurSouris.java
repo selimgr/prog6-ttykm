@@ -1,5 +1,7 @@
 package Vue;
 
+import Modele.Epoque;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,14 +23,14 @@ class AdaptateurSouris extends MouseAdapter {
         controleur.clicSouris(l, c, resolution_nom(Objet));
     }
 
-    private int resolution_nom(String nom){
+    private Epoque resolution_nom(String nom){
         switch (nom){
             case "plateauPasse" :
-                return 0;
+                return Epoque.PASSE;
             case "plateauPresent" :
-                return 1;
+                return Epoque.PRESENT;
             case "plateauFutur" :
-                return 2;
+                return Epoque.FUTUR;
             default :
                 throw new IllegalArgumentException("Aucun paramètre de ce nom");
         }

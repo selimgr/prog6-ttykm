@@ -1,5 +1,6 @@
 package Vue;
 
+import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
 import Modele.Pion;
@@ -23,7 +24,7 @@ public interface CollecteurEvenements {
 
     void toClose();
 
-    void clicSouris(int l, int c, int p);
+    void clicSouris(int l, int c, Epoque e);
 
     void toucheClavier(String touche);
 

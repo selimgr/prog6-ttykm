@@ -14,7 +14,7 @@ class VueMenuNouvellePartie extends JPanel {
         JButton boutonPartie = new JButton("Lancer la partie");
         boutonPartie.addActionListener((e) -> {
             //String nomJ1, TypeJoueur typeJ1, TypePion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, TypePion pionsJ2, int handicapJ2
-            c.nouvellePartie("abc", TypeJoueur.HUMAIN, Pion.NOIR,4,"def", TypeJoueur.IA_FACILE, Pion.BLANC, 4);
+            c.nouvellePartie("abc", TypeJoueur.HUMAIN, Pion.NOIR,3,"def", TypeJoueur.IA_FACILE, Pion.BLANC, 3);
             c.afficherJeu();
         });
         add(boutonPartie);

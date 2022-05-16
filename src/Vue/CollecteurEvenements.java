@@ -1,5 +1,6 @@
 package Vue;
 
+import Controleur.Action;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
@@ -23,6 +24,16 @@ public interface CollecteurEvenements {
     Jeu jeu();
 
     void toClose();
+
+    void selectionnerPion(int l, int c, Epoque e);
+
+    void deplacer(int l, int c, Epoque e);
+
+    void planterGraine(int l, int c);
+
+    void recolterGraine(int l, int c);
+
+    public void fixerAction(Action a);
 
     void clicSouris(int l, int c, Epoque e);
 

@@ -1,10 +1,6 @@
 package Controleur;
 
-import Modele.Case;
-import Modele.Epoque;
-import Modele.Jeu;
-import Modele.TypeJoueur;
-import Modele.Pion;
+import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
 
@@ -13,9 +9,9 @@ import Vue.Vues;
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
-    Case caseDepart;
-    Case caseArrivee;
-    boolean caseSelectionne;
+    int departL, departC;
+    Epoque eDepart;
+    Action action;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -58,6 +54,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         vues.afficherJeu();
     }
 
+
     @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
@@ -66,7 +63,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
         jeu.nouvellePartie();
         vues.nouvellePartie();
-        caseSelectionne = false;
     }
 
     @Override
@@ -87,20 +83,63 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void clicSouris(int l, int c, Epoque e) {
-        //Appeler affichage des feedforwards
-        if (caseSelectionne) {
-            caseArrivee = new Case(l, c, e);
-            // Gérer différent cas ( mouvements, recolte, plantation, ...)
-            jeu.jouerMouvement(caseDepart.ligne(),caseDepart.colonne(),caseDepart.epoque(),
-                    caseArrivee.ligne(),caseArrivee.colonne(),caseArrivee.epoque());
+    public void selectionnerPion(int l, int c, Epoque e) {
+        departL = l;
+        departC = c;
+        eDepart = e;
+        fixerAction(Action.MOUVEMENT);
+    }
 
-            caseSelectionne = false;
+    @Override
+    public void deplacer(int l, int c, Epoque e) {
+        if (eDepart != null) {
+            jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
         }
-        else {
-            caseDepart = new Case(l, c, e);
-            caseSelectionne = true;
+        eDepart = null;
+    }
+
+    @Override
+    public void planterGraine(int l, int c) {
+        if (eDepart != null) {
+            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart);
         }
+        eDepart = null;
+    }
+
+    @Override
+    public void recolterGraine(int l, int c) {
+        if (eDepart != null) {
+            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart);
+        }
+        eDepart = null;
+    }
+
+    @Override
+    public void fixerAction(Action a) {
+        action = a;
+    }
+
+    @Override
+    public void clicSouris(int l, int c, Epoque e) {
+        if (eDepart == null) {
+            selectionnerPion(l, c, e);
+            return;
+        }
+
+        switch (action) {
+            case MOUVEMENT:
+                deplacer(l, c, e);
+                break;
+            case PLANTATION:
+                planterGraine(l, c);
+                break;
+            case RECOLTE:
+                recolterGraine(l, c);
+                break;
+            default:
+                throw new IllegalStateException("Aucune action sélectionnée");
+        }
+        action = null;
     }
 
     @Override

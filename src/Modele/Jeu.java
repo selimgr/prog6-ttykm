@@ -71,7 +71,7 @@ public class Jeu extends Observable {
         }
     }
 
-    public boolean partieTerminee(TypePion pions) {
+    public boolean partieTerminee(Pion pions) {
         int[] pla = {0, 0, 0};
         int i, j, k;
         i = j = k = 0;

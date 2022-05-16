@@ -26,7 +26,6 @@ class VueJeu extends JPanel {
     private  JPanel top;
     private CInfoJoueur j1;
     private CInfoJoueur j2;
-
     private int passeX ;
     private int passeY ;
     Image plateauPasse ;

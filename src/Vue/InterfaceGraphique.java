@@ -40,7 +40,7 @@ public class InterfaceGraphique implements Runnable {
 
         ajouterVue(Vues.DEMARRAGE);
         ajouterVue(Vues.MENU_PRINCIPAL);
-        ajouterVue(Vues.MENU_NOUVELLE_PARTIE);
+        ajouterVue(Vues.MENU_SAISIES);
         ajouterVue(Vues.JEU);
 
         controleur.fixerMediateurVues(vues);
@@ -81,8 +81,8 @@ public class InterfaceGraphique implements Runnable {
             case Vues.MENU_PRINCIPAL:
                 vue = new VueMenuPrincipal(controleur);
                 break;
-            case Vues.MENU_NOUVELLE_PARTIE:
-                vue = new VueMenuNouvellePartie(controleur);
+            case Vues.MENU_SAISIES:
+                vue = new MenuSaisies(controleur);
                 break;
             case Vues.JEU:
                 vue = new VueJeu(controleur);

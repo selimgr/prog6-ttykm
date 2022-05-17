@@ -39,10 +39,8 @@ class VueMenuPrincipal extends JPanel {
         add(quitter);
 
         for (Component ca : getComponents()) {
-            if (ca.getClass().getName().contains("Button")) {
-                System.out.println(((JButton) ca).getText());
+            if (ca.getClass().getName().contains("Button"))
                 ((JButton)ca).setAlignmentX(CENTER_ALIGNMENT);
-            }
         }
 
         addComponentListener(new ComponentAdapter() {

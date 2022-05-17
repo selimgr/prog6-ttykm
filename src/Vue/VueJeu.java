@@ -108,9 +108,15 @@ class VueJeu extends JPanel {
         JMenuItem item2 = new JMenuItem();
         item2.setText("Sauvegarder");
         JMenuItem item3 = new JMenuItem();
-        item3.setText("Quitter");
+        item3.setText("Menu Principal");
+        item3.addActionListener((e) -> {
+            c.afficherMenuPrincipal();
+        });
         JMenuItem item4 = new JMenuItem();
-        item4.setText("Menu Principal");
+        item4.setText("Quitter");
+        item4.addActionListener((e) -> {
+            c.toClose();
+        });
         jm.add(itemMusique); jm.add(item2);
         jm.add(item3); jm.add(item4);
         jBar.add(jm);

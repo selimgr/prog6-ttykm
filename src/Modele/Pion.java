@@ -4,7 +4,7 @@ public enum Pion {
     BLANC("Blanc", 1),
     NOIR("Noir", 2);
 
-    public static final int NOMBRE_RESERVE = 4;
+    public static final int NOMBRE_MAX_RESERVE = 4;
 
     private final String nom;
     private final int valeur;
@@ -25,8 +25,15 @@ public enum Pion {
             case 2:
                 return NOIR;
             default:
-                throw new IllegalArgumentException("Aucune pièce correspondant à cette valeur");
+                throw new IllegalArgumentException("Aucun pion correspondant à la valeur " + valeur);
         }
+    }
+
+    Piece toPiece() {
+        if (this == BLANC) {
+            return Piece.BLANC;
+        }
+        return Piece.NOIR;
     }
 
     @Override

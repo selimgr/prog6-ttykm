@@ -93,10 +93,29 @@ class VueJeu extends JPanel {
         JPanel boutons = new JPanel();
         boutons.setOpaque(false);
         boutons.setLayout(new FlowLayout(FlowLayout.LEFT));
-        menu.setBackground(new Color(51, 51, 51));
-        menu.setBorder(BorderFactory.createEmptyBorder(12, 12, 1, 1));
+        menu.setBackground(new Color(0, 0, 0));
+        menu.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         menu.setMargin(new Insets(10, 10, 2, 14));
-        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+
+        // Menu Paramètres
+        JMenuBar jBar = new JMenuBar();
+        jBar.setBackground(new Color(0, 0, 0));
+        JMenu jm = new JMenu();
+        jm.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        JCheckBoxMenuItem itemMusique = new JCheckBoxMenuItem();
+        itemMusique.setText("Musique");
+        itemMusique.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Musique.png"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        JMenuItem item2 = new JMenuItem();
+        item2.setText("Sauvegarder");
+        JMenuItem item3 = new JMenuItem();
+        item3.setText("Quitter");
+        JMenuItem item4 = new JMenuItem();
+        item4.setText("Menu Principal");
+        jm.add(itemMusique); jm.add(item2);
+        jm.add(item3); jm.add(item4);
+        jBar.add(jm);
+        menu.add(jBar);
+
         boutons.add(menu);
 
         //--

@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class MenuSaisies extends JPanel {
+public class VueMenuSaisies extends JPanel {
 
     CollecteurEvenements controleur;
 
@@ -26,7 +26,7 @@ public class MenuSaisies extends JPanel {
     private JComboBox niveauJ2;
     private JComboBox niveauJ1;
 
-    public MenuSaisies(CollecteurEvenements c) {
+    public VueMenuSaisies(CollecteurEvenements c) {
         controleur = c;
 
         typeJ1 = new JComboBox();

@@ -121,25 +121,30 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
-        if (eDepart == null) {
-            selectionnerPion(l, c, e);
+        if(eDepart==null && !jeu().plateau().aPion(l,c,e)) {
             return;
         }
+            if (eDepart == null) {
+                selectionnerPion(l, c, e);
+                return;
+            }
 
-        switch (action) {
-            case MOUVEMENT:
-                deplacer(l, c, e);
-                break;
-            case PLANTATION:
-                planterGraine(l, c);
-                break;
-            case RECOLTE:
-                recolterGraine(l, c);
-                break;
-            default:
-                throw new IllegalStateException("Aucune action sélectionnée");
-        }
-        action = null;
+            switch (action) {
+                case MOUVEMENT:
+                    deplacer(l, c, e);
+                    System.out.println("mouvement");
+                    break;
+                case PLANTATION:
+                    planterGraine(l, c);
+                    break;
+                case RECOLTE:
+                    recolterGraine(l, c);
+                    break;
+                default:
+                    throw new IllegalStateException("Aucune action sélectionnée");
+            }
+            action = null;
+
     }
 
     @Override

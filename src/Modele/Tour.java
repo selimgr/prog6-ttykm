@@ -11,7 +11,7 @@ class Tour {
     }
 
     boolean estTermine() {
-        return coup1 != null && coup2 != null;
+        return ((coup1 != null) && (coup2 != null));
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {

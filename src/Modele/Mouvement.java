@@ -185,8 +185,12 @@ public class Mouvement extends Coup {
             plateau.ajouterGraineReserve();
         }
         for (int i = 0; i < Epoque.NOMBRE; i++) {
-            plateau.modifierNombrePionPlateau(Piece.BLANC, Epoque.depuisIndice(i), dBlancPlateau[i]);
-            plateau.modifierNombrePionPlateau(Piece.NOIR, Epoque.depuisIndice(i), dNoirPlateau[i]);
+            if(dBlancPlateau[i]!=0) {
+                plateau.modifierNombrePionPlateau(Piece.BLANC, Epoque.depuisIndice(i), dBlancPlateau[i]);
+            }
+            if(dNoirPlateau[i]!=0) {
+                plateau.modifierNombrePionPlateau(Piece.NOIR, Epoque.depuisIndice(i), dNoirPlateau[i]);
+            }
         }
     }
 

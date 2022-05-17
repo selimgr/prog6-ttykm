@@ -1,5 +1,7 @@
 package Modele;
 
+import java.util.ArrayList;
+
 public class Plateau {
     private int[][][] contenu;
     private int[] nbBlancParPlateau;
@@ -183,7 +185,10 @@ public class Plateau {
     }
 
     // TODO : Implémenter casesJouables
-    // casesJouables(int l, int c)
+    ArrayList<Coup> casesJouables(int l, int c, Epoque e){
+        ArrayList<Coup> jouables = new ArrayList<>();
+        return jouables;
+    }
 
     // Utile pour l'IA
     public Plateau copier(Plateau n) {

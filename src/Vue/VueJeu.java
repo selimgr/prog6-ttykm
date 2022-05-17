@@ -120,6 +120,12 @@ class VueJeu extends JPanel {
         jm.add(itemMusique); jm.add(item2);
         jm.add(item3); jm.add(item4);
         jBar.add(jm);
+
+        JMenu tutoriel = new JMenu();
+        tutoriel.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        jBar.add(tutoriel);
+
+
         menu.add(jBar);
 
         boutons.add(menu);

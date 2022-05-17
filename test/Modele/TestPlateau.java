@@ -57,9 +57,9 @@ public class TestPlateau {
         for (int i = -100; i < 100; i++) {
             for (int j = -100; j < 100; j++) {
                 if (i < 0 || j < 0 || i >= Plateau.TAILLE || j >= Plateau.TAILLE) {
-                    assertTrue(p.aMur(i, j));
+                    assertTrue(Plateau.aMur(i, j));
                 } else {
-                    assertFalse(p.aMur(i, j));
+                    assertFalse(Plateau.aMur(i, j));
                 }
             }
         }
@@ -264,6 +264,12 @@ public class TestPlateau {
         p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
         assertContenuBlancEtGraine();
         assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuBlancEtGraine();
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
+        assertContenuBlancEtGraine();
+        assertExceptionsAjouterContenu();
         p.supprimer(1, 1, Epoque.PRESENT, Piece.GRAINE);
         assertContenuBlanc();
         assertExceptionsSupprimerContenu(Piece.BLANC);
@@ -277,6 +283,12 @@ public class TestPlateau {
         p.ajouter(1, 1, Epoque.PRESENT, Piece.NOIR);
         assertContenuNoir();
         p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        assertContenuNoirEtGraine();
+        assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuNoirEtGraine();
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
         assertContenuNoirEtGraine();
         assertExceptionsAjouterContenu();
         p.supprimer(1, 1, Epoque.PRESENT, Piece.GRAINE);
@@ -298,6 +310,12 @@ public class TestPlateau {
         exceptionAjouterContenu(Piece.ARBRE_COUCHE_DROITE);
         exceptionAjouterContenu(Piece.ARBRE_COUCHE_BAS);
         exceptionAjouterContenu(Piece.ARBRE_COUCHE_GAUCHE);
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuGraine();
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
+        assertContenuGraine();
+        assertExceptionsAjouterContenu();
         p.ajouter(1, 1, Epoque.PRESENT, Piece.BLANC);
         assertContenuBlancEtGraine();
         p.supprimer(1, 1, Epoque.PRESENT, Piece.BLANC);
@@ -317,6 +335,12 @@ public class TestPlateau {
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBUSTE);
         assertContenuArbuste();
         assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbuste();
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
+        assertContenuArbuste();
+        assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBUSTE);
         p.supprimer(1, 1, Epoque.PRESENT, Piece.ARBUSTE);
         assertContenuVide();
@@ -326,6 +350,12 @@ public class TestPlateau {
     public void testContenuArbre() {
         assertContenuVide();
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBRE);
+        assertContenuArbre();
+        assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbre();
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
         assertContenuArbre();
         assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBRE);
@@ -339,10 +369,22 @@ public class TestPlateau {
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_HAUT);
         assertContenuArbreCouche(Piece.ARBRE_COUCHE_HAUT);
         assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_HAUT);
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_HAUT);
+        assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBRE_COUCHE_HAUT);
         p.supprimer(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_HAUT);
         assertContenuVide();
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_DROITE);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_DROITE);
+        assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_DROITE);
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
         assertContenuArbreCouche(Piece.ARBRE_COUCHE_DROITE);
         assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBRE_COUCHE_DROITE);
@@ -351,10 +393,22 @@ public class TestPlateau {
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_BAS);
         assertContenuArbreCouche(Piece.ARBRE_COUCHE_BAS);
         assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_BAS);
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_BAS);
+        assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBRE_COUCHE_BAS);
         p.supprimer(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_BAS);
         assertContenuVide();
         p.ajouter(1, 1, Epoque.PRESENT, Piece.ARBRE_COUCHE_GAUCHE);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_GAUCHE);
+        assertExceptionsAjouterContenu();
+        p.ajouter(1, 1, Epoque.PRESENT, null);
+        assertContenuArbreCouche(Piece.ARBRE_COUCHE_GAUCHE);
+        assertExceptionsAjouterContenu();
+        p.supprimer(1, 1, Epoque.PRESENT, null);
         assertContenuArbreCouche(Piece.ARBRE_COUCHE_GAUCHE);
         assertExceptionsAjouterContenu();
         assertExceptionsSupprimerContenu(Piece.ARBRE_COUCHE_GAUCHE);
@@ -702,25 +756,11 @@ public class TestPlateau {
         e = assertThrows(NullPointerException.class, () -> p.aPiece(0, 0, Epoque.PRESENT, null));
         assertTrue(e.getMessage().contains("La pièce p ne doit pas être null"));
 
-        e = assertThrows(NullPointerException.class, () -> p.ajout(0, 0, null, Piece.BLANC));
-        assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));
-        e = assertThrows(NullPointerException.class, () -> p.ajout(0, 0, Epoque.PRESENT, null));
-        assertTrue(e.getMessage().contains("La pièce p ne doit pas être null"));
-
-        e = assertThrows(NullPointerException.class, () -> p.suppression(0, 0, null, Piece.BLANC));
-        assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));
-        e = assertThrows(NullPointerException.class, () -> p.suppression(0, 0, Epoque.PRESENT, null));
-        assertTrue(e.getMessage().contains("La pièce p ne doit pas être null"));
-
         e = assertThrows(NullPointerException.class, () -> p.ajouter(0, 0, null, Piece.BLANC));
         assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));
-        e = assertThrows(NullPointerException.class, () -> p.ajouter(0, 0, Epoque.PRESENT, null));
-        assertTrue(e.getMessage().contains("La pièce p ne doit pas être null"));
 
         e = assertThrows(NullPointerException.class, () -> p.supprimer(0, 0, null, Piece.BLANC));
         assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));
-        e = assertThrows(NullPointerException.class, () -> p.supprimer(0, 0, Epoque.PRESENT, null));
-        assertTrue(e.getMessage().contains("La pièce p ne doit pas être null"));
 
         e = assertThrows(NullPointerException.class, () -> p.estVide(0, 0, null));
         assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));

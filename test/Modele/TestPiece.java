@@ -36,6 +36,7 @@ public class TestPiece {
     @Test
     public void testExceptionDepuisValeur() {
         for (int i = -100; i < 1000; i++) {
+            // Si i est une puissance de 2
             if (i == 0 || ((i & (i - 1)) != 0)) {
                 final int n = i;
                 IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> Piece.depuisValeur(n));

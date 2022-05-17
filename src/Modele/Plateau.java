@@ -28,11 +28,11 @@ public class Plateau {
         nombreGrainesReserve = NOMBRE_MAX_GRAINES;
     }
 
-    boolean aMur(int l, int c) {
+    static boolean aMur(int l, int c) {
         return Math.min(l, c) < 0 || Math.max(l, c) >= TAILLE;
     }
 
-    private void verifierCoordoneesCorrectes(int l, int c, Epoque e) {
+    static void verifierCoordoneesCorrectes(int l, int c, Epoque e) {
         requireNonNull(e, "L'époque e ne doit pas être null");
 
         if (aMur(l, c)) {
@@ -50,32 +50,19 @@ public class Plateau {
         return (contenu(l, c, e) & p.valeur()) != 0;
     }
 
-    int ajout(int l, int c, Epoque e, Piece p) {
-        requireNonNull(p, "La pièce p ne doit pas être null");
-
-        if (estVide(l, c, e) ||
-                (p == Piece.GRAINE && aPion(l, c, e) && !aGraine(l, c, e)) ||
-                (p.toPion() != null && aGraine(l, c, e) && !aPion(l, c, e))) {
-            return contenu(l, c, e) | p.valeur();
-        }
-        throw new IllegalStateException(
-                "Impossible d'ajouter la pièce " + p + " sur la case (" + l + ", " + c + ", " + e + ")"
-        );
-    }
-
-    int suppression(int l, int c, Epoque e, Piece p) {
-        if (!aPiece(l, c, e, p)) {
-            throw new IllegalStateException(
-                    "Impossible de supprimer la pièce " + p + " de la case (" + l + ", " + c + ", " + e + ") : pièce absente"
-            );
-        }
-        return contenu(l, c, e) & ~p.valeur();
-    }
-
     void ajouter(int l, int c, Epoque e, Piece p) {
         requireNonNull(e, "L'époque e ne doit pas être null");
 
-        contenu[e.indice()][l][c] = ajout(l, c, e, p);
+        if (p == null) {
+            return;
+        }
+        if (!estVide(l, c, e) && (p != Piece.GRAINE || !aPion(l, c, e) || aGraine(l, c, e)) &&
+                (p.toPion() == null || !aGraine(l, c, e) || aPion(l, c, e))) {
+            throw new IllegalStateException(
+                    "Impossible d'ajouter la pièce " + p + " sur la case (" + l + ", " + c + ", " + e + ")"
+            );
+        }
+        contenu[e.indice()][l][c] = contenu(l, c, e) | p.valeur();
 
         if (p == Piece.BLANC) {
             if (nombrePionPlateau(Pion.BLANC, e) == 0) {
@@ -94,7 +81,15 @@ public class Plateau {
     void supprimer(int l, int c, Epoque e, Piece p) {
         requireNonNull(e, "L'époque e ne doit pas être null");
 
-        contenu[e.indice()][l][c] = suppression(l, c, e, p);
+        if (p == null) {
+            return;
+        }
+        if (!aPiece(l, c, e, p)) {
+            throw new IllegalStateException(
+                    "Impossible de supprimer la pièce " + p + " de la case (" + l + ", " + c + ", " + e + ") : pièce absente"
+            );
+        }
+        contenu[e.indice()][l][c] = contenu(l, c, e) & ~p.valeur();
 
         if (p == Piece.BLANC) {
             nbBlancParPlateau[e.indice()]--;

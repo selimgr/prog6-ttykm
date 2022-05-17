@@ -82,7 +82,7 @@ public class InterfaceGraphique implements Runnable {
                 vue = new VueMenuPrincipal(controleur);
                 break;
             case Vues.MENU_SAISIES:
-                vue = new MenuSaisies(controleur);
+                vue = new VueMenuSaisies(controleur);
                 break;
             case Vues.JEU:
                 vue = new VueJeu(controleur);

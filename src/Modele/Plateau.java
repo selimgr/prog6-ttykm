@@ -185,10 +185,79 @@ public class Plateau {
     }
 
     // TODO : Implémenter casesJouables
-    ArrayList<Coup> casesJouables(int l, int c, Epoque e){
+    ArrayList<Coup> casesJouables(int l, int c, Epoque e,Pion pion, Joueur joueur){
         ArrayList<Coup> jouables = new ArrayList<>();
+        //verif voyage temporel
+        switch(e){
+            case PASSE :
+                if(estOccupable(l,c,Epoque.PRESENT)){ //passé vers present
+                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PASSE);
+                    coup.creer(l,c,Epoque.PRESENT);
+                    jouables.add(coup);
+                }
+                break;
+            case PRESENT:
+                if(estOccupable(l,c,Epoque.FUTUR)){ //present vers futur ou passé
+                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PRESENT);
+                    coup.creer(l,c,Epoque.FUTUR);
+                    jouables.add(coup);
+                }
+                if(estOccupable(l,c,Epoque.PASSE)){
+                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PRESENT);
+                    coup.creer(l,c,Epoque.PASSE);
+                    jouables.add(coup);
+                }
+                break;
+            case FUTUR:
+                if(estOccupable(l,c,Epoque.PRESENT)){ // futur vers present
+                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.FUTUR);
+                    coup.creer(l,c,Epoque.PRESENT);
+                    jouables.add(coup);
+                }
+                break;
+            default:
+                break;
+
+        } //fin switch
+        //verif deplacement classique, y compris poussage etc
+        l=l+1;
+        if(l<4) {
+            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
+                Coup coup = new Mouvement(this, joueur, l, c, e);
+                coup.creer(l, c, e);
+                jouables.add(coup);
+            }
+        }
+        l=l-1;
+        c=c+1;
+        if(c<4) {
+            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
+                Coup coup = new Mouvement(this, joueur, l, c, e);
+                coup.creer(l, c, e);
+                jouables.add(coup);
+            }
+        }
+        c=c-2;
+        if(c>=0) {
+            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
+                Coup coup = new Mouvement(this, joueur, l, c, e);
+                coup.creer(l, c, e);
+                jouables.add(coup);
+            }
+        }
+        c=c+1;
+        l=l-1;
+        if(l>=0) {
+            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
+                Coup coup = new Mouvement(this, joueur, l, c, e);
+                coup.creer(l, c, e);
+                jouables.add(coup);
+            }
+        }
+
         return jouables;
     }
+
 
     // Utile pour l'IA
     public Plateau copier(Plateau n) {

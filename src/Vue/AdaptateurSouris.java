@@ -42,7 +42,8 @@ class AdaptateurSouris extends MouseAdapter {
                 l = (int) ((e.getY() / (pane.getHeight() - 2 * BORDURE_FUTUR_Y) * 4));
                 c = (int) ((e.getX() / (pane.getHeight() - 2 * BORDURE_FUTUR_X)) * 4);
         }
-        controleur.clicSouris(l, c, epoque);
+        controleur.clicSouris(c, l, epoque);
+        pane.repaint();
         System.out.println("l = " + l + ", c = " + c);
     }
 

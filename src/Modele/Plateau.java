@@ -2,6 +2,9 @@ package Modele;
 
 import java.util.ArrayList;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class Plateau {
     private int[][][] contenu;
     private int[] nbBlancParPlateau;
@@ -184,77 +187,40 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
+    List<Case> chercherPions(Joueur j){
+        ArrayList<Case> cases = new ArrayList<>();
+        Epoque e2 = j.focus();
+        Piece p = Piece.depuisValeur(j.pions().valeur());
+        for (int l2 = 0; l2 < Plateau.TAILLE;l2++) {
+            for (int c2 = 0; c2 < Plateau.TAILLE; c2++) {
+                if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
+            }
+        }
+
+        return new ArrayList<Case>();
+    }
     // TODO : Implémenter casesJouables
-    ArrayList<Coup> casesJouables(int l, int c, Epoque e,Pion pion, Joueur joueur){
+    ArrayList<Coup> casesJouables(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
-        //verif voyage temporel
-        switch(e){
-            case PASSE :
-                if(estOccupable(l,c,Epoque.PRESENT)){ //passé vers present
-                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PASSE);
-                    coup.creer(l,c,Epoque.PRESENT);
-                    jouables.add(coup);
-                }
-                break;
-            case PRESENT:
-                if(estOccupable(l,c,Epoque.FUTUR)){ //present vers futur ou passé
-                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PRESENT);
-                    coup.creer(l,c,Epoque.FUTUR);
-                    jouables.add(coup);
-                }
-                if(estOccupable(l,c,Epoque.PASSE)){
-                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.PRESENT);
-                    coup.creer(l,c,Epoque.PASSE);
-                    jouables.add(coup);
-                }
-                break;
-            case FUTUR:
-                if(estOccupable(l,c,Epoque.PRESENT)){ // futur vers present
-                    Coup coup = new Mouvement(this ,joueur,l,c,Epoque.FUTUR);
-                    coup.creer(l,c,Epoque.PRESENT);
-                    jouables.add(coup);
-                }
-                break;
-            default:
-                break;
-
-        } //fin switch
-        //verif deplacement classique, y compris poussage etc
-        l=l+1;
-        if(l<4) {
-            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
-                Coup coup = new Mouvement(this, joueur, l, c, e);
-                coup.creer(l, c, e);
-                jouables.add(coup);
-            }
+        List<Case> pions;
+        if (!sel)  pions = chercherPions(j);
+        else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
+        Iterator<Case> it  = pions.iterator();
+        while(it.hasNext()){
+            Case cas = it.next();
+            Epoque eActu = cas.epoque();
+            // Mouvement possible :
+            Coup coup = new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu);
+            if (coup.creer(1,0,eActu)) jouables.add(coup);
+            if (coup.creer(-1,0,eActu)) jouables.add(coup);
+            if (coup.creer(0,1,eActu)) jouables.add(coup);
+            if (coup.creer(0,-1,eActu)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.FUTUR)) jouables.add(coup);
+            if (coup.creer(1,0,Epoque.PRESENT)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.PASSE)) jouables.add(coup);
+            // TODO : Ajouter action sur les graines
+            // ...
         }
-        l=l-1;
-        c=c+1;
-        if(c<4) {
-            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
-                Coup coup = new Mouvement(this, joueur, l, c, e);
-                coup.creer(l, c, e);
-                jouables.add(coup);
-            }
-        }
-        c=c-2;
-        if(c>=0) {
-            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
-                Coup coup = new Mouvement(this, joueur, l, c, e);
-                coup.creer(l, c, e);
-                jouables.add(coup);
-            }
-        }
-        c=c+1;
-        l=l-1;
-        if(l>=0) {
-            if (estOccupable(l, c, e) || aPion(l, c, e) || aGraine(l, c, e)) {
-                Coup coup = new Mouvement(this, joueur, l, c, e);
-                coup.creer(l, c, e);
-                jouables.add(coup);
-            }
-        }
-
         return jouables;
     }
 

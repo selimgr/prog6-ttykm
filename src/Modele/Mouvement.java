@@ -49,7 +49,7 @@ public class Mouvement extends Coup {
             return joueur.nombrePionsReserve() > 0;
         }
         else {
-            throw new IllegalArgumentException("Impossible de créer le mouvement : mouvement incorrect");
+            return false; // IA peut envoyer de mauvaise action
         }
     }
 

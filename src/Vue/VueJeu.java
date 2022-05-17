@@ -100,6 +100,8 @@ class VueJeu extends JPanel {
         // Menu Paramètres
         JMenuBar jBar = new JMenuBar();
         jBar.setBackground(new Color(0, 0, 0));
+        jBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jBar.setMargin(new Insets(10, 10, 2, 14));
         JMenu jm = new JMenu();
         jm.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
         JCheckBoxMenuItem itemMusique = new JCheckBoxMenuItem();

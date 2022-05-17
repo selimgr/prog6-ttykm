@@ -48,7 +48,7 @@
               <visible value="true"/>
             </properties>
           </component>
-          <component id="777c5" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+          <component id="777c5" class="javax.swing.JComboBox" binding="typeJ1" custom-create="true">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
@@ -64,7 +64,7 @@
               </model>
             </properties>
           </component>
-          <component id="4b5f9" class="javax.swing.JComboBox" default-binding="true">
+          <component id="4b5f9" class="javax.swing.JComboBox" binding="niveauJ1" custom-create="true">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -109,7 +109,7 @@
               <text value="Nom du Joueur 2"/>
             </properties>
           </component>
-          <component id="1aeba" class="javax.swing.JComboBox" default-binding="true">
+          <component id="1aeba" class="javax.swing.JComboBox" binding="typeJ2" custom-create="true">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="-1"/>
@@ -125,7 +125,7 @@
               </model>
             </properties>
           </component>
-          <component id="dc937" class="javax.swing.JComboBox" default-binding="true">
+          <component id="dc937" class="javax.swing.JComboBox" binding="niveauJ2" custom-create="true">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

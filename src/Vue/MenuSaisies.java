@@ -15,16 +15,24 @@ public class MenuSaisies extends JPanel {
     JFrame f;
     private JPanel MenuSaisies;
     private JTextField nomJ1;
-    private JComboBox comboBox1;
+    private JComboBox typeJ1;
     private JButton jouerButton;
     private JButton menuPrincipalButton;
     private JPanel Boutons;
     private JPanel Joueur2;
     private JPanel Joueur1;
     private JTextField nomJ2;
+    private JComboBox typeJ2;
+    private JComboBox niveauJ2;
+    private JComboBox niveauJ1;
 
     public MenuSaisies(CollecteurEvenements c) {
         controleur = c;
+
+        typeJ1 = new JComboBox();
+        typeJ2 = new JComboBox();
+        niveauJ1 = new JComboBox();
+        niveauJ2 = new JComboBox();
 
         MenuSaisies = this;
         $$$setupUI$$$();
@@ -35,16 +43,25 @@ public class MenuSaisies extends JPanel {
 
         jouerButton.addActionListener((e) -> {
             //String nomJ1, TypeJoueur typeJ1, TypePion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, TypePion pionsJ2, int handicapJ2
-            c.nouvellePartie("abc", TypeJoueur.HUMAIN, Pion.NOIR, 3, "def", TypeJoueur.IA_FACILE, Pion.BLANC, 3);
+            System.out.println(typeJ1.getSelectedIndex());
+
+            c.nouvellePartie(
+                    nomJ1.getText(),
+                    TypeJoueur.values()[typeJ1.getSelectedIndex()],
+                    Pion.NOIR,
+                    3,
+                    // --
+                    nomJ2.getText(),
+                    TypeJoueur.values()[typeJ2.getSelectedIndex()],
+                    Pion.BLANC,
+                    3
+            );
             c.afficherJeu();
         });
 
         nomJ1.addFocusListener(new FocusAdapter() {
             String s = nomJ1.getText();
 
-            /**
-             * @param e
-             */
             @Override
             public void focusGained(FocusEvent e) {
                 if (nomJ1.getText().equals(s)) {
@@ -53,9 +70,6 @@ public class MenuSaisies extends JPanel {
                 }
             }
 
-            /**
-             * @param e
-             */
             @Override
             public void focusLost(FocusEvent e) {
                 if (nomJ1.getText().isEmpty()) {
@@ -67,9 +81,6 @@ public class MenuSaisies extends JPanel {
         nomJ2.addFocusListener(new FocusAdapter() {
             String s = nomJ2.getText();
 
-            /**
-             * @param e
-             */
             @Override
             public void focusGained(FocusEvent e) {
                 if (nomJ2.getText().equals(s)) {
@@ -78,9 +89,6 @@ public class MenuSaisies extends JPanel {
                 }
             }
 
-            /**
-             * @param e
-             */
             @Override
             public void focusLost(FocusEvent e) {
                 if (nomJ2.getText().isEmpty()) {
@@ -122,22 +130,20 @@ public class MenuSaisies extends JPanel {
         nomJ1.setText("Nom de Joueur 1");
         nomJ1.setVisible(true);
         Joueur1.add(nomJ1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(120, -1), new Dimension(200, -1), 0, false));
-        comboBox1 = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         defaultComboBoxModel1.addElement("Humain");
         defaultComboBoxModel1.addElement("IA Facile");
         defaultComboBoxModel1.addElement("IA Moyenne");
         defaultComboBoxModel1.addElement("IA Difficile");
-        comboBox1.setModel(defaultComboBoxModel1);
-        Joueur1.add(comboBox1, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(100, -1), null, 0, false));
-        final JComboBox comboBox2 = new JComboBox();
+        typeJ1.setModel(defaultComboBoxModel1);
+        Joueur1.add(typeJ1, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(100, -1), null, 0, false));
         final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
         defaultComboBoxModel2.addElement("Débutant");
         defaultComboBoxModel2.addElement("Initié");
         defaultComboBoxModel2.addElement("Confirmé");
         defaultComboBoxModel2.addElement("Expert");
-        comboBox2.setModel(defaultComboBoxModel2);
-        Joueur1.add(comboBox2, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        niveauJ1.setModel(defaultComboBoxModel2);
+        Joueur1.add(niveauJ1, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Joueur2 = new JPanel();
         Joueur2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
         MenuSaisies.add(Joueur2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(600, -1), 0, false));
@@ -147,22 +153,20 @@ public class MenuSaisies extends JPanel {
         nomJ2 = new JTextField();
         nomJ2.setText("Nom du Joueur 2");
         Joueur2.add(nomJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(100, -1), new Dimension(200, -1), 0, false));
-        final JComboBox comboBox3 = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel3 = new DefaultComboBoxModel();
         defaultComboBoxModel3.addElement("Humain");
         defaultComboBoxModel3.addElement("IA Facile");
         defaultComboBoxModel3.addElement("IA Moyenne");
         defaultComboBoxModel3.addElement("IA Difficile");
-        comboBox3.setModel(defaultComboBoxModel3);
-        Joueur2.add(comboBox3, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(100, -1), null, 0, false));
-        final JComboBox comboBox4 = new JComboBox();
+        typeJ2.setModel(defaultComboBoxModel3);
+        Joueur2.add(typeJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(100, -1), null, 0, false));
         final DefaultComboBoxModel defaultComboBoxModel4 = new DefaultComboBoxModel();
         defaultComboBoxModel4.addElement("Débutant");
         defaultComboBoxModel4.addElement("Initié");
         defaultComboBoxModel4.addElement("Confirmé");
         defaultComboBoxModel4.addElement("Expert");
-        comboBox4.setModel(defaultComboBoxModel4);
-        Joueur2.add(comboBox4, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        niveauJ2.setModel(defaultComboBoxModel4);
+        Joueur2.add(niveauJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Boutons = new JPanel();
         Boutons.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         MenuSaisies.add(Boutons, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(600, 50), 0, false));

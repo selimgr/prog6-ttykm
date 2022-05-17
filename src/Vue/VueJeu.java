@@ -1,7 +1,7 @@
 package Vue;
 
 import Vue.JComposants.CInfoJoueur;
-import Vue.JComposants.JPanelCustom;
+import Vue.JComposants.CPlateau;
 
 import  javax.swing.*;
 import java.awt.*;
@@ -12,13 +12,13 @@ class VueJeu extends JPanel {
     CollecteurEvenements controleur;
     VueNiveau vueNiveau;
     private  JPanel bottom;
-    private  JPanelCustom futur;
+    private CPlateau futur;
     private  JLayeredPane jLayeredPane1;
     private  JPanel fond;
     private  JButton menu;
-    private JPanelCustom passe;
+    private CPlateau passe;
     private  JPanel plateaux;
-    private  JPanelCustom present;
+    private CPlateau present;
     private  JPanel top;
     private CInfoJoueur j1;
     private CInfoJoueur j2;
@@ -28,9 +28,9 @@ class VueJeu extends JPanel {
 
         jLayeredPane1 = new JLayeredPane();
         plateaux = new  JPanel();
-        passe = new JPanelCustom(1,controleur);
-        present = new JPanelCustom(2,controleur);
-        futur = new JPanelCustom(3,controleur);
+        passe = new CPlateau(1,controleur);
+        present = new CPlateau(2,controleur);
+        futur = new CPlateau(3,controleur);
         fond = new  JPanel();
         top = new  JPanel();
         menu = new  JButton();
@@ -183,6 +183,9 @@ class VueJeu extends JPanel {
         controleur.jeu().ajouteObservateur(vueNiveau);
 
 //        j1 = new CInfoJoueur(controleur.jeu().joueur1().nom(), 4, 0);
+        System.out.println(controleur.jeu().joueur1().toString());
+        System.out.println(controleur.jeu().joueur2().toString());
+
         j1.setName(controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
         j2.setName(controleur.jeu().joueur2().nom());

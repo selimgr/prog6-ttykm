@@ -1,8 +1,6 @@
 package Vue.JComposants;
 
-import Controleur.ControleurMediateur;
 import Modele.Epoque;
-import Modele.Jeu;
 import Modele.Plateau;
 import Vue.CollecteurEvenements;
 
@@ -12,12 +10,12 @@ import java.util.Objects;
 
 // 1 =
 
-public class JPanelCustom extends JPanel {
+public class CPlateau extends JPanel {
     Image current;
     CollecteurEvenements c;
     int num;
 
-    public JPanelCustom(int numero, CollecteurEvenements c){
+    public CPlateau(int numero, CollecteurEvenements c){
         Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();
         Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
         Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();

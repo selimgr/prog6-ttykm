@@ -57,7 +57,7 @@ public class VueMenuSaisies extends JPanel {
         });
 
         nomJ1.addFocusListener(new FocusAdapter() {
-            String s = nomJ1.getText();
+            final String s = nomJ1.getText();
 
             @Override
             public void focusGained(FocusEvent e) {
@@ -76,7 +76,7 @@ public class VueMenuSaisies extends JPanel {
             }
         });
         nomJ2.addFocusListener(new FocusAdapter() {
-            String s = nomJ2.getText();
+            final String s = nomJ2.getText();
 
             @Override
             public void focusGained(FocusEvent e) {

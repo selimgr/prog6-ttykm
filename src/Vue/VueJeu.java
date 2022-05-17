@@ -125,7 +125,6 @@ class VueJeu extends JPanel {
         tutoriel.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
         jBar.add(tutoriel);
 
-
         menu.add(jBar);
 
         boutons.add(menu);

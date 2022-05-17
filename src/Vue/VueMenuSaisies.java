@@ -12,7 +12,6 @@ public class VueMenuSaisies extends JPanel {
 
     CollecteurEvenements controleur;
 
-    JFrame f;
     private JPanel MenuSaisies;
     private JTextField nomJ1;
     private JComboBox typeJ1;

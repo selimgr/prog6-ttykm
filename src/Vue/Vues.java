@@ -2,6 +2,8 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Vues {
     JFrame frame;
@@ -54,5 +56,14 @@ public class Vues {
     public void close() {
         frame.setVisible(true);
         frame.dispose();
+    }
+
+    public void afficherR(){
+        try {
+            File rules = new File("./resources/assets/Rules.pdf");
+            Desktop.getDesktop().open(rules);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 }

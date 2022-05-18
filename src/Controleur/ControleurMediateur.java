@@ -89,6 +89,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
+    public void afficherRegles() {vues.afficherR();}
+
+    @Override
     public void selectionnerPion(int l, int c, Epoque e) {
         departL = l;
         departC = c;

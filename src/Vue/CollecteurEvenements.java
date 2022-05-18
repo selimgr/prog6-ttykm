@@ -27,6 +27,8 @@ public interface CollecteurEvenements {
 
     void toClose();
 
+    void afficherRegles();
+
     void selectionnerPion(int l, int c, Epoque e);
 
     void deplacer(int l, int c, Epoque e);

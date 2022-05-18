@@ -4,6 +4,8 @@ import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
 
 import  javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
@@ -124,6 +126,17 @@ class VueJeu extends JPanel {
         jBar.add(jm);
 
         JMenu tutoriel = new JMenu();
+        //Affichage des règles pendant le jeu
+        tutoriel.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent menuEvent) {
+                c.afficherRegles();
+            }
+            @Override
+            public void menuDeselected(MenuEvent menuEvent) {}
+            @Override
+            public void menuCanceled(MenuEvent menuEvent) {}
+        });
         tutoriel.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
         jBar.add(tutoriel);
 

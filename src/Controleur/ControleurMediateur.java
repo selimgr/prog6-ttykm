@@ -12,6 +12,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     int departL, departC;
     Epoque eDepart;
     Action action;
+    IA ia;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -144,7 +145,16 @@ public class ControleurMediateur implements CollecteurEvenements {
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
             action = null;
+            // TODO : Gestion du changement focus IHM
+            if (jeu.tourTerminee()){
+                // Changer vue pour mise à jour du focus
+            }
+    }
 
+    // Focus changement
+    public void ChangerFocus(Epoque e){
+        jeu.changerFocus(e);
+        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN )ia.calcul();
     }
 
     @Override

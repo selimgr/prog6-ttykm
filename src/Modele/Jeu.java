@@ -1,5 +1,6 @@
 package Modele;
 
+import Controleur.IA;
 import Patterns.Observable;
 
 import java.util.Random;
@@ -54,6 +55,9 @@ public class Jeu extends Observable {
         return plateau;
     }
 
+    public  boolean tourTerminee() {
+        return tourActuel.estTermine();
+    }
     public Joueur joueur1() {
         return joueur1;
     }

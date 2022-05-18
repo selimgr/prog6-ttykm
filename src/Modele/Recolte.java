@@ -1,9 +1,13 @@
 package Modele;
 
+import Controleur.Action;
+
 public class Recolte extends Coup {
 
     Recolte(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
+        a = Action.RECOLTE;
+
     }
 
     static boolean estCorrecte(int dL, int dC, int dEpoque) {

@@ -1,14 +1,18 @@
 package Modele;
 
+import Controleur.Action;
+
 public class Mouvement extends Coup {
     boolean voyageTemporelArriere;
     boolean graineRecuperee;
     int[] dBlancPlateau, dNoirPlateau;
 
+
     Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
         dBlancPlateau = new int[Epoque.NOMBRE];
         dNoirPlateau = new int[Epoque.NOMBRE];
+        a = Action.MOUVEMENT;
     }
 
     static boolean estCorrect(int dL, int dC, int dEpoque) {
@@ -26,10 +30,10 @@ public class Mouvement extends Coup {
 
     @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        int dL = destL - pionL;
-        int dC = destC - pionC;
+        dL = destL - pionL;
+        dC = destC - pionC;
+        this.dEpoque = eDest.indice() - ePion.indice();
         int dEpoque = eDest.indice() - ePion.indice();
-
         if (estDeplacement(dL, dC, dEpoque)) {
             return !plateau.aObstacleMortel(destL, destC, ePion, dL, dC) &&
                     creerDeplacementPion(pionL, pionC, destL, destC);

@@ -1,5 +1,7 @@
 package Modele;
 
+import Controleur.Action;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -10,6 +12,9 @@ public abstract class Coup {
     protected final int pionL, pionC;
     protected final Epoque ePion;
     private Deque<Etat> etats;
+    int dL,dC;
+    int dEpoque;
+    Action a;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         plateau = p;
@@ -18,19 +23,36 @@ public abstract class Coup {
         this.pionC = pionC;
         this.ePion = ePion;
         etats = new ArrayDeque<>();
+        dL = dC = 0;
+        dEpoque = ePion.indice();
+
     }
 
-    int lignePion() {
+    public int lignePion() {
         return pionL;
     }
 
-    int colonnePion() {
+    public int colonnePion() {
         return pionC;
     }
 
-    Epoque epoquePion() {
+    public Epoque epoquePion() {
         return ePion;
     }
+
+    public int deplacementLignePion(){
+        return dL;
+    }
+
+    public int deplacementColonnePion(){
+        return dC;
+    }
+
+    public int deplacementEpoquePion(){
+        return dL;
+    }
+    public Action getAction(){return a;}
+
 
     private void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
         etats.push(new Etat(l, c, e, contenuAvant, contenuApres));

@@ -6,4 +6,6 @@ public class IA_Difficile implements IA {
     IA_Difficile() {
 
     }
+    public void calcul() {
+    }
 }

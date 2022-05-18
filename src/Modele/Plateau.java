@@ -187,7 +187,7 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
-    List<Case> chercherPions(Joueur j){
+    private List<Case> chercherPions(Joueur j){
         ArrayList<Case> cases = new ArrayList<>();
         Epoque e2 = j.focus();
         Piece p = Piece.depuisValeur(j.pions().valeur());
@@ -200,7 +200,7 @@ public class Plateau {
         return new ArrayList<Case>();
     }
     // TODO : Implémenter casesJouables
-    ArrayList<Coup> casesJouables(Joueur j, boolean sel,  int l, int c, Epoque e){
+    public ArrayList<Coup> casesJouables(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
         if (!sel)  pions = chercherPions(j);
@@ -226,13 +226,13 @@ public class Plateau {
 
 
     // Utile pour l'IA
-    public Plateau copier(Plateau n) {
+    public Plateau copier() {
         Plateau retour = new Plateau();
 
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             for (int j = 0; j < TAILLE; j++) {
                 for (int k = 0; k < TAILLE; k++) {
-                    retour.contenu[i][j][k] = n.contenu(j, k, Epoque.depuisIndice(i));
+                    retour.contenu[i][j][k] = this.contenu(j, k, Epoque.depuisIndice(i));
                 }
             }
         }

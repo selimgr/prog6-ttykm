@@ -12,6 +12,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     int departL, departC;
     Epoque eDepart;
     Action action;
+    boolean attendAction1 = true;  //sorte d'AEFD
+    boolean attendAction2 = false;
+    boolean attendFocus =  false;   //
 
 
     @Override
@@ -94,6 +97,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void deplacer(int l, int c, Epoque e) {
         if (eDepart != null) {
+            //System.out.println("je joue le mouvement " + departL +", "+departC+", "+eDepart+" vers "+l+", "+c+", "+e);
             jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
         }
         eDepart = null;
@@ -128,10 +132,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             }
             System.out.println("");
         } ////////////////FIN DEBUG
-
-        if(eDepart==null && !jeu().plateau().aPion(l,c,e)) {
-            return;
-        }
+        if(attendAction1 || attendAction2) {
+            if (eDepart == null && !jeu().plateau().aPion(l, c, e)) {
+                return;
+            }
             if (eDepart == null) {
                 selectionnerPion(l, c, e);
                 return;
@@ -151,8 +155,29 @@ public class ControleurMediateur implements CollecteurEvenements {
                 default:
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
+        }else{ //attend focus
+            jeu().changerFocus(e);
+        }
+
+            eDepart = null;
             action = null;
             vues.metAjour();
+
+            if(attendAction1){ //AEFD
+                attendAction1 = false;
+                attendAction2 = true;
+            }else{
+                if(attendAction2){
+                    attendAction2 = false;
+                    attendFocus = true;
+                }else{
+                    if(attendFocus){
+                        attendFocus = false;
+                        attendAction1 = true;
+                        //changer joueur
+                    }
+                }
+            }
 
     }
 

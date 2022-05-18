@@ -27,7 +27,14 @@ class VueMenuPrincipal extends JPanel {
             c.afficherMenuNouvellePartie();
         });
         add(nouvellePartie);
-        add(new JButton("Charger Partie"));
+
+        JButton chargerPartie = new JButton("Charger Partie");
+        chargerPartie.addActionListener((e) -> {
+            //System.out.println("Je capte pas pq il m'ffiche pas la fenêtre");
+            c.afficherChargerPartie();
+        });
+        add(chargerPartie);
+
         add(new JButton("Règles"));
         add(Box.createRigidArea(new Dimension(10, 30)));
         add(new JButton("Paramètres"));
@@ -51,7 +58,7 @@ class VueMenuPrincipal extends JPanel {
             }
         });
 
-        JButton chargerPartie, regles, didacticiel, parametres;
+        JButton regles, didacticiel, parametres;
     }
 
     @Override

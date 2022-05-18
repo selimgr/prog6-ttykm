@@ -10,6 +10,7 @@ public class Vues {
     final static String DEMARRAGE = "Démarrage";
     final static String MENU_PRINCIPAL = "Menu Principal";
     final static String MENU_SAISIES = "Nouvelle Partie";
+    final static String MENU_PARTIES = "Charger Partie";
     final static String JEU = "Jeu";
 
     Vues(JFrame f) {
@@ -47,6 +48,8 @@ public class Vues {
     public void afficherJeu() {
         afficher(JEU);
     }
+
+    public void afficherChargerPartie(){afficher(MENU_PARTIES);}
 
     public void close() {
         frame.setVisible(true);

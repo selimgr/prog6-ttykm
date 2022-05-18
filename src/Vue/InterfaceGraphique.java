@@ -39,8 +39,9 @@ public class InterfaceGraphique implements Runnable {
         vues = new Vues(frame);
 
         ajouterVue(Vues.DEMARRAGE);
-        ajouterVue(Vues.MENU_PRINCIPAL);
         ajouterVue(Vues.MENU_SAISIES);
+        ajouterVue(Vues.MENU_PRINCIPAL);
+        ajouterVue(Vues.MENU_PARTIES);
         ajouterVue(Vues.JEU);
 
         controleur.fixerMediateurVues(vues);

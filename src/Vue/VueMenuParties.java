@@ -22,7 +22,7 @@ public class VueMenuParties extends JPanel {
 
         $$$setupUI$$$();
 
-        //menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
+        menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
     }
 
     /**

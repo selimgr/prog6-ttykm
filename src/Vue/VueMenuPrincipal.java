@@ -31,7 +31,7 @@ class VueMenuPrincipal extends JPanel {
         JButton chargerPartie = new JButton("Charger Partie");
         chargerPartie.addActionListener((e) -> {
             //System.out.println("Je capte pas pq il m'affiche pas la fenêtre");
-            c.afficherChargerPartie();
+            c.afficherMenuChargerPartie();
         });
         add(chargerPartie);
 

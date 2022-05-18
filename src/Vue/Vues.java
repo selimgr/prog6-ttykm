@@ -49,7 +49,7 @@ public class Vues {
         afficher(JEU);
     }
 
-    public void afficherChargerPartie(){afficher(MENU_PARTIES);}
+    public void afficherMenuChargerPartie(){afficher(MENU_PARTIES);}
 
     public void close() {
         frame.setVisible(true);

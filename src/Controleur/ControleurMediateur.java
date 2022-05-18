@@ -55,9 +55,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void afficherChargerPartie() {
+    public void afficherMenuChargerPartie() {
         verifierMediateurVues("Impossible d'afficher le menu des parties sauvegardées");
-        vues.afficherChargerPartie();
+        vues.afficherMenuChargerPartie();
     }
 
 

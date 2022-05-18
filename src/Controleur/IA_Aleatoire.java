@@ -23,4 +23,5 @@ public class IA_Aleatoire implements IA{
         //ctrl.jeu.jouerTour();
 
     }
+    public void calcul(){}
 }

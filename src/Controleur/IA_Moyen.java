@@ -6,4 +6,5 @@ public class IA_Moyen implements IA {
     IA_Moyen() {
 
     }
+    public void calcul(){}
 }

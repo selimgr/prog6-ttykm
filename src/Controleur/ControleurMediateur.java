@@ -13,6 +13,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     Epoque eDepart;
     Action action;
 
+
     @Override
     public void fixerMediateurVues(Vues v) {
         vues = v;
@@ -121,6 +122,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
+        for(int i=0;i<4;i++) { //////////DEBUGGING
+            for (int j = 0; j < 4; j++) {
+                System.out.print(jeu().plateau().contenu(i, j, e));
+            }
+            System.out.println("");
+        } ////////////////FIN DEBUG
+
         if(eDepart==null && !jeu().plateau().aPion(l,c,e)) {
             return;
         }
@@ -144,6 +152,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
             action = null;
+            vues.metAjour();
 
     }
 

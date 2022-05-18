@@ -38,7 +38,7 @@ public class Plateau {
         }
     }
 
-    int contenu(int l, int c, Epoque e) {
+    public int contenu(int l, int c, Epoque e) {
         verifierCoordoneesCorrectes(l, c, e);
         return contenu[e.indice()][l][c];
     }

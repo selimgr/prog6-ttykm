@@ -64,17 +64,10 @@ public class Plateau {
         }
         contenu[e.indice()][l][c] = contenu(l, c, e) | p.valeur();
 
-        if (p == Piece.BLANC) {
-            if (nombrePionPlateau(Pion.BLANC, e) == 0) {
-                nombrePlateauVideBlanc--;
-            }
-            nbBlancParPlateau[e.indice()]++;
-        }
-        else if (p == Piece.NOIR) {
-            if (nombrePionPlateau(Pion.NOIR, e) == 0) {
-                nombrePlateauVideNoir--;
-            }
-            nbNoirParPlateau[e.indice()]++;
+        if (p == Piece.BLANC || p == Piece.NOIR) {
+            ajouterPionPlateau(p.toPion(), e);
+        } else if (p == Piece.GRAINE) {
+            ajouterGraineReserve();
         }
     }
 
@@ -91,19 +84,10 @@ public class Plateau {
         }
         contenu[e.indice()][l][c] = contenu(l, c, e) & ~p.valeur();
 
-        if (p == Piece.BLANC) {
-            nbBlancParPlateau[e.indice()]--;
-
-            if (nombrePionPlateau(Pion.BLANC, e) == 0) {
-                nombrePlateauVideBlanc++;
-            }
-        }
-        else if (p == Piece.NOIR) {
-            nbNoirParPlateau[e.indice()]--;
-
-            if (nombrePionPlateau(Pion.NOIR, e) == 0) {
-                nombrePlateauVideNoir++;
-            }
+        if (p == Piece.BLANC || p == Piece.NOIR) {
+            supprimerPionPlateau(p.toPion(), e);
+        } else if (p == Piece.GRAINE) {
+            enleverGraineReserve();
         }
     }
 
@@ -193,18 +177,48 @@ public class Plateau {
         return nbNoirParPlateau[e.indice()];
     }
 
+    private void ajouterPionPlateau(Pion p, Epoque e) {
+        if (p == Pion.BLANC) {
+            if (nombrePionPlateau(p, e) == 0) {
+                nombrePlateauVideBlanc--;
+            }
+            nbBlancParPlateau[e.indice()]++;
+        } else {
+            if (nombrePionPlateau(p, e) == 0) {
+                nombrePlateauVideNoir--;
+            }
+            nbNoirParPlateau[e.indice()]++;
+        }
+    }
+
+    private void supprimerPionPlateau(Pion p, Epoque e) {
+        if (p == Pion.BLANC) {
+            nbBlancParPlateau[e.indice()]--;
+
+            if (nombrePionPlateau(p, e) == 0) {
+                nombrePlateauVideBlanc++;
+            }
+        } else {
+            nbNoirParPlateau[e.indice()]--;
+
+            if (nombrePionPlateau(p, e) == 0) {
+                nombrePlateauVideNoir++;
+            }
+        }
+    }
+
     public int nombreGrainesReserve() {
         return nombreGrainesReserve;
     }
 
-    void ajouterGraineReserve() {
+    private void ajouterGraineReserve() {
         if (nombreGrainesReserve == NOMBRE_MAX_GRAINES) {
             throw new IllegalStateException("Impossible d'ajouter une graine : nombre maximal atteint");
         }
         nombreGrainesReserve++;
     }
 
-    void enleverGraineReserve() {
+    private void enleverGraineReserve() {
         if (nombreGrainesReserve == 0) {
             throw new IllegalStateException("Impossible d'enlever une graine : aucune graine en réserve");
         }

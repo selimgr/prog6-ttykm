@@ -593,45 +593,43 @@ public class TestPlateau {
     @Test
     public void testNombreGraineReserve() {
         assertEquals(5, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(0, 0, Epoque.PASSE, Piece.GRAINE);
         assertEquals(4, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(0, 0, Epoque.PASSE, Piece.GRAINE);
         assertEquals(5, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(0, 0, Epoque.PASSE, Piece.GRAINE);
         assertEquals(4, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(0, 1, Epoque.PASSE, Piece.GRAINE);
         assertEquals(3, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(0, 2, Epoque.PASSE, Piece.GRAINE);
         assertEquals(2, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(0, 3, Epoque.PASSE, Piece.GRAINE);
         assertEquals(1, p.nombreGrainesReserve());
-        p.enleverGraineReserve();
+        p.ajouter(1, 1, Epoque.PASSE, Piece.GRAINE);
         assertEquals(0, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(0, 0, Epoque.PASSE, Piece.GRAINE);
         assertEquals(1, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(0, 1, Epoque.PASSE, Piece.GRAINE);
         assertEquals(2, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(0, 2, Epoque.PASSE, Piece.GRAINE);
         assertEquals(3, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(0, 3, Epoque.PASSE, Piece.GRAINE);
         assertEquals(4, p.nombreGrainesReserve());
-        p.ajouterGraineReserve();
+        p.supprimer(1, 1, Epoque.PASSE, Piece.GRAINE);
         assertEquals(5, p.nombreGrainesReserve());
     }
 
     @Test
     public void testExceptionAjouterGraineReserve() {
-        IllegalStateException e = assertThrows(IllegalStateException.class, p::ajouterGraineReserve);
-        assertTrue(e.getMessage().contains("Impossible d'ajouter une graine : nombre maximal atteint"));
-    }
-
-    @Test
-    public void testExceptionEnleverGraineReserve() {
         for (int i = 0; i < Plateau.NOMBRE_MAX_GRAINES; i++) {
-            p.enleverGraineReserve();
+            p.ajouter(0, i, Epoque.PASSE, Piece.GRAINE);
         }
-        IllegalStateException e = assertThrows(IllegalStateException.class, p::enleverGraineReserve);
-        assertTrue(e.getMessage().contains("Impossible d'enlever une graine : aucune graine en réserve"));
+        p.ajouter(1, 0, Epoque.PASSE, Piece.GRAINE);
+        IllegalStateException e = assertThrows(
+                IllegalStateException.class,
+                () -> p.ajouter(1, 1, Epoque.PASSE, Piece.GRAINE)
+        );
+        assertTrue(e.getMessage().contains("Impossible d'ajouter une graine : nombre maximal atteint"));
     }
 
     @Test

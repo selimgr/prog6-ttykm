@@ -4,14 +4,19 @@ import Patterns.Observable;
 
 import java.util.Random;
 
+// TODO: A tester
+// TODO: Ajouter des logs quand des actions incorrects sont effectuées
+
 public class Jeu extends Observable {
-    Plateau plateau;
-    Joueur joueur1;
-    Joueur joueur2;
-    int joueurActuel;
-    int dernierVainqueur;
-    Tour tourActuel;
-    Random rand;
+    private Plateau plateau;
+    private Joueur joueur1;
+    private Joueur joueur2;
+    private int joueurActuel;
+    private int dernierVainqueur;
+    private Tour tourActuel;
+    private Action prochaineAction;
+    private boolean focusSelectionne;
+    private final Random rand;
 
     public Jeu() {
         rand = new Random();
@@ -69,38 +74,118 @@ public class Jeu extends Observable {
         return joueur1();
     }
 
-    public void jouerMouvement(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
-        Coup coup = new Mouvement(plateau, joueurActuel(), departL, departC, eDepart);
-        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
+    public void selectionnerPlantation() {
+        if (prochaineAction == Action.PLANTATION) {
+            prochaineAction = Action.MOUVEMENT;
+        }
+        prochaineAction = Action.PLANTATION;
+    }
+
+    public void selectionnerRecolte() {
+        if (prochaineAction == Action.RECOLTE) {
+            prochaineAction = Action.MOUVEMENT;
+        }
+        prochaineAction = Action.RECOLTE;
+    }
+
+    public void jouerCoup(int l, int c, Epoque e) {
+        if (!tourActuel.pionSelectione() && !tourActuel.estCommence()) {
+            tourActuel.selectionnerPion(l, c, e);
+            prochaineAction = Action.MOUVEMENT;
+        }
+        else if (!tourActuel.estTermine()) {
+            switch (prochaineAction) {
+                case MOUVEMENT:
+                    jouerMouvement(l, c, e);
+                    break;
+                case PLANTATION:
+                    jouerPlantation(l, c, e);
+                    break;
+                case RECOLTE:
+                    jouerRecolte(l, c, e);
+                    break;
+            }
+            prochaineAction = Action.MOUVEMENT;
+        }
+    }
+
+    private void selectionnerPion(int l, int c, Epoque e) {
+        if (e == joueurActuel().focus() && (
+                (joueurActuel().pions() == Pion.BLANC && plateau.aBlanc(l, c, e)) ||
+                (joueurActuel().pions() == Pion.NOIR && plateau.aNoir(l, c, e)))) {
+            tourActuel.selectionnerPion(l, c, e);
+        }
+    }
+
+    private void jouerMouvement(int l, int c, Epoque e) {
+        if (tourActuel.deselectionnerPion(l, c, e)) {
+            metAJour();
+            return;
+        }
+        Coup coup = new Mouvement(
+                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
+        );
+        if (tourActuel.jouerCoup(coup, l, c, e)) {
             metAJour();
         }
     }
 
-    public void jouerPlantation(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
-        Coup coup = new Plantation(plateau, joueurActuel(), departL, departC, eDepart);
-        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
+    private void jouerPlantation(int l, int c, Epoque e) {
+        Coup coup = new Plantation(
+                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
+        );
+        if (tourActuel.jouerCoup(coup, l, c, e)) {
             metAJour();
         }
     }
 
-    public void jouerRecolte(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
-        Coup coup = new Recolte(plateau, joueurActuel(), departL, departC, eDepart);
+    private void jouerRecolte(int arriveeL, int arriveeC, Epoque eArrivee) {
+        Coup coup = new Recolte(
+                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
+        );
         if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
             metAJour();
         }
     }
 
     public void annulerCoup() {
-        tourActuel.annulerCoup();
-        metAJour();
+        if (tourActuel.annulerCoup()) {
+            metAJour();
+        }
     }
 
-    public void changerFocus(Epoque nouveau) {
+    public void focusPasse() {
+        if (joueurActuel().focus() == Epoque.PASSE) {
+            focusSelectionne = true;
+        } else if (focusSelectionne) {
+            changerFocus(Epoque.PASSE);
+        }
+    }
+
+    public void focusPresent() {
+        if (joueurActuel().focus() == Epoque.PRESENT) {
+            focusSelectionne = true;
+        } else if (focusSelectionne) {
+            changerFocus(Epoque.PRESENT);
+        }
+    }
+
+    public void focusFutur() {
+        if (joueurActuel().focus() == Epoque.FUTUR) {
+            focusSelectionne = true;
+        } else if (focusSelectionne) {
+            changerFocus(Epoque.FUTUR);
+        }
+    }
+
+    private void changerFocus(Epoque nouveau) {
         if (!tourActuel.estTermine()) {
-            throw new IllegalStateException("Impossible de changer le focus : tour non terminé");
+//            Configuration.logger.info("Impossible de changer le focus : tour non terminé");
+            return;
         }
         if (nouveau == joueurActuel().focus()) {
-            throw new IllegalArgumentException("Impossible de changer le focus : nouveau focus identique au focus actuel");
+//            Configuration.logger.info("Impossible de changer le focus : nouveau focus identique au focus actuel");
+            return;
         }
         joueurActuel().fixerFocus(nouveau);
         joueurActuel = (joueurActuel + 1) % 2;
@@ -115,6 +200,7 @@ public class Jeu extends Observable {
         } else {
             tourActuel = new Tour();
         }
+        focusSelectionne = false;
     }
 
     public boolean partieTerminee() {
@@ -129,5 +215,17 @@ public class Jeu extends Observable {
         } else {
             return null;
         }
+    }
+
+    public boolean pionSelectionne() {
+        return tourActuel.pionSelectione();
+    }
+
+    public boolean tourCommence() {
+        return tourActuel.estCommence();
+    }
+
+    public boolean tourTermine() {
+        return tourActuel.estTermine();
     }
 }

@@ -20,7 +20,9 @@ public class CPlateau extends JPanel {
         Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
         Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();
         this.c = c;
+
         num = numero;
+
         switch(numero) {
             case 1:
                 current = plateauPasse;
@@ -60,6 +62,7 @@ public class CPlateau extends JPanel {
         int offY = getOffsetY();
         int multX = (this.getWidth() - 2*offX)/4;
         int multY = (this.getHeight() - 2*offY)/4;
+
         for (int l = 0; l < Plateau.TAILLE; l++) {
             for (int c = 0; c < Plateau.TAILLE; c++) {
                 if (this.c.jeu().plateau().aBlanc(l, c, e)) {

@@ -30,7 +30,7 @@ public class Vues {
         vueJeu.nouvellePartie();
     }
 
-    public void metAjour(){ ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
+    public void metAjour() { ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
         frame.repaint();
         vueJeu.repaint();
     }

@@ -32,10 +32,9 @@ class VueJeu extends JPanel {
         controleur = c;
 
         jLayeredPane1 = new JLayeredPane();
-        plateaux = new  JPanel();
-        passe = new CPlateau(1,controleur);
-        present = new CPlateau(2,controleur);
-        futur = new CPlateau(3,controleur);
+        passe = new CPlateau(1, controleur);
+        present = new CPlateau(2, controleur);
+        futur = new CPlateau(3, controleur);
         fond = new  JPanel();
         top = new  JPanel();
         menu = new  JButton();
@@ -43,51 +42,7 @@ class VueJeu extends JPanel {
 
         setLayout(new OverlayLayout(this));
 
-        // -- DESSIN DES PLATEAUX
-        plateaux.setBackground(new Color(255, 255, 255));
-        plateaux.setBorder(BorderFactory.createEmptyBorder(140, 100, 140, 100));
-        plateaux.setOpaque(false);
-        plateaux.setLayout(new GridLayout(1, 3, 30, 0));
-
-        JPanel plateau1 = new JPanel(new GridBagLayout());
-        plateau1.setOpaque(false);
-        passe.setMinimumSize(new Dimension(300, 300));
-        plateau1.add(passe);
-
-        // ----
-        JPanel plateau2 = new JPanel(new GridBagLayout());
-        plateau2.setOpaque(false);
-        present.setPreferredSize(new Dimension(300, 300));
-        plateau2.add(present);
-
-        // ----
-        JPanel plateau3 = new JPanel(new GridBagLayout());
-        plateau3.setOpaque(false);
-        futur.setPreferredSize(new Dimension(300, 300));
-        plateau3.add(futur);
-
-        // --
-        plateaux.add(plateau1);
-        plateaux.add(plateau2);
-        plateaux.add(plateau3);
-
-        plateaux.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int size =  Math.min(plateau1.getWidth(), plateau1.getHeight());
-                passe.setPreferredSize(new Dimension(size, size));
-                present.setPreferredSize(new Dimension(size, size));
-                futur.setPreferredSize(new Dimension(size, size));
-                plateau1.revalidate();
-                plateau2.revalidate();
-                plateau3.revalidate();
-            }
-        });
-
-        add(plateaux);
-
         // -- DESSIN DERRIÈRE LES PLATEAUX
-
         fond.setLayout(new GridLayout(2, 0));
 
         // DESSIN DE LA PARTIE DU HAUT (bouton menu + info joueur 1)
@@ -177,7 +132,6 @@ class VueJeu extends JPanel {
         grainesButtons.add(planter);
         grainesButtons.add(recolter);
 
-
         //-----
         // DESSIN DE LA PARTIE DU BAS (boutons + infos joueur 2)
         bottom.setBackground(new Color(254, 125, 97));
@@ -211,8 +165,6 @@ class VueJeu extends JPanel {
         // --
         fond.add(bottom);
 
-        add(fond);
-
         // -- Add Listener
         passe.addMouseListener(new AdaptateurSouris(c, passe , "plateauPasse"));
         present.addMouseListener(new AdaptateurSouris(c, present,"plateauPresent"));
@@ -223,17 +175,13 @@ class VueJeu extends JPanel {
         vueNiveau = new VueNiveau(controleur);
         controleur.jeu().ajouteObservateur(vueNiveau);
 
-//        j1 = new CInfoJoueur(controleur.jeu().joueur1().nom(), 4, 0);
-        System.out.println(controleur.jeu().joueur1().toString());
-        System.out.println(controleur.jeu().joueur2().toString());
+        add(vueNiveau);
+        add(fond);
 
-        String s1 = "";
-        String s2 = "";
-        if(controleur.jeu().joueur1().type()!= TypeJoueur.HUMAIN){s1 = "IA : ";}
-        if(controleur.jeu().joueur2().type()!= TypeJoueur.HUMAIN){s2 = "IA : ";}
-        j1.setName(s1 + controleur.jeu().joueur1().nom());
+        j1.setName((controleur.jeu().joueur1().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
-        j2.setName(s2 + controleur.jeu().joueur2().nom());
+
+        j2.setName((controleur.jeu().joueur2().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
     }
 

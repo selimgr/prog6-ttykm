@@ -4,6 +4,7 @@ import Controleur.ControleurMediateur;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.Plateau;
+import Patterns.Observateur;
 import Vue.CollecteurEvenements;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 // 1 =
 
-public class JPanelCustom extends JPanel {
+public class JPanelCustom extends JPanel implements Observateur {
     Image current;
     CollecteurEvenements c;
     int num;
@@ -37,6 +38,7 @@ public class JPanelCustom extends JPanel {
                 System.err.println("Mauvais numéro de boutons");
                 break;
         }
+        c.jeu().ajouteObservateur(this);
     }
 
     @Override
@@ -83,5 +85,10 @@ public class JPanelCustom extends JPanel {
     }
     private int getOffsetY(){
         return 70*this.getHeight()/770;
+    }
+
+    @Override
+    public void miseAJour() {
+        repaint();
     }
 }

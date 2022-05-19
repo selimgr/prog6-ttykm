@@ -36,7 +36,7 @@ public class TestCoup {
         assertEquals(2, c3.colonnePion());
         assertEquals(Epoque.PASSE, c1.epoquePion());
         assertEquals(Epoque.FUTUR, c2.epoquePion());
-        assertEquals(Epoque.FUTUR, c3.epoquePion());
+        assertEquals(Epoque.PRESENT, c3.epoquePion());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class TestCoup {
     @Test
     public void testAnnulerAucunCoupCree() {
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
-        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : aucun coup créé"));
     }
 
     @Test

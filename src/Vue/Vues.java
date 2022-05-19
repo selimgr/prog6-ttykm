@@ -32,6 +32,7 @@ public class Vues {
 
     public void metAjour() { ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
         frame.repaint();
+        vueJeu.vueNiveau.miseAJour();
         vueJeu.repaint();
     }
 

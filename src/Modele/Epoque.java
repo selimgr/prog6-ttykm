@@ -15,7 +15,7 @@ public enum Epoque {
         this.indice = indice;
     }
 
-    int indice() {
+     public int indice() {
         return indice;
     }
 

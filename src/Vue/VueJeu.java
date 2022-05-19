@@ -178,6 +178,9 @@ class VueJeu extends JPanel {
 
         j2.setName((controleur.jeu().joueur2().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
+
+        vueNiveau.miseAJour();
+        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
 
 

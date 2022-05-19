@@ -92,25 +92,25 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void deplacer(int l, int c, Epoque e) {
+    public void deplacer(int l, int c, Epoque e,Plateau p) {
         if (eDepart != null) {
-            jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
+            jeu.jouerMouvement(departL, departC, eDepart, l, c, e,p);
         }
         eDepart = null;
     }
 
     @Override
-    public void planterGraine(int l, int c) {
+    public void planterGraine(int l, int c,Plateau p) {
         if (eDepart != null) {
-            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart);
+            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart,p);
         }
         eDepart = null;
     }
 
     @Override
-    public void recolterGraine(int l, int c) {
+    public void recolterGraine(int l, int c,Plateau p) {
         if (eDepart != null) {
-            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart);
+            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart,p);
         }
         eDepart = null;
     }
@@ -122,6 +122,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
+        // TODO : Deselectionner pion
         if(eDepart==null && !jeu().plateau().aPion(l,c,e)) {
             return;
         }
@@ -132,14 +133,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 
             switch (action) {
                 case MOUVEMENT:
-                    deplacer(l, c, e);
+                    deplacer(l, c, e,jeu.plateau());
                     System.out.println("mouvement");
                     break;
                 case PLANTATION:
-                    planterGraine(l, c);
+                    planterGraine(l, c,jeu.plateau());
                     break;
                 case RECOLTE:
-                    recolterGraine(l, c);
+                    recolterGraine(l, c,jeu.plateau());
                     break;
                 default:
                     throw new IllegalStateException("Aucune action sélectionnée");
@@ -154,7 +155,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // Focus changement
     public void ChangerFocus(Epoque e){
         jeu.changerFocus(e);
-        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN )ia.calcul();
+        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN )ia.calcul(jeu().plateau(), 0,1);
     }
 
     @Override

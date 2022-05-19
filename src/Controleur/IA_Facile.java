@@ -8,7 +8,7 @@ import Modele.Plateau;
 import java.util.List;
 import java.util.Random;
 
-public class IA_Facile implements IA {
+public class IA_Facile extends IA {
     ControleurMediateur ctrl;
     Joueur j;
     List<Coup> coups;
@@ -19,7 +19,12 @@ public class IA_Facile implements IA {
     IA_Facile() {
 
     }
-    public void calcul() {
+    public int calcul(Plateau p, int horizon,int minmax) {
+        return 1;
     }
 
+    @Override
+    public int fonctionApproximation(Plateau p) {
+        return 0;
+    }
 }

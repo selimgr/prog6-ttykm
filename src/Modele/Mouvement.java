@@ -1,7 +1,7 @@
 package Modele;
 
 public class Mouvement extends Coup {
-    boolean voyageTemporelArriere;
+    private boolean voyageTemporelArriere;
 
     Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);

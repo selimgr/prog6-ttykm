@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 
+import static java.awt.GridBagConstraints.*;
+
 class VueJeu extends JPanel {
     CollecteurEvenements controleur;
     VueNiveau vueNiveau;
@@ -159,6 +161,23 @@ class VueJeu extends JPanel {
 
         fond.add(top);
 
+        // TODO : Ajout du stock de graine
+        // Sachant qu'il y a le focus entre les plateaux et les boutons graines
+        JPanel grainesButtons = new JPanel();
+        grainesButtons.setLayout(new GridBagLayout());
+        grainesButtons.setBackground(new Color(254, 125, 97));
+        // --
+        //setEnabled à modifer à l'avenir en fonction de l'action possible par le joueur courant
+        JButton recolter = new JButton("Recolter une graine");
+        recolter.setEnabled(false);
+
+        JButton planter = new JButton("Planter une graine");
+        planter.setEnabled(true);
+
+        grainesButtons.add(planter);
+        grainesButtons.add(recolter);
+
+
         //-----
         // DESSIN DE LA PARTIE DU BAS (boutons + infos joueur 2)
         bottom.setBackground(new Color(254, 125, 97));
@@ -184,7 +203,8 @@ class VueJeu extends JPanel {
         controles.add(new JButton(">"));
         controles.add(new JButton("Fin tour"));
 
-        bas.add(joueur2infos, BorderLayout.PAGE_START);
+        bas.add(grainesButtons, BorderLayout.PAGE_START);
+        bas.add(joueur2infos);
         bas.add(controles, BorderLayout.PAGE_END);
         // --
         bottom.add(bas, BorderLayout.PAGE_END);

@@ -209,11 +209,11 @@ class VueJeu extends JPanel {
 
         String s1 = "";
         String s2 = "";
-        if(controleur.jeu().joueur1().type()!= TypeJoueur.HUMAIN){s1 = "IA";}
-        if(controleur.jeu().joueur2().type()!= TypeJoueur.HUMAIN){s2 = "IA";}
-        j1.setName(s1 + " : " + controleur.jeu().joueur1().nom());
+        if(controleur.jeu().joueur1().type()!= TypeJoueur.HUMAIN){s1 = "IA : ";}
+        if(controleur.jeu().joueur2().type()!= TypeJoueur.HUMAIN){s2 = "IA : ";}
+        j1.setName(s1 + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
-        j2.setName(s2 + " : " + controleur.jeu().joueur2().nom());
+        j2.setName(s2 + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
     }
 

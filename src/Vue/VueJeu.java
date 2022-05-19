@@ -1,5 +1,6 @@
 package Vue;
 
+import Modele.TypeJoueur;
 import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
 
@@ -206,9 +207,13 @@ class VueJeu extends JPanel {
         System.out.println(controleur.jeu().joueur1().toString());
         System.out.println(controleur.jeu().joueur2().toString());
 
-        j1.setName(controleur.jeu().joueur1().nom());
+        String s1 = "";
+        String s2 = "";
+        if(controleur.jeu().joueur1().type()!= TypeJoueur.HUMAIN){s1 = "IA";}
+        if(controleur.jeu().joueur2().type()!= TypeJoueur.HUMAIN){s2 = "IA";}
+        j1.setName(s1 + " : " + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
-        j2.setName(controleur.jeu().joueur2().nom());
+        j2.setName(s2 + " : " + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
     }
 

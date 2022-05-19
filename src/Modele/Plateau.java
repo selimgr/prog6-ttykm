@@ -67,7 +67,7 @@ public class Plateau {
         if (p == Piece.BLANC || p == Piece.NOIR) {
             ajouterPionPlateau(p.toPion(), e);
         } else if (p == Piece.GRAINE) {
-            ajouterGraineReserve();
+            enleverGraineReserve();
         }
     }
 
@@ -87,7 +87,7 @@ public class Plateau {
         if (p == Piece.BLANC || p == Piece.NOIR) {
             supprimerPionPlateau(p.toPion(), e);
         } else if (p == Piece.GRAINE) {
-            enleverGraineReserve();
+            ajouterGraineReserve();
         }
     }
 

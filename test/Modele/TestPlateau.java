@@ -312,10 +312,22 @@ public class TestPlateau {
         exceptionAjouterContenu(Piece.ARBRE_COUCHE_GAUCHE);
         p.ajouter(1, 1, Epoque.PRESENT, null);
         assertContenuGraine();
-        assertExceptionsAjouterContenu();
+        exceptionAjouterContenu(Piece.GRAINE);
+        exceptionAjouterContenu(Piece.ARBUSTE);
+        exceptionAjouterContenu(Piece.ARBRE);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_HAUT);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_DROITE);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_BAS);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_GAUCHE);
         p.supprimer(1, 1, Epoque.PRESENT, null);
         assertContenuGraine();
-        assertExceptionsAjouterContenu();
+        exceptionAjouterContenu(Piece.GRAINE);
+        exceptionAjouterContenu(Piece.ARBUSTE);
+        exceptionAjouterContenu(Piece.ARBRE);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_HAUT);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_DROITE);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_BAS);
+        exceptionAjouterContenu(Piece.ARBRE_COUCHE_GAUCHE);
         p.ajouter(1, 1, Epoque.PRESENT, Piece.BLANC);
         assertContenuBlancEtGraine();
         p.supprimer(1, 1, Epoque.PRESENT, Piece.BLANC);
@@ -620,8 +632,8 @@ public class TestPlateau {
     }
 
     @Test
-    public void testExceptionAjouterGraineReserve() {
-        for (int i = 0; i < Plateau.NOMBRE_MAX_GRAINES; i++) {
+    public void testExceptionEnleverGraineReserve() {
+        for (int i = 0; i < 4; i++) {
             p.ajouter(0, i, Epoque.PASSE, Piece.GRAINE);
         }
         p.ajouter(1, 0, Epoque.PASSE, Piece.GRAINE);
@@ -629,7 +641,7 @@ public class TestPlateau {
                 IllegalStateException.class,
                 () -> p.ajouter(1, 1, Epoque.PASSE, Piece.GRAINE)
         );
-        assertTrue(e.getMessage().contains("Impossible d'ajouter une graine : nombre maximal atteint"));
+        assertTrue(e.getMessage().contains("Impossible d'enlever une graine : aucune graine en réserve"));
     }
 
     @Test

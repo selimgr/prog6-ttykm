@@ -4,14 +4,12 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
 
+// TODO: A tester
 // TODO: Compléter le controleur
 
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
-    int departL, departC;
-    Epoque eDepart;
-    Action action;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -54,9 +52,9 @@ public class ControleurMediateur implements CollecteurEvenements {
         vues.afficherJeu();
     }
 
-
     @Override
-    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
+    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
+                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
@@ -83,63 +81,23 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void selectionnerPion(int l, int c, Epoque e) {
-        departL = l;
-        departC = c;
-        eDepart = e;
-        fixerAction(Action.MOUVEMENT);
+    public void jouer(int l, int c, Epoque e) {
+        jeu.jouerCoup(l, c, e);
     }
 
     @Override
-    public void deplacer(int l, int c, Epoque e) {
-        if (eDepart != null) {
-            jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
-        }
-        eDepart = null;
+    public void annuler() {
+        jeu.annulerCoup();
     }
 
     @Override
-    public void planterGraine(int l, int c) {
-        if (eDepart != null) {
-            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart);
-        }
-        eDepart = null;
+    public void selectionnerPlanterGraine() {
+        jeu.selectionnerPlantation();
     }
 
     @Override
-    public void recolterGraine(int l, int c) {
-        if (eDepart != null) {
-            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart);
-        }
-        eDepart = null;
-    }
-
-    @Override
-    public void fixerAction(Action a) {
-        action = a;
-    }
-
-    @Override
-    public void clicSouris(int l, int c, Epoque e) {
-        if (eDepart == null) {
-            selectionnerPion(l, c, e);
-            return;
-        }
-
-        switch (action) {
-            case MOUVEMENT:
-                deplacer(l, c, e);
-                break;
-            case PLANTATION:
-                planterGraine(l, c);
-                break;
-            case RECOLTE:
-                recolterGraine(l, c);
-                break;
-            default:
-                throw new IllegalStateException("Aucune action sélectionnée");
-        }
-        action = null;
+    public void selectionnerRecolterGraine() {
+        jeu.selectionnerRecolte();
     }
 
     @Override

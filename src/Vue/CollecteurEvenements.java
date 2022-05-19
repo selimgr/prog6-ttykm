@@ -1,6 +1,6 @@
 package Vue;
 
-import Controleur.Action;
+import Modele.Action;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
@@ -17,7 +17,8 @@ public interface CollecteurEvenements {
 
     void afficherJeu();
 
-    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2);
+    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
+                        String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2);
 
     void partieSuivante();
 
@@ -25,17 +26,13 @@ public interface CollecteurEvenements {
 
     void toClose();
 
-    void selectionnerPion(int l, int c, Epoque e);
+    void jouer(int l, int c, Epoque e);
 
-    void deplacer(int l, int c, Epoque e);
+    void annuler();
 
-    void planterGraine(int l, int c);
+    void selectionnerPlanterGraine();
 
-    void recolterGraine(int l, int c);
-
-    public void fixerAction(Action a);
-
-    void clicSouris(int l, int c, Epoque e);
+    void selectionnerRecolterGraine();
 
     void toucheClavier(String touche);
 

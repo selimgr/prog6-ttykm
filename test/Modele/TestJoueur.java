@@ -97,7 +97,7 @@ public class TestJoueur {
 
         for (int i = 0; i < Pion.NOMBRE_MAX_RESERVE; i++) {
             j.ajouterPionReserve();
-            assertEquals(Pion.NOMBRE_MAX_RESERVE + i + 1, j.nombrePionsReserve());
+            assertEquals(i + 1, j.nombrePionsReserve());
         }
         assertEquals(Pion.NOMBRE_MAX_RESERVE, j.nombrePionsReserve());
     }

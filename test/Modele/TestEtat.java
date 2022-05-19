@@ -13,20 +13,27 @@ public class TestEtat {
 
             for (int j = 0; j < Plateau.TAILLE; j++) {
                 for (int k = 0; k < Plateau.TAILLE; k++) {
-                    for (int l = 0; l < Piece.NOMBRE; l++) {
+                    int l = 0;
+
+                    while (l < Piece.NOMBRE) {
                         Piece avant;
                         if (l == 0) {
                             avant = null;
+                            l++;
                         } else {
                             avant = Piece.depuisValeur(l);
+                            l *= 2;
                         }
+                        int m = 0;
 
-                        for (int m = 0; m < Piece.NOMBRE; m++) {
+                        while (m < Piece.NOMBRE) {
                             Piece apres;
                             if (m == 0) {
                                 apres = null;
+                                m++;
                             } else {
                                 apres = Piece.depuisValeur(m);
+                                m *= 2;
                             }
                             Etat q = new Etat(j, k, e, avant, apres);
 
@@ -46,20 +53,27 @@ public class TestEtat {
     public void testExceptionEpoqueNull() {
         for (int i = 0; i < Plateau.TAILLE; i++) {
             for (int j = 0; j < Plateau.TAILLE; j++) {
-                for (int k = 0; k < Piece.NOMBRE; k++) {
+                int k = 0;
+
+                while (k < Piece.NOMBRE) {
                     Piece avant;
                     if (k == 0) {
                         avant = null;
+                        k++;
                     } else {
                         avant = Piece.depuisValeur(k);
+                        k *= 2;
                     }
+                    int l = 0;
 
-                    for (int l = 0; l < Piece.NOMBRE; l++) {
+                    while (l < Piece.NOMBRE) {
                         Piece apres;
                         if (l == 0) {
                             apres = null;
+                            l++;
                         } else {
                             apres = Piece.depuisValeur(l);
+                            l *= 2;
                         }
                         final int ligne = i;
                         final int colonne = j;
@@ -86,21 +100,27 @@ public class TestEtat {
     public void testLignesColonnesIncorrectes() {
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             Epoque epoque = Epoque.depuisIndice(i);
+            int j = 0;
 
-            for (int j = 0; j < Piece.NOMBRE; j++) {
+            while (j < Piece.NOMBRE) {
                 Piece avant;
                 if (j == 0) {
                     avant = null;
+                    j++;
                 } else {
                     avant = Piece.depuisValeur(j);
+                    j *= 2;
                 }
+                int k = 0;
 
-                for (int k = 0; k < Piece.NOMBRE; k++) {
+                while (k < Piece.NOMBRE) {
                     Piece apres;
                     if (k == 0) {
                         apres = null;
+                        k++;
                     } else {
                         apres = Piece.depuisValeur(k);
+                        k *= 2;
                     }
 
                     for (int l = -100; l < 0; l++) {

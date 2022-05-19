@@ -1,24 +1,29 @@
 package Vue;
 
+import Modele.TypeJoueur;
 import Vue.JComposants.CInfoJoueur;
-import Vue.JComposants.JPanelCustom;
+import Vue.JComposants.CPlateau;
 
 import  javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
+
+import static java.awt.GridBagConstraints.*;
 
 class VueJeu extends JPanel {
     CollecteurEvenements controleur;
     VueNiveau vueNiveau;
     private  JPanel bottom;
-    private  JPanelCustom futur;
+    private CPlateau futur;
     private  JLayeredPane jLayeredPane1;
     private  JPanel fond;
     private  JButton menu;
-    private JPanelCustom passe;
+    private CPlateau passe;
     private  JPanel plateaux;
-    private  JPanelCustom present;
+    private CPlateau present;
     private  JPanel top;
     private CInfoJoueur j1;
     private CInfoJoueur j2;
@@ -28,9 +33,9 @@ class VueJeu extends JPanel {
 
         jLayeredPane1 = new JLayeredPane();
         plateaux = new  JPanel();
-        passe = new JPanelCustom(1,controleur);
-        present = new JPanelCustom(2,controleur);
-        futur = new JPanelCustom(3,controleur);
+        passe = new CPlateau(1,controleur);
+        present = new CPlateau(2,controleur);
+        futur = new CPlateau(3,controleur);
         fond = new  JPanel();
         top = new  JPanel();
         menu = new  JButton();
@@ -93,10 +98,53 @@ class VueJeu extends JPanel {
         JPanel boutons = new JPanel();
         boutons.setOpaque(false);
         boutons.setLayout(new FlowLayout(FlowLayout.LEFT));
-        menu.setBackground(new Color(51, 51, 51));
-        menu.setBorder(BorderFactory.createEmptyBorder(12, 12, 1, 1));
+        menu.setBackground(new Color(0, 0, 0));
+        menu.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         menu.setMargin(new Insets(10, 10, 2, 14));
-        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+
+        // Menu Paramètres
+        JMenuBar jBar = new JMenuBar();
+        jBar.setBackground(new Color(0, 0, 0));
+        jBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jBar.setMargin(new Insets(10, 10, 2, 14));
+        JMenu jm = new JMenu();
+        jm.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        JCheckBoxMenuItem itemMusique = new JCheckBoxMenuItem();
+        itemMusique.setText("Musique");
+        itemMusique.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Musique.png"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        JMenuItem item2 = new JMenuItem();
+        item2.setText("Sauvegarder");
+        JMenuItem item3 = new JMenuItem();
+        item3.setText("Menu Principal");
+        item3.addActionListener((e) -> {
+            c.afficherMenuPrincipal();
+        });
+        JMenuItem item4 = new JMenuItem();
+        item4.setText("Quitter");
+        item4.addActionListener((e) -> {
+            c.toClose();
+        });
+        jm.add(itemMusique); jm.add(item2);
+        jm.add(item3); jm.add(item4);
+        jBar.add(jm);
+
+        JMenu tutoriel = new JMenu();
+        //Affichage des règles pendant le jeu
+        tutoriel.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent menuEvent) {
+                c.afficherRegles();
+            }
+            @Override
+            public void menuDeselected(MenuEvent menuEvent) {}
+            @Override
+            public void menuCanceled(MenuEvent menuEvent) {}
+        });
+        tutoriel.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        jBar.add(tutoriel);
+
+        menu.add(jBar);
+
         boutons.add(menu);
 
         //--
@@ -112,6 +160,23 @@ class VueJeu extends JPanel {
         top.add(joueur1infos, BorderLayout.CENTER);
 
         fond.add(top);
+
+        // TODO : Ajout du stock de graine
+        // Sachant qu'il y a le focus entre les plateaux et les boutons graines
+        JPanel grainesButtons = new JPanel();
+        grainesButtons.setLayout(new GridBagLayout());
+        grainesButtons.setBackground(new Color(254, 125, 97));
+        // --
+        //setEnabled à modifer à l'avenir en fonction de l'action possible par le joueur courant
+        JButton recolter = new JButton("Recolter une graine");
+        recolter.setEnabled(false);
+
+        JButton planter = new JButton("Planter une graine");
+        planter.setEnabled(true);
+
+        grainesButtons.add(planter);
+        grainesButtons.add(recolter);
+
 
         //-----
         // DESSIN DE LA PARTIE DU BAS (boutons + infos joueur 2)
@@ -138,7 +203,8 @@ class VueJeu extends JPanel {
         controles.add(new JButton(">"));
         controles.add(new JButton("Fin tour"));
 
-        bas.add(joueur2infos, BorderLayout.PAGE_START);
+        bas.add(grainesButtons, BorderLayout.PAGE_START);
+        bas.add(joueur2infos);
         bas.add(controles, BorderLayout.PAGE_END);
         // --
         bottom.add(bas, BorderLayout.PAGE_END);
@@ -158,9 +224,16 @@ class VueJeu extends JPanel {
         controleur.jeu().ajouteObservateur(vueNiveau);
 
 //        j1 = new CInfoJoueur(controleur.jeu().joueur1().nom(), 4, 0);
-        j1.setName(controleur.jeu().joueur1().nom());
+        System.out.println(controleur.jeu().joueur1().toString());
+        System.out.println(controleur.jeu().joueur2().toString());
+
+        String s1 = "";
+        String s2 = "";
+        if(controleur.jeu().joueur1().type()!= TypeJoueur.HUMAIN){s1 = "IA : ";}
+        if(controleur.jeu().joueur2().type()!= TypeJoueur.HUMAIN){s2 = "IA : ";}
+        j1.setName(s1 + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
-        j2.setName(controleur.jeu().joueur2().nom());
+        j2.setName(s2 + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
     }
 

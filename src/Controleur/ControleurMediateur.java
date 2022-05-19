@@ -164,6 +164,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         eDepart = null;
         action = null;
+
         vues.metAjour();
 
         if(attendAction1) { //AEFD

@@ -61,8 +61,19 @@ class VueNiveau extends JPanel implements Observateur {
             plateau3.revalidate();
             }
         });
+
+        // -- Add Listener
+        passe.addMouseListener(new AdaptateurSouris(c, passe , "plateauPasse"));
+        present.addMouseListener(new AdaptateurSouris(c, present,"plateauPresent"));
+        futur.addMouseListener(new AdaptateurSouris(c,futur,"plateauFutur"));
     }
 
+    @Override
+    public void repaint() {
+        super.repaint();
+
+        System.out.println("cc");
+    }
 
     @Override
     public void miseAJour() {

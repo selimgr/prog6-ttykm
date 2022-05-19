@@ -40,7 +40,6 @@ class VueMenuPrincipal extends JPanel {
         });
         add(regles);
 
-
         add(Box.createRigidArea(new Dimension(10, 30)));
         add(new JButton("Paramètres"));
 

@@ -1,7 +1,6 @@
 package Modele;
 
 // TODO: A tester
-// TODO: Mette à jour la position du pion après un coup
 
 class Tour {
     private Case pion;
@@ -60,7 +59,7 @@ class Tour {
         if (estTermine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
         }
-        if (!pionsIdentiques(destL, destC, eDest) || !coup.creer(destL, destC, eDest)) {
+        if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
 
@@ -70,20 +69,26 @@ class Tour {
             coup2 = coup;
         }
         coup.jouer();
+        pion = coup.pion();
         return true;
     }
 
     boolean annulerCoup() {
         if (!estCommence()) {
+            if (pionSelectione()) {
+                pion = null;
+                return true;
+            }
             return false;
         }
         if (estTermine()) {
             coup2.annuler();
+            pion = coup2.pion();
             coup2 = null;
         } else {
             coup1.annuler();
+            pion = coup2.pion();
             coup1 = null;
-            pion = null;
         }
         return true;
     }

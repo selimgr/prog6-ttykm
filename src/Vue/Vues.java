@@ -2,6 +2,8 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Vues {
     JFrame frame;
@@ -9,7 +11,8 @@ public class Vues {
 
     final static String DEMARRAGE = "Démarrage";
     final static String MENU_PRINCIPAL = "Menu Principal";
-    final static String MENU_NOUVELLE_PARTIE = "Nouvelle Partie";
+    final static String MENU_SAISIES = "Nouvelle Partie";
+    final static String MENU_PARTIES = "Charger Partie";
     final static String JEU = "Jeu";
 
     Vues(JFrame f) {
@@ -27,8 +30,9 @@ public class Vues {
         vueJeu.nouvellePartie();
     }
 
-    public void metAjour(){ ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
+    public void metAjour() { ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
         frame.repaint();
+        vueJeu.vueNiveau.miseAJour();
         vueJeu.repaint();
     }
 
@@ -46,15 +50,26 @@ public class Vues {
     }
 
     public void afficherMenuNouvellePartie() {
-        afficher(MENU_NOUVELLE_PARTIE);
+        afficher(MENU_SAISIES);
     }
 
     public void afficherJeu() {
         afficher(JEU);
     }
 
+    public void afficherMenuChargerPartie(){afficher(MENU_PARTIES);}
+
     public void close() {
         frame.setVisible(true);
         frame.dispose();
+    }
+
+    public void afficherR(){
+        try {
+            File rules = new File("./resources/assets/Rules.pdf");
+            Desktop.getDesktop().open(rules);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 }

@@ -27,8 +27,19 @@ class VueMenuPrincipal extends JPanel {
             c.afficherMenuNouvellePartie();
         });
         add(nouvellePartie);
-        add(new JButton("Charger Partie"));
-        add(new JButton("Règles"));
+
+        JButton chargerPartie = new JButton("Charger Partie");
+        chargerPartie.addActionListener((e) -> {
+            c.afficherMenuChargerPartie();
+        });
+        add(chargerPartie);
+
+        JButton regles = new JButton("Règles");
+        regles.addActionListener((e) -> {
+            c.afficherRegles();
+        });
+        add(regles);
+
         add(Box.createRigidArea(new Dimension(10, 30)));
         add(new JButton("Paramètres"));
 
@@ -39,10 +50,8 @@ class VueMenuPrincipal extends JPanel {
         add(quitter);
 
         for (Component ca : getComponents()) {
-            if (ca.getClass().getName().contains("Button")) {
-                System.out.println(((JButton) ca).getText());
+            if (ca.getClass().getName().contains("Button"))
                 ((JButton)ca).setAlignmentX(CENTER_ALIGNMENT);
-            }
         }
 
         addComponentListener(new ComponentAdapter() {
@@ -53,7 +62,7 @@ class VueMenuPrincipal extends JPanel {
             }
         });
 
-        JButton chargerPartie, regles, didacticiel, parametres;
+        JButton didacticiel, parametres;
     }
 
     @Override

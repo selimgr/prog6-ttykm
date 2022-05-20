@@ -80,21 +80,21 @@ public class Jeu extends Observable {
         return joueur1();
     }
 
-    public void jouerMouvement(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee,Plateau plateau) {
+    public void jouerMouvement(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Mouvement(plateau, joueurActuel(), departL, departC, eDepart);
         if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
             metAJour();
         }
     }
 
-    public void jouerPlantation(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee,Plateau plateau) {
+    public void jouerPlantation(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Plantation(plateau, joueurActuel(), departL, departC, eDepart);
         if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
             metAJour();
         }
     }
 
-    public void jouerRecolte(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee,Plateau plateau) {
+    public void jouerRecolte(int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         Coup coup = new Recolte(plateau, joueurActuel(), departL, departC, eDepart);
         if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
             metAJour();
@@ -118,7 +118,7 @@ public class Jeu extends Observable {
         metAJour();
 
         if (partieTerminee()) {
-            if (vainqueur(this.plateau) == joueur1) {
+            if (vainqueur() == joueur1) {
                 dernierVainqueur = 0;
             } else {
                 dernierVainqueur = 1;
@@ -129,10 +129,10 @@ public class Jeu extends Observable {
     }
 
     public boolean partieTerminee() {
-        return vainqueur(this.plateau) != null;
+        return vainqueur() != null;
     }
 
-    public Joueur vainqueur(Plateau p) {
+    public Joueur vainqueur() {
         if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
             return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
         } else if (plateau.nombrePlateauVide(Pion.NOIR) >= 2) {

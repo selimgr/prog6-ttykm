@@ -22,8 +22,8 @@ public abstract class IA {
 
     int calcul(Plateau p, int horizon,int minmax) {
         /* --------- Feuille --------- */
-        if (jeu.vainqueur(p) == ia){return 1000;}
-        if (jeu.vainqueur(p) == adversaire){return -1000;}
+        if (jeu.vainqueur() == ia){return 1000;}
+        if (jeu.vainqueur() == adversaire){return -1000;}
         if (horizon <= 0 ){return fonctionApproximation(p);}
         // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
         if ( antiCycle.get(p.hash()) >= horizon){return -1000*minmax;}
@@ -82,9 +82,12 @@ public abstract class IA {
          int eA = c1.epoquePion().indice() + c1.deplacementEpoquePion();
          Epoque eA2 = Epoque.depuisIndice(eA);
         switch (cp.getAction()){
-            case MOUVEMENT -> jeu.jouerMouvement(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2,p);
-            case RECOLTE -> jeu.jouerRecolte(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2,p);
-            case PLANTATION -> jeu.jouerPlantation(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2,p);
+            case MOUVEMENT :
+                jeu.jouerMouvement(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2);break;
+            case RECOLTE :
+                jeu.jouerRecolte(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2);break;
+            case PLANTATION :
+                jeu.jouerPlantation(cp.lignePion(),cp.colonnePion(),cp.epoquePion(),lA,cA,eA2);break;
         }
     }
 

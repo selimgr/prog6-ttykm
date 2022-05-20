@@ -126,13 +126,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
-        for(int i=0;i<4;i++) { //////////DEBUGGING
+        for (int i = 0; i < 4; i++) { //////////DEBUGGING
             for (int j = 0; j < 4; j++) {
                 System.out.print(jeu().plateau().contenu(i, j, e));
             }
             System.out.println("");
         } ////////////////FIN DEBUG
-        if(attendAction1 || attendAction2) {
+        if (attendAction1 || attendAction2) {
             if (eDepart == null && !jeu().plateau().aPion(l, c, e)) {
                 return;
             }
@@ -155,34 +155,32 @@ public class ControleurMediateur implements CollecteurEvenements {
                 default:
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
-        }else{ //attend focus
+        } else { //attend focus
             jeu().changerFocus(e);
         }
 
-            eDepart = null;
-            action = null;
-            vues.metAjour();
+        eDepart = null;
+        action = null;
+        vues.metAjour();
 
-            if(attendAction1){ //AEFD
-                attendAction1 = false;
-                attendAction2 = true;
-            }else{
-                if(attendAction2){
-                    attendAction2 = false;
-                    attendFocus = true;
-                }else{
-                    if(attendFocus){
-                        attendFocus = false;
-                        attendAction1 = true;
-                        //changer joueur
-                    }
+        if (attendAction1) { //AEFD
+            attendAction1 = false;
+            attendAction2 = true;
+        } else {
+            if (attendAction2) {
+                attendAction2 = false;
+                attendFocus = true;
+            } else {
+                if (attendFocus) {
+                    attendFocus = false;
+                    attendAction1 = true;
+                    //changer joueur
                 }
             }
-
-
-    @Override
-    public void toucheClavier(String touche) {
-
+        }
+    }
+    public void toucheClavier( String toucheStr) {
+        System.out.println(toucheStr);
     }
 
     @Override

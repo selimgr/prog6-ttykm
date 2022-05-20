@@ -1,7 +1,10 @@
 package Vue;
 
 import Controleur.Action;
-import Modele.*;
+import Modele.Epoque;
+import Modele.Jeu;
+import Modele.TypeJoueur;
+import Modele.Pion;
 
 public interface CollecteurEvenements {
     void fixerMediateurVues(Vues v);
@@ -24,11 +27,11 @@ public interface CollecteurEvenements {
 
     void selectionnerPion(int l, int c, Epoque e);
 
-    void deplacer(int l, int c, Epoque e, Plateau p);
+    void deplacer(int l, int c, Epoque e);
 
-    void planterGraine(int l, int c, Plateau p);
+    void planterGraine(int l, int c);
 
-    void recolterGraine(int l, int c, Plateau p);
+    void recolterGraine(int l, int c);
 
     public void fixerAction(Action a);
 

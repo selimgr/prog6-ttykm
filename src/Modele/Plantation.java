@@ -32,13 +32,13 @@ public class Plantation extends Coup {
         if (eDest.indice() + 1 < Epoque.NOMBRE) {
             Epoque eSuivante = Epoque.depuisIndice(eDest.indice() + 1);
 
-            if (estPlantable(destL, destC, eSuivante)) {
+            if (plateau().estVide(destL, destC, eSuivante)) {
                 ajouter(Piece.ARBUSTE, destL, destC, eSuivante);
 
                 if (eSuivante.indice() + 1 < Epoque.NOMBRE) {
                     eSuivante = Epoque.depuisIndice(eSuivante.indice() + 1);
 
-                    if (estPlantable(destL, destC, eSuivante)) {
+                    if (plateau().estVide(destL, destC, eSuivante)) {
                         ajouter(Piece.ARBRE, destL, destC, eSuivante);
                     }
                 }

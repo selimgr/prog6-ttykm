@@ -1,36 +1,36 @@
 package Modele;
 
-public class Etat {
-    private final int l, c;
-    private final Epoque e;
-    private final Piece avant, apres;
+import static java.util.Objects.requireNonNull;
 
-    Etat(int l, int c, Epoque e, Piece avant, Piece apres) {
-        Plateau.verifierCoordoneesCorrectes(l, c, e);
-        this.l = l;
-        this.c = c;
-        this.e = e;
+public class Etat {
+    private final Piece piece;
+    private final Case avant, apres;
+
+    Etat(Piece piece, Case avant, Case apres) {
+        requireNonNull(piece, "La pièce ne doit pas être null");
+
+        if (avant == null && apres == null) {
+            throw new IllegalArgumentException("Impossible de créer un état avec les cases avant et après null");
+        }
+        this.piece = piece;
         this.avant = avant;
         this.apres = apres;
     }
 
-    int ligne() {
-        return l;
+    Piece piece() {
+        return piece;
     }
 
-    int colonne() {
-        return c;
-    }
-
-    Epoque epoque() {
-        return e;
-    }
-
-    Piece pieceAvant() {
+    Case avant() {
         return avant;
     }
 
-    Piece pieceApres() {
+    Case apres() {
         return apres;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + piece + " : " + avant + " -> " + apres + "]";
     }
 }

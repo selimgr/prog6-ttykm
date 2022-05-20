@@ -17,6 +17,7 @@ public class TestCoup {
         j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
         c1 = new Mouvement(p, j1, 0, 0, Epoque.PASSE);
         c2 = new Mouvement(p, j2, 3, 3, Epoque.FUTUR);
+        p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         c3 = new Mouvement(p, j1, 1, 2, Epoque.PRESENT);
     }
 
@@ -28,21 +29,32 @@ public class TestCoup {
         assertEquals(j1, c1.joueur());
         assertEquals(j2, c2.joueur());
         assertEquals(j1, c3.joueur());
-        assertEquals(0, c1.lignePion());
-        assertEquals(3, c2.lignePion());
-        assertEquals(1, c3.lignePion());
-        assertEquals(0, c1.colonnePion());
-        assertEquals(3, c2.colonnePion());
-        assertEquals(2, c3.colonnePion());
-        assertEquals(Epoque.PASSE, c1.epoquePion());
-        assertEquals(Epoque.FUTUR, c2.epoquePion());
-        assertEquals(Epoque.PRESENT, c3.epoquePion());
+        Case pion1 = c1.pion();
+        assertEquals(0, pion1.ligne());
+        assertEquals(0, pion1.colonne());
+        assertEquals(Epoque.PASSE, pion1.epoque());
+        Case pion2 = c2.pion();
+        assertEquals(3, pion2.ligne());
+        assertEquals(3, pion2.colonne());
+        assertEquals(Epoque.FUTUR, pion2.epoque());
+        Case pion3 = c3.pion();
+        assertEquals(1, pion3.ligne());
+        assertEquals(2, pion3.colonne());
+        assertEquals(Epoque.PRESENT, pion3.epoque());
+    }
+
+    @Test
+    public void testDeplacerEtat() {
+        c1.verifierPremierCoupCree();
+        c1.deplacer(Piece.BLANC, 0, 0, Epoque.PRESENT, 0, 1, Epoque.PRESENT);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testAjouterEtat() {
         c1.verifierPremierCoupCree();
-        c1.ajouter(1, 1, Epoque.PRESENT, Piece.NOIR);
+        c1.ajouter(Piece.NOIR, 1, 1, Epoque.PRESENT);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
@@ -50,7 +62,7 @@ public class TestCoup {
     @Test
     public void testSupprimerEtat() {
         c1.verifierPremierCoupCree();
-        c1.supprimer(0, 0, Epoque.PRESENT, Piece.BLANC);
+        c1.supprimer(Piece.BLANC, 0, 0, Epoque.PRESENT);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
@@ -89,5 +101,47 @@ public class TestCoup {
         c1.annuler();
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
         assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+    }
+
+    @Test
+    public void testModificationPionJouerAnnuler() {
+        c1.creer(0, 1, Epoque.PASSE);
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(0, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.jouer();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.annuler();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(0, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+
+        c2.creer(2, 3, Epoque.FUTUR);
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+        c2.jouer();
+        assertEquals(2, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+        c2.annuler();
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+
+        c3.creer(1, 2, Epoque.FUTUR);
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
+        c3.jouer();
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.FUTUR, c3.pion().epoque());
+        c3.annuler();
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
     }
 }

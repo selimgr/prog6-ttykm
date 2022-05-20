@@ -8,139 +8,77 @@ public class TestEtat {
 
     @Test
     public void testInitialisation() {
+        for (int i = 1; i <= 256; i *= 2) {
+            Piece p = Piece.depuisValeur(i);
+
+            for (int j = 0; j < Epoque.NOMBRE; j++) {
+                Epoque e = Epoque.depuisIndice(j);
+
+                for (int k = 0; k < Plateau.TAILLE; k++) {
+                    for (int l = 0; l < Plateau.TAILLE; l++) {
+                        Case c = new Case(k, l, e);
+                        Etat etat = new Etat(p, c, null);
+                        assertEquals(p, etat.piece());
+                        assertEquals(c, etat.avant());
+                        assertNull(etat.apres());
+                        etat = new Etat(p, null, c);
+                        assertEquals(p, etat.piece());
+                        assertNull(etat.avant());
+                        assertEquals(c, etat.apres());
+                        etat = new Etat(p, c, c);
+                        assertEquals(p, etat.piece());
+                        assertEquals(c, etat.avant());
+                        assertEquals(c, etat.apres());
+                    }
+                }
+            }
+        }
+    }
+
+    private void exceptionPieceNull(Case avant, Case apres) {
+        NullPointerException e = assertThrows(
+                NullPointerException.class,
+                () -> new Etat(null, avant, apres)
+        );
+        assertTrue(e.getMessage().contains("La pièce ne doit pas être null"));
+    }
+
+    @Test
+    public void testExceptionPieceNull() {
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             Epoque e = Epoque.depuisIndice(i);
 
             for (int j = 0; j < Plateau.TAILLE; j++) {
                 for (int k = 0; k < Plateau.TAILLE; k++) {
-                    int l = 0;
-
-                    while (l < Piece.NOMBRE) {
-                        Piece avant;
-                        if (l == 0) {
-                            avant = null;
-                            l++;
-                        } else {
-                            avant = Piece.depuisValeur(l);
-                            l *= 2;
-                        }
-                        int m = 0;
-
-                        while (m < Piece.NOMBRE) {
-                            Piece apres;
-                            if (m == 0) {
-                                apres = null;
-                                m++;
-                            } else {
-                                apres = Piece.depuisValeur(m);
-                                m *= 2;
-                            }
-                            Etat q = new Etat(j, k, e, avant, apres);
-
-                            assertEquals(j, q.ligne());
-                            assertEquals(k, q.colonne());
-                            assertEquals(e, q.epoque());
-                            assertEquals(avant, q.pieceAvant());
-                            assertEquals(apres, q.pieceApres());
-                        }
-                    }
+                    Case c = new Case(j, k, e);
+                    exceptionPieceNull(c, null);
+                    exceptionPieceNull(null, c);
+                    exceptionPieceNull(c, c);
                 }
             }
         }
     }
 
     @Test
-    public void testExceptionEpoqueNull() {
-        for (int i = 0; i < Plateau.TAILLE; i++) {
-            for (int j = 0; j < Plateau.TAILLE; j++) {
-                int k = 0;
+    public void testExceptionDeuxCasesNull() {
+        for (int i = 1; i <= 256; i *= 2) {
+            Piece p = Piece.depuisValeur(i);
 
-                while (k < Piece.NOMBRE) {
-                    Piece avant;
-                    if (k == 0) {
-                        avant = null;
-                        k++;
-                    } else {
-                        avant = Piece.depuisValeur(k);
-                        k *= 2;
-                    }
-                    int l = 0;
-
-                    while (l < Piece.NOMBRE) {
-                        Piece apres;
-                        if (l == 0) {
-                            apres = null;
-                            l++;
-                        } else {
-                            apres = Piece.depuisValeur(l);
-                            l *= 2;
-                        }
-                        final int ligne = i;
-                        final int colonne = j;
-                        NullPointerException e = assertThrows(
-                                NullPointerException.class,
-                                () -> new Etat(ligne, colonne, null, avant, apres)
-                        );
-                        assertTrue(e.getMessage().contains("L'époque e ne doit pas être null"));
-                    }
-                }
-            }
+            IllegalArgumentException e = assertThrows(
+                    IllegalArgumentException.class,
+                    () -> new Etat(p, null, null)
+            );
+            assertTrue(e.getMessage().contains("Impossible de créer un état avec les cases avant et après null"));
         }
-    }
-
-    private void assertLignesColonnesIncorrectes(int l, int c, Epoque e, Piece avant, Piece apres) {
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Etat(l, c, e, avant, apres)
-        );
-        assertTrue(thrown.getMessage().contains("Coordonnées (" + l + ", " + c + ", " + e + ") incorrectes"));
     }
 
     @Test
-    public void testLignesColonnesIncorrectes() {
-        for (int i = 0; i < Epoque.NOMBRE; i++) {
-            Epoque epoque = Epoque.depuisIndice(i);
-            int j = 0;
-
-            while (j < Piece.NOMBRE) {
-                Piece avant;
-                if (j == 0) {
-                    avant = null;
-                    j++;
-                } else {
-                    avant = Piece.depuisValeur(j);
-                    j *= 2;
-                }
-                int k = 0;
-
-                while (k < Piece.NOMBRE) {
-                    Piece apres;
-                    if (k == 0) {
-                        apres = null;
-                        k++;
-                    } else {
-                        apres = Piece.depuisValeur(k);
-                        k *= 2;
-                    }
-
-                    for (int l = -100; l < 0; l++) {
-                        int c = 0;
-                        assertLignesColonnesIncorrectes(l, c, epoque, avant, apres);
-                    }
-                    for (int c = -100; c < 0; c++) {
-                        int l = 0;
-                        assertLignesColonnesIncorrectes(l, c, epoque, avant, apres);
-                    }
-                    for (int l = Plateau.TAILLE; l < 100; l++) {
-                        int c = 0;
-                        assertLignesColonnesIncorrectes(l, c, epoque, avant, apres);
-                    }
-                    for (int c = Plateau.TAILLE; c < 100; c++) {
-                        int l = 0;
-                        assertLignesColonnesIncorrectes(l, c, epoque, avant, apres);
-                    }
-                }
-            }
-        }
+    public void testToString() {
+        Etat e = new Etat(Piece.BLANC, new Case(0, 1, Epoque.PASSE), null);
+        assertEquals("[Blanc : (0, 1, Passé) -> null]", e.toString());
+        e = new Etat(Piece.ARBRE, new Case(2, 1, Epoque.PRESENT), new Case(2, 1, Epoque.FUTUR));
+        assertEquals("[Arbre : (2, 1, Présent) -> (2, 1, Futur)]", e.toString());
+        e = new Etat(Piece.NOIR, null, new Case(3, 3, Epoque.FUTUR));
+        assertEquals("[Noir : null -> (3, 3, Futur)]", e.toString());
     }
 }

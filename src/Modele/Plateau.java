@@ -213,7 +213,7 @@ public class Plateau {
     public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
-        if (!sel)  pions = chercherPions(j,j.focus());
+        if (sel)  pions = chercherPions(j,j.focus());
         else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
         gestionCoupsJouables(j, jouables, pions);
         return jouables;

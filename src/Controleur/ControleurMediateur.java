@@ -12,7 +12,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     int departL, departC;
     Epoque eDepart;
     Action action;
-    IA ia;
+    IA ia1;
+    IA ia2;
     boolean attendAction1 = true;  //sorte d'AEFD
     boolean attendAction2 = false;
     boolean attendFocus =  false;   //
@@ -73,6 +74,8 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
         jeu.nouvellePartie();
+        if(typeJ1 == TypeJoueur.IA_DIFFICILE) ia1 = new IA_Difficile(jeu(), jeu().joueur1(), jeu().joueur2());
+        if(typeJ2 == TypeJoueur.IA_DIFFICILE) ia2 = new IA_Difficile(jeu(), jeu().joueur2(), jeu().joueur1());
         vues.nouvellePartie();
     }
 
@@ -160,6 +163,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
         }else{ //attend focus
+            System.out.println("Attend Focus");
             jeu().changerFocus(e);
         }
 

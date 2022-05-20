@@ -93,4 +93,10 @@ public abstract class Coup {
             plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuAvant());
         }
     }
+
+    public String toString(){
+        String str =  "PionL = "+ pionL + "   PionC = " + pionC +"   ePion = " + ePion.indice();
+        str += "dL = "+ dL + "   dC = " + dC +"   dE = " + dEpoque;
+        return str;
+    }
 }

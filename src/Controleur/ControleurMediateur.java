@@ -13,6 +13,10 @@ public class ControleurMediateur implements CollecteurEvenements {
     Epoque eDepart;
     Action action;
     IA ia;
+    boolean attendAction1 = true;  //sorte d'AEFD
+    boolean attendAction2 = false;
+    boolean attendFocus =  false;   //
+
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -92,25 +96,25 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void deplacer(int l, int c, Epoque e,Plateau p) {
+    public void deplacer(int l, int c, Epoque e) {
         if (eDepart != null) {
-            jeu.jouerMouvement(departL, departC, eDepart, l, c, e,p);
+            jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
         }
         eDepart = null;
     }
 
     @Override
-    public void planterGraine(int l, int c,Plateau p) {
+    public void planterGraine(int l, int c) {
         if (eDepart != null) {
-            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart,p);
+            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart);
         }
         eDepart = null;
     }
 
     @Override
-    public void recolterGraine(int l, int c,Plateau p) {
+    public void recolterGraine(int l, int c) {
         if (eDepart != null) {
-            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart,p);
+            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart);
         }
         eDepart = null;
     }
@@ -122,10 +126,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
-        // TODO : Deselectionner pion
-        if(eDepart==null && !jeu().plateau().aPion(l,c,e)) {
-            return;
-        }
+        for(int i=0;i<4;i++) { //////////DEBUGGING
+            for (int j = 0; j < 4; j++) {
+                System.out.print(jeu().plateau().contenu(i, j, e));
+            }
+            System.out.println("");
+        } ////////////////FIN DEBUG
+        if(attendAction1 || attendAction2) {
+            if (eDepart == null && !jeu().plateau().aPion(l, c, e)) {
+                return;
+            }
             if (eDepart == null) {
                 selectionnerPion(l, c, e);
                 return;
@@ -133,30 +143,42 @@ public class ControleurMediateur implements CollecteurEvenements {
 
             switch (action) {
                 case MOUVEMENT:
-                    deplacer(l, c, e,jeu.plateau());
+                    deplacer(l, c, e);
                     System.out.println("mouvement");
                     break;
                 case PLANTATION:
-                    planterGraine(l, c,jeu.plateau());
+                    planterGraine(l, c);
                     break;
                 case RECOLTE:
-                    recolterGraine(l, c,jeu.plateau());
+                    recolterGraine(l, c);
                     break;
                 default:
                     throw new IllegalStateException("Aucune action sélectionnée");
             }
-            action = null;
-            // TODO : Gestion du changement focus IHM
-            if (jeu.tourTerminee()){
-                // Changer vue pour mise à jour du focus
-            }
-    }
+        }else{ //attend focus
+            jeu().changerFocus(e);
+        }
 
-    // Focus changement
-    public void ChangerFocus(Epoque e){
-        jeu.changerFocus(e);
-        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN )ia.calcul(jeu().plateau(), 0,1);
-    }
+            eDepart = null;
+            action = null;
+            vues.metAjour();
+
+            if(attendAction1){ //AEFD
+                attendAction1 = false;
+                attendAction2 = true;
+            }else{
+                if(attendAction2){
+                    attendAction2 = false;
+                    attendFocus = true;
+                }else{
+                    if(attendFocus){
+                        attendFocus = false;
+                        attendAction1 = true;
+                        //changer joueur
+                    }
+                }
+            }
+
 
     @Override
     public void toucheClavier(String touche) {

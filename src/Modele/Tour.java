@@ -21,17 +21,20 @@ class Tour {
         if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
-        if (estVide()) {
+        if (coup1==null) {
             pion = new Case(coup.lignePion(), coup.colonnePion(), coup.epoquePion());
             coup1 = coup;
+            coup1.jouer();
         } else {
-            if (pion.ligne() != coup.lignePion() || pion.colonne() != coup.colonnePion() ||
-                    pion.epoque() != coup.epoquePion()) {
-                return false;
+            /*if (pion.ligne() != coup.lignePion() || pion.colonne() != coup.colonnePion() ||
+                    pion.epoque() != coup.epoquePion()) {                                               //rentre ici
+                return false;*/
+            coup2=coup;
+            coup2.jouer();
             }
-            coup2 = coup;
-        }
-        coup.jouer();
+            //coup2 = coup;
+        //}
+
         return true;
     }
 

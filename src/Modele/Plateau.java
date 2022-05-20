@@ -2,6 +2,11 @@ package Modele;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+
+import java.util.Iterator;
+import java.util.List;
+
 public class Plateau {
     private final int[][][] contenu;
     private final int[] nbBlancParPlateau;
@@ -161,6 +166,16 @@ public class Plateau {
     int nombrePlateauVide(Pion p) {
         requireNonNull(p, "Le pion p ne doit pas être null");
 
+    int suppression(int l, int c, Epoque e, Piece p) {
+        if (!aPiece(l, c, e, p)) {
+            throw new IllegalStateException(
+                    "Impossible de supprimer la pièce " + p + " de la case (" + l + ", " + c + ", " + e + ") : pièce absente"
+            );
+        }
+        return contenu(l, c, e) & ~p.valeur();
+    }
+
+    public int nombrePlateauVide(Pion p) {
         if (p == Pion.BLANC) {
             return nombrePlateauVideBlanc;
         }
@@ -225,8 +240,43 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
+    List<Case> chercherPions(Joueur j){
+        ArrayList<Case> cases = new ArrayList<>();
+        Epoque e2 = j.focus();
+        Piece p = Piece.depuisValeur(j.pions().valeur());
+        for (int l2 = 0; l2 < Plateau.TAILLE;l2++) {
+            for (int c2 = 0; c2 < Plateau.TAILLE; c2++) {
+                if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
+            }
+        }
+
+        return new ArrayList<Case>();
+    }
     // TODO : Implémenter casesJouables
-    // casesJouables(int l, int c)
+    ArrayList<Coup> casesJouables(Joueur j, boolean sel,  int l, int c, Epoque e){
+        ArrayList<Coup> jouables = new ArrayList<>();
+        List<Case> pions;
+        if (!sel)  pions = chercherPions(j);
+        else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
+        Iterator<Case> it  = pions.iterator();
+        while(it.hasNext()){
+            Case cas = it.next();
+            Epoque eActu = cas.epoque();
+            // Mouvement possible :
+            Coup coup = new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu);
+            if (coup.creer(1,0,eActu)) jouables.add(coup);
+            if (coup.creer(-1,0,eActu)) jouables.add(coup);
+            if (coup.creer(0,1,eActu)) jouables.add(coup);
+            if (coup.creer(0,-1,eActu)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.FUTUR)) jouables.add(coup);
+            if (coup.creer(1,0,Epoque.PRESENT)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.PASSE)) jouables.add(coup);
+            // TODO : Ajouter action sur les graines
+            // ...
+        }
+        return jouables;
+    }
+
 
     // Utile pour l'IA
     public Plateau copier() {

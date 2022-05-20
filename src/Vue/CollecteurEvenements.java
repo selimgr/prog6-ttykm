@@ -17,14 +17,18 @@ public interface CollecteurEvenements {
 
     void afficherJeu();
 
+    void afficherMenuChargerPartie();
+    
     void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
                         String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2);
-
+    
     void partieSuivante();
 
     Jeu jeu();
 
     void toClose();
+
+    void afficherRegles();
 
     void jouer(int l, int c, Epoque e);
 

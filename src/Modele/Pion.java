@@ -14,7 +14,7 @@ public enum Pion {
         this.valeur = valeur;
     }
 
-    int valeur() {
+    public int valeur() {
         return valeur;
     }
 

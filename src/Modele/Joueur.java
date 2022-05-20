@@ -88,4 +88,16 @@ public class Joueur {
         }
         nombreVictoires--;
     }
+
+    @Override
+    public String toString() {
+        return "Joueur{" +
+                "nom='" + nom + '\'' +
+                ", type=" + type +
+                ", focus=" + focus +
+                ", pions=" + pions +
+                ", nombrePionsReserve=" + nombrePionsReserve +
+                ", nombreVictoires=" + nombreVictoires +
+                '}';
+    }
 }

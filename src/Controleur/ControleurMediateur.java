@@ -53,6 +53,13 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
+    public void afficherMenuChargerPartie() {
+        verifierMediateurVues("Impossible d'afficher le menu des parties sauvegardées");
+        vues.afficherMenuChargerPartie();
+    }
+
+
+    @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
                                String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
@@ -79,6 +86,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     public void toClose() {
         vues.close();
     }
+
+    @Override
+    public void afficherRegles() {vues.afficherR();}
 
     @Override
     public void jouer(int l, int c, Epoque e) {

@@ -38,6 +38,13 @@ public class Jeu extends Observable {
             throw new IllegalStateException("Impossible de lancer une nouvelle partie : joueurs manquants");
         }
         plateau = new Plateau();
+        if(joueur1.pions() == Pion.NOIR){
+            joueur1.fixerFocus(Epoque.FUTUR);
+            joueur2.fixerFocus(Epoque.PASSE);
+        }else{
+            joueur2.fixerFocus(Epoque.FUTUR);
+            joueur1.fixerFocus(Epoque.PASSE);
+        }
 
         if (joueurActuel == -1) {
             joueurActuel = rand.nextInt(2);

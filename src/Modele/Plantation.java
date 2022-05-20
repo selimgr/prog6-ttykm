@@ -20,26 +20,26 @@ public class Plantation extends Coup {
     boolean creer(int destL, int destC, Epoque eDest) {
         verifierPremierCoupCree();
 
-        int dL = destL - lignePion();
-        int dC = destC - colonnePion();
-        int dEpoque = eDest.indice() - epoquePion().indice();
+        int dL = destL - pion().ligne();
+        int dC = destC - pion().colonne();
+        int dEpoque = eDest.indice() - pion().epoque().indice();
 
         if (!estCorrecte(dL, dC, dEpoque) || !estPlantable(destL, destC, eDest) || plateau().nombreGrainesReserve() == 0) {
             return false;
         }
-        ajouter(destL, destC, eDest, Piece.GRAINE);
+        ajouter(Piece.GRAINE, destL, destC, eDest);
 
         if (eDest.indice() + 1 < Epoque.NOMBRE) {
             Epoque eSuivante = Epoque.depuisIndice(eDest.indice() + 1);
 
             if (estPlantable(destL, destC, eSuivante)) {
-                ajouter(destL, destC, eSuivante, Piece.ARBUSTE);
+                ajouter(Piece.ARBUSTE, destL, destC, eSuivante);
 
                 if (eSuivante.indice() + 1 < Epoque.NOMBRE) {
                     eSuivante = Epoque.depuisIndice(eSuivante.indice() + 1);
 
                     if (estPlantable(destL, destC, eSuivante)) {
-                        ajouter(destL, destC, eSuivante, Piece.ARBRE);
+                        ajouter(Piece.ARBRE, destL, destC, eSuivante);
                     }
                 }
             }

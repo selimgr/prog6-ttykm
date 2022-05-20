@@ -19,26 +19,26 @@ public class TestEtat {
                         Case c = new Case(k, l, e);
                         Etat etat = new Etat(p, c, null);
                         assertEquals(p, etat.piece());
-                        assertEquals(c, etat.avant());
-                        assertNull(etat.apres());
+                        assertEquals(c, etat.depart());
+                        assertNull(etat.arrivee());
                         etat = new Etat(p, null, c);
                         assertEquals(p, etat.piece());
-                        assertNull(etat.avant());
-                        assertEquals(c, etat.apres());
+                        assertNull(etat.depart());
+                        assertEquals(c, etat.arrivee());
                         etat = new Etat(p, c, c);
                         assertEquals(p, etat.piece());
-                        assertEquals(c, etat.avant());
-                        assertEquals(c, etat.apres());
+                        assertEquals(c, etat.depart());
+                        assertEquals(c, etat.arrivee());
                     }
                 }
             }
         }
     }
 
-    private void exceptionPieceNull(Case avant, Case apres) {
+    private void exceptionPieceNull(Case depart, Case arrivee) {
         NullPointerException e = assertThrows(
                 NullPointerException.class,
-                () -> new Etat(null, avant, apres)
+                () -> new Etat(null, depart, arrivee)
         );
         assertTrue(e.getMessage().contains("La pièce ne doit pas être null"));
     }

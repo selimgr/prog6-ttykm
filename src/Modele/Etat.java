@@ -4,33 +4,33 @@ import static java.util.Objects.requireNonNull;
 
 public class Etat {
     private final Piece piece;
-    private final Case avant, apres;
+    private final Case depart, arrivee;
 
-    Etat(Piece piece, Case avant, Case apres) {
+    Etat(Piece piece, Case depart, Case arrivee) {
         requireNonNull(piece, "La pièce ne doit pas être null");
 
-        if (avant == null && apres == null) {
+        if (depart == null && arrivee == null) {
             throw new IllegalArgumentException("Impossible de créer un état avec les cases avant et après null");
         }
         this.piece = piece;
-        this.avant = avant;
-        this.apres = apres;
+        this.depart = depart;
+        this.arrivee = arrivee;
     }
 
     Piece piece() {
         return piece;
     }
 
-    Case avant() {
-        return avant;
+    Case depart() {
+        return depart;
     }
 
-    Case apres() {
-        return apres;
+    Case arrivee() {
+        return arrivee;
     }
 
     @Override
     public String toString() {
-        return "[" + piece + " : " + avant + " -> " + apres + "]";
+        return "[" + piece + " : " + depart + " -> " + arrivee + "]";
     }
 }

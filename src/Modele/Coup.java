@@ -7,7 +7,7 @@ import java.util.Iterator;
 public abstract class Coup {
     private final Plateau plateau;
     private final Joueur joueur;
-    private Case pion;
+    private final Case pion;
     private final Deque<Etat> etats;
     private boolean coupJoue;
 
@@ -59,30 +59,30 @@ public abstract class Coup {
         }
         coupJoue = true;
 
+        // On parcourt les états dans le sens inverse
         Iterator<Etat> it = etats.descendingIterator();
 
         while (it.hasNext()) {
             Etat q = it.next();
 
-            if (q.avant() != null) {
-                plateau.supprimer(q.avant().ligne(), q.avant().colonne(), q.avant().epoque(), q.piece());
+            // On supprime la pièce sur la case de départ
+            if (q.depart() != null) {
+                plateau.supprimer(q.depart().ligne(), q.depart().colonne(), q.depart().epoque(), q.piece());
             }
 
-            if (q.apres() != null) {
-                if (q.piece() == Piece.ARBRE && q.avant() != null) {
-                    int dL = q.apres().ligne() - q.avant().ligne();
-                    int dC = q.apres().colonne() - q.avant().colonne();
+            if (q.arrivee() != null) {
+                // Si la pièce est un arbre, on ajoute l'arbre couché correspondant sur la case d'arrivée
+                if (q.piece() == Piece.ARBRE && q.depart() != null) {
+                    int dL = q.arrivee().ligne() - q.depart().ligne();
+                    int dC = q.arrivee().colonne() - q.depart().colonne();
                     Piece p = Piece.directionArbreCouche(dL, dC);
-                    plateau.ajouter(q.apres().ligne(), q.apres().colonne(), q.apres().epoque(), p);
-                } else {
-                    plateau.ajouter(q.apres().ligne(), q.apres().colonne(), q.apres().epoque(), q.piece());
+                    plateau.ajouter(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), p);
+                }
+                // Sinon on ajoute la pièce
+                else {
+                    plateau.ajouter(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), q.piece());
                 }
             }
-        }
-        // On change la position du pion
-        if (etats.element().piece() == joueur.pions().toPiece() && (pion == etats.element().avant() ||
-                (pion != null && pion.equals(etats.element().avant())))) {
-            pion = etats.element().apres();
         }
     }
 
@@ -96,17 +96,24 @@ public abstract class Coup {
         coupJoue = false;
 
         for (Etat q : etats) {
-            if (q.apres() != null) {
-                plateau.supprimer(q.apres().ligne(), q.apres().colonne(), q.apres().epoque(), q.piece());
+            if (q.arrivee() != null) {
+                // Si la pièce est un arbre, on supprime l'arbre couché correspondant sur la case d'arrivée
+                if (q.piece() == Piece.ARBRE && q.depart() != null) {
+                    int dL = q.arrivee().ligne() - q.depart().ligne();
+                    int dC = q.arrivee().colonne() - q.depart().colonne();
+                    Piece p = Piece.directionArbreCouche(dL, dC);
+                    plateau.supprimer(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), p);
+                }
+                // Sinon on supprime la pièce
+                else {
+                    plateau.supprimer(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), q.piece());
+                }
             }
-            if (q.avant() != null) {
-                plateau.ajouter(q.avant().ligne(), q.avant().colonne(), q.avant().epoque(), q.piece());
+
+            // On remet la pièce sur la case de départ
+            if (q.depart() != null) {
+                plateau.ajouter(q.depart().ligne(), q.depart().colonne(), q.depart().epoque(), q.piece());
             }
-        }
-        // On change remet la position de départ du pion
-        if (etats.element().piece() == joueur.pions().toPiece() && (pion == etats.element().apres() ||
-                (pion != null && pion.equals(etats.element().apres())))) {
-            pion = etats.element().avant();
         }
     }
 }

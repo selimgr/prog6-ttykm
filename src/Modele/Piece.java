@@ -61,6 +61,24 @@ enum Piece {
         }
     }
 
+    static Piece directionArbreCouche(int dL, int dC) {
+        if (dL == 0) {
+            if (dC == 1) {
+                return ARBRE_COUCHE_DROITE;
+            } else if (dC == -1) {
+                return ARBRE_COUCHE_GAUCHE;
+            }
+        } else if (dC == 0) {
+            if (dL == 1) {
+                return ARBRE_COUCHE_BAS;
+            } else if (dL == -1) {
+                return ARBRE_COUCHE_HAUT;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Impossible de renvoyer la direction de l'arbre couché : déplacement " + dL + ", " + dC + " incorrect");
+    }
+
     @Override
     public String toString() {
         return nom;

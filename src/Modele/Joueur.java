@@ -92,12 +92,12 @@ public class Joueur {
     @Override
     public String toString() {
         return "Joueur{" +
-                "nom='" + nom + '\'' +
+                "nom='" + nom + "'" +
                 ", type=" + type +
                 ", focus=" + focus +
                 ", pions=" + pions +
                 ", nombrePionsReserve=" + nombrePionsReserve +
                 ", nombreVictoires=" + nombreVictoires +
-                '}';
+                "}";
     }
 }

@@ -172,4 +172,13 @@ public class TestJoueur {
         );
         assertTrue(e.getMessage().contains("L'époque du focus du joueur ne doit pas être null"));
     }
+
+    @Test
+    public void testToString() {
+        assertEquals("Joueur{nom='abc', type=Humain, focus=Passé, pions=Blanc, nombrePionsReserve=4" +
+                ", nombreVictoires=0}", j.toString());
+        j = new Joueur("def", TypeJoueur.IA_MOYEN, Pion.NOIR, 3);
+        assertEquals("Joueur{nom='def', type=IA Moyen, focus=Futur, pions=Noir, nombrePionsReserve=1" +
+                ", nombreVictoires=0}", j.toString());
+    }
 }

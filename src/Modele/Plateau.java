@@ -166,16 +166,6 @@ public class Plateau {
     int nombrePlateauVide(Pion p) {
         requireNonNull(p, "Le pion p ne doit pas être null");
 
-    int suppression(int l, int c, Epoque e, Piece p) {
-        if (!aPiece(l, c, e, p)) {
-            throw new IllegalStateException(
-                    "Impossible de supprimer la pièce " + p + " de la case (" + l + ", " + c + ", " + e + ") : pièce absente"
-            );
-        }
-        return contenu(l, c, e) & ~p.valeur();
-    }
-
-    public int nombrePlateauVide(Pion p) {
         if (p == Pion.BLANC) {
             return nombrePlateauVideBlanc;
         }
@@ -276,7 +266,6 @@ public class Plateau {
         }
         return jouables;
     }
-
 
     // Utile pour l'IA
     public Plateau copier() {

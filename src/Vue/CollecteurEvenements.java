@@ -38,6 +38,12 @@ public interface CollecteurEvenements {
 
     void selectionnerRecolterGraine();
 
+    void changerFocusPasse();
+
+    void changerFocusPresent();
+
+    void changerFocusFutur();
+
     void toucheClavier(String touche);
 
     void temps();

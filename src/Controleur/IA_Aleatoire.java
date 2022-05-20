@@ -23,12 +23,12 @@ public class IA_Aleatoire extends IA {
         Random r = new Random();
         int alea = r.nextInt(coups.size());
         c1 = coups.get(alea);
-        ctrl.clicSouris(c1.lignePion(),c1.colonnePion(),c1.epoquePion());
+        ctrl.jouer(c1.lignePion(),c1.colonnePion(),c1.epoquePion());
         // TODO :  Interface IA avec jeu : à modifier pour passer par jeu ou controleur mediateur dans une fonction (+ IA abstract class ?)
         int lA = c1.lignePion()+ c1.deplacementLignePion();
         int cA = c1.deplacementColonnePion()+ c1.deplacementColonnePion();
         int eA = c1.epoquePion().indice() + c1.deplacementEpoquePion();
-        ctrl.clicSouris(lA,cA,Epoque.depuisIndice(eA));
+        ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
         // Second coup avec pion déjà choisi
         coups = jeu.plateau().casesJouablesEpoque(j,true,lA,cA,Epoque.depuisIndice(eA));
         alea = r.nextInt(coups.size());
@@ -36,7 +36,7 @@ public class IA_Aleatoire extends IA {
         lA = c2.lignePion()+ c2.deplacementLignePion();
         cA = c2.deplacementColonnePion()+ c2.deplacementColonnePion();
         eA = c2.epoquePion().indice() + c2.deplacementEpoquePion();
-        ctrl.clicSouris(lA,cA,Epoque.depuisIndice(eA));
+        ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
         //Changement de focus
         alea = r.nextInt(3);
         if (c2.epoquePion().indice() == alea){
@@ -47,7 +47,7 @@ public class IA_Aleatoire extends IA {
                 alea = 1;
             }
         }
-        jeu.changerFocus(Epoque.depuisIndice(alea));
+        //jeu.changerFocus(Epoque.depuisIndice(alea));
         return 1;
     }
 

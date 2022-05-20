@@ -6,13 +6,11 @@ import Vue.Vues;
 
 // TODO: A tester
 // TODO: Compléter le controleur
+// TODO : Ajouter IA
 
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
-    int departL, departC;
-    Epoque eDepart;
-    Action action;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -111,6 +109,21 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void selectionnerRecolterGraine() {
         jeu.selectionnerRecolte();
+    }
+
+    @Override
+    public void changerFocusPasse() {
+        jeu.focusPasse();
+    }
+
+    @Override
+    public void changerFocusPresent() {
+        jeu.focusPresent();
+    }
+
+    @Override
+    public void changerFocusFutur() {
+        jeu.focusFutur();
     }
 
     @Override

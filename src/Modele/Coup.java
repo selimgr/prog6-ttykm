@@ -11,6 +11,8 @@ public abstract class Coup {
     private final Epoque ePion;
     private final Deque<Etat> etats;
     private boolean coupJoue;
+    int dL,dC;
+    int dEpoque;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         plateau = p;
@@ -19,6 +21,8 @@ public abstract class Coup {
         this.pionC = pionC;
         this.ePion = ePion;
         etats = new ArrayDeque<>();
+        dL = dC = 0;
+        dEpoque = ePion.indice();
     }
 
     Plateau plateau() {
@@ -39,6 +43,18 @@ public abstract class Coup {
 
     public Epoque epoquePion() {
         return ePion;
+    }
+
+    public int deplacementLignePion(){
+        return dL;
+    }
+
+    public int deplacementColonnePion(){
+        return dC;
+    }
+
+    public int deplacementEpoquePion(){
+        return dL;
     }
 
     protected void ajouter(int l, int c, Epoque e, Piece pion) {

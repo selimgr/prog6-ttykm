@@ -1,7 +1,7 @@
 package Vue;
 
 import Modele.Epoque;
-import Vue.JComposants.JPanelCustom;
+import Vue.JComposants.CPlateau;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 class AdaptateurSouris extends MouseAdapter {
     CollecteurEvenements controleur;
     String Objet;
-    JPanelCustom pane;
+    CPlateau pane;
     static double BORDURE_PASSE_Y = 0.09102564;
     static double BORDURE_PRESENT_Y = 0.08678756;
     static double BORDURE_FUTUR_Y = 0.08903226;
@@ -17,7 +17,7 @@ class AdaptateurSouris extends MouseAdapter {
     static double BORDURE_PRESENT_X = 0.08667529;
     static double BORDURE_FUTUR_X = 0.08914729;
 
-    AdaptateurSouris(CollecteurEvenements c, JPanelCustom pane, String nomObjet) {
+    AdaptateurSouris(CollecteurEvenements c, CPlateau pane, String nomObjet) {
         controleur = c;
         Objet = nomObjet;
         this.pane = pane;

@@ -1,5 +1,8 @@
 package Modele;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 
 public class Plateau {
@@ -26,6 +29,15 @@ public class Plateau {
         nombrePlateauVideBlanc = 0;
         nombrePlateauVideNoir = 0;
         nombreGrainesReserve = NOMBRE_MAX_GRAINES;
+    }
+    public void fixerPlateau(Plateau p){
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
+                    contenu[i][j][k] = p.contenu(j, k, Epoque.depuisIndice(i));
+                }
+            }
+        }
     }
 
     static boolean aMur(int l, int c) {
@@ -225,8 +237,56 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
+    private List<Case> chercherPions(Joueur j, Epoque e){
+        ArrayList<Case> cases = new ArrayList<>();
+        Epoque e2 =e;
+        Piece p = Piece.depuisValeur(j.pions().valeur());
+        for (int l2 = 0; l2 < Plateau.TAILLE;l2++) {
+            for (int c2 = 0; c2 < Plateau.TAILLE; c2++) {
+                if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
+            }
+        }
+        return new ArrayList<Case>();
+    }
+
     // TODO : Implémenter casesJouables
-    // casesJouables(int l, int c)
+    public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
+        ArrayList<Coup> jouables = new ArrayList<>();
+        List<Case> pions;
+        if (sel)  pions = chercherPions(j,j.focus());
+        else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
+        gestionCoupsJouables(j, jouables, pions);
+        return jouables;
+    }
+
+    public int coupJouables(Joueur j){
+        ArrayList<Coup> jouables = new ArrayList<>();
+        List<Case> pions;
+        pions = chercherPions(j,Epoque.PASSE);
+        pions = chercherPions(j,Epoque.PRESENT);
+        pions = chercherPions(j,Epoque.FUTUR);
+        gestionCoupsJouables(j, jouables, pions);
+        return jouables.size();
+    }
+
+    private  ArrayList<Coup> gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions){
+        Iterator<Case> it  = pions.iterator();
+        while(it.hasNext()){
+            Case cas = it.next();
+            Epoque eActu = cas.epoque();
+            // Mouvement possible :
+            Coup coup = new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu);
+            if (coup.creer(1,0,eActu)) jouables.add(coup);
+            if (coup.creer(-1,0,eActu)) jouables.add(coup);
+            if (coup.creer(0,1,eActu)) jouables.add(coup);
+            if (coup.creer(0,-1,eActu)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.FUTUR)) jouables.add(coup);
+            if (coup.creer(1,0,Epoque.PRESENT)) jouables.add(coup);
+            if (coup.creer(0,0,Epoque.PASSE)) jouables.add(coup);
+        }
+        return jouables;
+    }
+
 
     // Utile pour l'IA
     public Plateau copier() {
@@ -243,5 +303,17 @@ public class Plateau {
         retour.nombrePlateauVideNoir = nombrePlateauVideNoir;
         retour.nombreGrainesReserve = nombreGrainesReserve;
         return retour;
+    }
+
+    public String hash() {
+        String plateauStr = new String();
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
+                    plateauStr += this.contenu(j, k, Epoque.depuisIndice(i)) + " ";
+                }
+            }
+        }
+        return plateauStr;
     }
 }

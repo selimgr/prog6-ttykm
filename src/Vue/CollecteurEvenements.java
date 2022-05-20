@@ -1,6 +1,6 @@
 package Vue;
 
-import Controleur.Action;
+import Modele.Action;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
@@ -30,15 +30,19 @@ public interface CollecteurEvenements {
 
     void afficherRegles();
 
-    void selectionnerPion(int l, int c, Epoque e);
-
-    void deplacer(int l, int c, Epoque e);
+    void jouer(int l, int c, Epoque e);
 
     void annuler();
 
     void selectionnerPlanterGraine();
 
     void selectionnerRecolterGraine();
+
+    void changerFocusPasse();
+
+    void changerFocusPresent();
+
+    void changerFocusFutur();
 
     void toucheClavier(String touche);
 

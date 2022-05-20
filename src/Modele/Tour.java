@@ -1,6 +1,7 @@
 package Modele;
 
 // TODO: A tester
+// TODO: Mette à jour la position du pion après un coup
 
 class Tour {
     private Case pion;

@@ -1,7 +1,5 @@
 package Modele;
 
-// TODO: A tester
-
 public enum Action {
     MOUVEMENT("Mouvement", 0),
     PLANTATION("Plantation", 1),

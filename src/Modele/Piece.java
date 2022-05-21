@@ -11,6 +11,8 @@ enum Piece {
     ARBRE_COUCHE_BAS("Arbre couché vers le bas", 128),
     ARBRE_COUCHE_GAUCHE("Arbre couché vers la gauche", 256);
 
+    public static final int NOMBRE = values().length;
+
     private final String nom;
     private final int valeur;
 
@@ -44,7 +46,18 @@ enum Piece {
             case 256:
                 return ARBRE_COUCHE_GAUCHE;
             default:
-                throw new IllegalArgumentException("Aucune pièce correspondant à cette valeur");
+                throw new IllegalArgumentException("Aucune pièce correspondant à la valeur " + valeur);
+        }
+    }
+
+    Pion toPion() {
+        switch (this) {
+            case BLANC:
+                return Pion.BLANC;
+            case NOIR:
+                return Pion.NOIR;
+            default:
+                return null;
         }
     }
 

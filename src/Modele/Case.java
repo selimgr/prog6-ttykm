@@ -1,5 +1,7 @@
 package Modele;
 
+// TODO: A tester
+
 public class Case {
     private final int ligne, colonne;
     private final Epoque epoque;

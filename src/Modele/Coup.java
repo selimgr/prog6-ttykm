@@ -1,20 +1,16 @@
 package Modele;
 
-import Controleur.Action;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
 public abstract class Coup {
-    protected final Plateau plateau;
-    protected final Joueur joueur;
-    protected final int pionL, pionC;
-    protected final Epoque ePion;
-    private Deque<Etat> etats;
-    int dL,dC;
-    int dEpoque;
-    Action a;
+    private final Plateau plateau;
+    private final Joueur joueur;
+    private final int pionL, pionC;
+    private final Epoque ePion;
+    private final Deque<Etat> etats;
+    private boolean coupJoue;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         plateau = p;
@@ -23,9 +19,14 @@ public abstract class Coup {
         this.pionC = pionC;
         this.ePion = ePion;
         etats = new ArrayDeque<>();
-        dL = dC = 0;
-        dEpoque = ePion.indice();
+    }
 
+    Plateau plateau() {
+        return plateau;
+    }
+
+    Joueur joueur() {
+        return joueur;
     }
 
     public int lignePion() {
@@ -40,57 +41,52 @@ public abstract class Coup {
         return ePion;
     }
 
-    public int deplacementLignePion(){
-        return dL;
+    protected void ajouter(int l, int c, Epoque e, Piece pion) {
+        etats.push(new Etat(l, c, e, null, pion));
     }
 
-    public int deplacementColonnePion(){
-        return dC;
+    protected void supprimer(int l, int c, Epoque e, Piece pion) {
+        etats.push(new Etat(l, c, e, pion, null));
     }
 
-    public int deplacementEpoquePion(){
-        return dL;
-    }
-    public Action getAction(){return a;}
-
-
-    private void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
-        etats.push(new Etat(l, c, e, contenuAvant, contenuApres));
-    }
-    
-    protected void ajouter(int l, int c, Epoque e, Piece p) {
-        ajouterEtat(l, c, e, plateau.contenu(l, c, e), plateau.ajout(l, c, e, p));
-    }
-
-    protected void supprimer(int l, int c, Epoque e, Piece p) {
-        ajouterEtat(l, c, e, plateau.contenu(l, c, e), plateau.suppression(l, c, e, p));
+    protected void verifierPremierCoupCree() {
+        if (!etats.isEmpty()) {
+            throw new IllegalStateException("Impossible de créer un nouveau coup : un coup a déjà été créé");
+        }
     }
 
     abstract boolean creer(int destL, int destC, Epoque eDest);
 
     public void jouer() {
-        Iterator<Etat> it = etats.iterator();
+        if (etats.isEmpty()) {
+            throw new IllegalStateException("Impossible de jouer le coup : aucun coup créé");
+        }
+        if (coupJoue) {
+            throw new IllegalStateException("Impossible de jouer le coup : coup déjà joué");
+        }
+        coupJoue = true;
 
-        while (it.hasNext()) {
-            Etat q = it.next();
-
-            if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuAvant()) {
-                throw new IllegalStateException("Etat du plateau incorrect");
-            }
-            plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuApres());
+        for (Etat q : etats) {
+            plateau.supprimer(q.ligne(), q.colonne(), q.epoque(), q.pieceAvant());
+            plateau.ajouter(q.ligne(), q.colonne(), q.epoque(), q.pieceApres());
         }
     }
 
     public void annuler() {
+        if (etats.isEmpty()) {
+            throw new IllegalStateException("Impossible d'annuler le coup : aucun coup créé");
+        }
+        if (!coupJoue) {
+            throw new IllegalStateException("Impossible d'annuler le coup : le coup n'a pas encore été joué");
+        }
+        coupJoue = false;
+
         Iterator<Etat> it = etats.descendingIterator();
 
         while (it.hasNext()) {
             Etat q = it.next();
-
-            if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuApres()) {
-                throw new IllegalStateException("Etat du plateau incorrect");
-            }
-            plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuAvant());
+            plateau.supprimer(q.ligne(), q.colonne(), q.epoque(), q.pieceApres());
+            plateau.ajouter(q.ligne(), q.colonne(), q.epoque(), q.pieceAvant());
         }
     }
 

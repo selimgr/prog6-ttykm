@@ -19,7 +19,8 @@ public interface CollecteurEvenements {
 
     void afficherMenuChargerPartie();
 
-    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2);
+    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
+                        String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2);
 
     void partieSuivante();
 
@@ -33,13 +34,11 @@ public interface CollecteurEvenements {
 
     void deplacer(int l, int c, Epoque e);
 
-    void planterGraine(int l, int c);
+    void annuler();
 
-    void recolterGraine(int l, int c);
+    void selectionnerPlanterGraine();
 
-    public void fixerAction(Action a);
-
-    void clicSouris(int l, int c, Epoque e);
+    void selectionnerRecolterGraine();
 
     void toucheClavier(String touche);
 

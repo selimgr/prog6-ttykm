@@ -1,22 +1,24 @@
 package Modele;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 public class Joueur {
     private final String nom;
-    private TypeJoueur type;
+    private final TypeJoueur type;
+    private final Pion pions;
     private Epoque focus;
-    private Pion pions;
     private int nombrePionsReserve;
     private int nombreVictoires;
 
-    Joueur(String nom, TypeJoueur type, Pion p, int handicap) {
-        Objects.requireNonNull(nom);
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(p);
+    static int HANDICAP_MAX = 3;
+
+    Joueur(String nom, TypeJoueur type, Pion pions, int handicap) {
+        requireNonNull(nom, "Le nom du joueur ne doit pas être null");
+        requireNonNull(type, "Le type du joueur ne doit pas être null");
+        requireNonNull(pions, "Le type de pions du joueur ne doit pas être null");
         this.nom = nom;
         this.type = type;
-        pions = p;
+        this.pions = pions;
 
         // blanc commence dans le passé
         if (pions == Pion.BLANC) {
@@ -27,10 +29,10 @@ public class Joueur {
             fixerFocus(Epoque.FUTUR);
         }
 
-        if (handicap < 0 || handicap > 3) {
+        if (handicap < 0 || handicap > HANDICAP_MAX) {
             throw new IllegalStateException("Handicap " + handicap + " incorrect");
         }
-        nombrePionsReserve = Pion.NOMBRE_RESERVE - handicap;
+        nombrePionsReserve = Pion.NOMBRE_MAX_RESERVE - handicap;
     }
 
     public String nom() {
@@ -41,17 +43,17 @@ public class Joueur {
         return type;
     }
 
+    public Pion pions() {
+        return pions;
+    }
+
     public Epoque focus() {
         return focus;
     }
 
     void fixerFocus(Epoque e) {
-        Objects.requireNonNull(e);
+        requireNonNull(e, "L'époque du focus du joueur ne doit pas être null");
         focus = e;
-    }
-
-    public Pion pions() {
-        return pions;
     }
 
     public int nombrePionsReserve() {
@@ -59,6 +61,9 @@ public class Joueur {
     }
 
     void ajouterPionReserve() {
+        if (nombrePionsReserve == Pion.NOMBRE_MAX_RESERVE) {
+            throw new IllegalStateException("Impossible d'ajouter un pion au joueur : réserve de pions pleine");
+        }
         nombrePionsReserve++;
     }
 

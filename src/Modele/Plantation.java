@@ -1,7 +1,5 @@
 package Modele;
 
-// TODO: A tester
-
 public class Plantation extends Coup {
 
     Plantation(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {

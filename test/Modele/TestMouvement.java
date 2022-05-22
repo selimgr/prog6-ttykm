@@ -14,7 +14,9 @@ public class TestMouvement {
     public void initialisation() {
         p = new Plateau();
         j1 = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
-        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
+        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 3);
+        j1.initialiserJoueur();
+        j2.initialiserJoueur();
     }
 
     private void nouveauCoup1() {
@@ -1641,5 +1643,39 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
+    }
+
+    @Test
+    public void testReservePionVide() {
+        p.ajouter(1, 1, Epoque.FUTUR, Piece.BLANC);
+        Coup c = new Mouvement(p, j1, 1, 1, Epoque.FUTUR);
+        assertEquals(4, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 1, Epoque.PRESENT));
+        c.jouer();
+        assertEquals(3, j1.nombrePionsReserve());
+
+        c = new Mouvement(p, j1, 1, 1, Epoque.PRESENT);
+        assertEquals(3, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 1, Epoque.PASSE));
+        c.jouer();
+        assertEquals(2, j1.nombrePionsReserve());
+
+        p.ajouter(1, 2, Epoque.FUTUR, Piece.BLANC);
+        c = new Mouvement(p, j1, 1, 2, Epoque.FUTUR);
+        assertEquals(2, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 2, Epoque.PRESENT));
+        c.jouer();
+        assertEquals(1, j1.nombrePionsReserve());
+
+        c = new Mouvement(p, j1, 1, 2, Epoque.PRESENT);
+        assertEquals(1, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 2, Epoque.PASSE));
+        c.jouer();
+        assertEquals(0, j1.nombrePionsReserve());
+
+        p.ajouter(1, 3, Epoque.FUTUR, Piece.BLANC);
+        c = new Mouvement(p, j1, 1, 3, Epoque.FUTUR);
+        assertEquals(0, j1.nombrePionsReserve());
+        assertFalse(c.creer(1, 3, Epoque.PRESENT));
     }
 }

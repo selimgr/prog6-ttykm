@@ -1,7 +1,5 @@
 package Modele;
 
-// TODO: A tester
-
 public class Recolte extends Coup {
 
     Recolte(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
@@ -20,10 +18,7 @@ public class Recolte extends Coup {
         int dC = destC - pion().colonne();
         int dEpoque = eDest.indice() - pion().epoque().indice();
 
-        if (!estCorrecte(dL, dC, dEpoque)) {
-            throw new IllegalArgumentException("Impossible de créer la récolte : récolte incorrecte");
-        }
-        if (!plateau().aGraine(destL, destC, eDest)) {
+        if (!estCorrecte(dL, dC, dEpoque) || !plateau().aGraine(destL, destC, eDest)) {
             return false;
         }
         supprimer(Piece.GRAINE, destL, destC, eDest);
@@ -39,14 +34,18 @@ public class Recolte extends Coup {
 
                     if (plateau().aArbre(destL, destC, eSuivante)) {
                         supprimer(Piece.ARBRE, destL, destC, eSuivante);
-                    } else if (plateau().aArbreCouche(destL - 1, destC, eDest)) {
-                        supprimer(Piece.ARBRE_COUCHE_HAUT, destL, destC, eSuivante);
-                    } else if (plateau().aArbreCouche(destL, destC + 1, eDest)) {
-                        supprimer(Piece.ARBRE_COUCHE_DROITE, destL, destC, eSuivante);
-                    } else if (plateau().aArbreCouche(destL + 1, destC, eDest)) {
-                        supprimer(Piece.ARBRE_COUCHE_BAS, destL, destC, eSuivante);
-                    } else if (plateau().aArbreCouche(destL, destC - 1, eDest)) {
-                        supprimer(Piece.ARBRE_COUCHE_GAUCHE, destL, destC, eSuivante);
+                    }
+                    else if (destL > 0 && plateau().aArbreCoucheVersLeHaut(destL - 1, destC, eSuivante)) {
+                        supprimer(Piece.ARBRE_COUCHE_HAUT, destL - 1, destC, eSuivante);
+                    }
+                    else if (destC < Plateau.TAILLE - 1 && plateau().aArbreCoucheVersLaDroite(destL, destC + 1, eSuivante)) {
+                        supprimer(Piece.ARBRE_COUCHE_DROITE, destL, destC + 1, eSuivante);
+                    }
+                    else if (destL < Plateau.TAILLE - 1 && plateau().aArbreCoucheVersLeBas(destL + 1, destC, eSuivante)) {
+                        supprimer(Piece.ARBRE_COUCHE_BAS, destL + 1, destC, eSuivante);
+                    }
+                    else if (destC > 0 && plateau().aArbreCoucheVersLaGauche(destL, destC - 1, eSuivante)) {
+                        supprimer(Piece.ARBRE_COUCHE_GAUCHE, destL, destC - 1, eSuivante);
                     }
                 }
             }

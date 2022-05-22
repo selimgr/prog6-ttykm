@@ -92,12 +92,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouer(int l, int c, Epoque e) {
-        jeu.jouerCoup(l, c, e);
+        jeu.jouer(l, c, e);
     }
 
     @Override
     public void annuler() {
-        jeu.annulerCoup();
+        jeu.annuler();
     }
 
     @Override

@@ -11,6 +11,7 @@ public class TestJoueur {
     @Before
     public void initialiserJoueur() {
         j = new Joueur("abc", TypeJoueur.HUMAIN, Pion.BLANC, 0);
+        j.initialiserJoueur();
     }
 
     @Test
@@ -29,7 +30,10 @@ public class TestJoueur {
                         assertEquals(nom, joueur.nom());
                         assertEquals(type, joueur.type());
                         assertEquals(pion, joueur.pions());
+                        assertEquals(l, joueur.handicap());
 
+                        assertNull(joueur.focus());
+                        joueur.initialiserJoueur();
                         if (pion == Pion.BLANC) {
                             assertEquals(Epoque.PASSE, joueur.focus());
                         } else {
@@ -175,10 +179,11 @@ public class TestJoueur {
 
     @Test
     public void testToString() {
-        assertEquals("Joueur{nom='abc', type=Humain, focus=Passé, pions=Blanc, nombrePionsReserve=4" +
+        assertEquals("Joueur{nom='abc', type=Humain, pions=Blanc, handicap=0, focus=Passé, nombrePionsReserve=4" +
                 ", nombreVictoires=0}", j.toString());
         j = new Joueur("def", TypeJoueur.IA_MOYEN, Pion.NOIR, 3);
-        assertEquals("Joueur{nom='def', type=IA Moyen, focus=Futur, pions=Noir, nombrePionsReserve=1" +
+        j.initialiserJoueur();
+        assertEquals("Joueur{nom='def', type=IA Moyen, pions=Noir, handicap=3, focus=Futur, nombrePionsReserve=1" +
                 ", nombreVictoires=0}", j.toString());
     }
 }

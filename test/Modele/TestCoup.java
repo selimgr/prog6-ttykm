@@ -16,9 +16,9 @@ public class TestCoup {
         j1 = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
         j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
         c1 = new Mouvement(p, j1, 0, 0, Epoque.PASSE);
-        c2 = new Mouvement(p, j2, 3, 3, Epoque.FUTUR);
+        c2 = new Plantation(p, j2, 3, 3, Epoque.FUTUR);
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
-        c3 = new Mouvement(p, j1, 1, 2, Epoque.PRESENT);
+        c3 = new Recolte(p, j1, 1, 2, Epoque.PRESENT);
     }
 
     @Test
@@ -46,24 +46,54 @@ public class TestCoup {
     @Test
     public void testDeplacerEtat() {
         c1.verifierPremierCoupCree();
-        c1.deplacer(Piece.BLANC, 0, 0, Epoque.PRESENT, 0, 1, Epoque.PRESENT);
+        c1.deplacer(Piece.BLANC, 0, 0, Epoque.PASSE, 0, 1, Epoque.PASSE);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c2.verifierPremierCoupCree();
+        c2.deplacer(Piece.NOIR, 3, 3, Epoque.FUTUR, 3, 2, Epoque.FUTUR);
+        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c3.verifierPremierCoupCree();
+        c3.deplacer(Piece.BLANC, 1, 2, Epoque.PRESENT, 1, 1, Epoque.PRESENT);
+        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testAjouterEtat() {
         c1.verifierPremierCoupCree();
-        c1.ajouter(Piece.NOIR, 1, 1, Epoque.PRESENT);
+        c1.ajouter(Piece.NOIR, 0, 1, Epoque.PASSE);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c2.verifierPremierCoupCree();
+        c2.ajouter(Piece.NOIR, 3, 2, Epoque.FUTUR);
+        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c3.verifierPremierCoupCree();
+        c3.ajouter(Piece.NOIR, 1, 1, Epoque.PRESENT);
+        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testSupprimerEtat() {
         c1.verifierPremierCoupCree();
-        c1.supprimer(Piece.BLANC, 0, 0, Epoque.PRESENT);
+        c1.supprimer(Piece.BLANC, 0, 0, Epoque.PASSE);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c2.verifierPremierCoupCree();
+        c2.supprimer(Piece.NOIR, 3, 3, Epoque.FUTUR);
+        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
+
+        c3.verifierPremierCoupCree();
+        c3.supprimer(Piece.BLANC, 1, 2, Epoque.PRESENT);
+        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
@@ -71,11 +101,23 @@ public class TestCoup {
     public void testJouerAucunCoupCree() {
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::jouer);
         assertTrue(e.getMessage().contains("Impossible de jouer le coup : aucun coup créé"));
+
+        e = assertThrows(IllegalStateException.class, c2::jouer);
+        assertTrue(e.getMessage().contains("Impossible de jouer le coup : aucun coup créé"));
+
+        e = assertThrows(IllegalStateException.class, c3::jouer);
+        assertTrue(e.getMessage().contains("Impossible de jouer le coup : aucun coup créé"));
     }
 
     @Test
     public void testAnnulerAucunCoupCree() {
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : aucun coup créé"));
+
+        e = assertThrows(IllegalStateException.class, c2::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : aucun coup créé"));
+
+        e = assertThrows(IllegalStateException.class, c3::annuler);
         assertTrue(e.getMessage().contains("Impossible d'annuler le coup : aucun coup créé"));
     }
 
@@ -85,12 +127,32 @@ public class TestCoup {
         c1.jouer();
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::jouer);
         assertTrue(e.getMessage().contains("Impossible de jouer le coup : coup déjà joué"));
+
+        c2.creer(3, 2, Epoque.FUTUR);
+        c2.jouer();
+        e = assertThrows(IllegalStateException.class, c2::jouer);
+        assertTrue(e.getMessage().contains("Impossible de jouer le coup : coup déjà joué"));
+
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        c3.creer(1, 1, Epoque.PRESENT);
+        c3.jouer();
+        e = assertThrows(IllegalStateException.class, c3::jouer);
+        assertTrue(e.getMessage().contains("Impossible de jouer le coup : coup déjà joué"));
     }
 
     @Test
     public void testAnnulerAucunCoupJoue() {
         c1.creer(0, 1, Epoque.PASSE);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+
+        c2.creer(3, 2, Epoque.FUTUR);
+        e = assertThrows(IllegalStateException.class, c2::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        c3.creer(1, 1, Epoque.PRESENT);
+        e = assertThrows(IllegalStateException.class, c3::annuler);
         assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
     }
 
@@ -100,6 +162,19 @@ public class TestCoup {
         c1.jouer();
         c1.annuler();
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+
+        c2.creer(3, 2, Epoque.FUTUR);
+        c2.jouer();
+        c2.annuler();
+        e = assertThrows(IllegalStateException.class, c2::annuler);
+        assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
+
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        c3.creer(1, 1, Epoque.PRESENT);
+        c3.jouer();
+        c3.annuler();
+        e = assertThrows(IllegalStateException.class, c3::annuler);
         assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
     }
 
@@ -118,6 +193,7 @@ public class TestCoup {
         assertEquals(0, c1.pion().colonne());
         assertEquals(Epoque.PASSE, c1.pion().epoque());
 
+        c2 = new Mouvement(p, j2, 3, 3, Epoque.FUTUR);
         c2.creer(2, 3, Epoque.FUTUR);
         assertEquals(3, c2.pion().ligne());
         assertEquals(3, c2.pion().colonne());
@@ -131,6 +207,7 @@ public class TestCoup {
         assertEquals(3, c2.pion().colonne());
         assertEquals(Epoque.FUTUR, c2.pion().epoque());
 
+        c3 = new Mouvement(p, j1, 1, 2, Epoque.PRESENT);
         c3.creer(1, 2, Epoque.FUTUR);
         assertEquals(1, c3.pion().ligne());
         assertEquals(2, c3.pion().colonne());

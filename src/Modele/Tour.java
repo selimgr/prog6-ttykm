@@ -1,54 +1,95 @@
 package Modele;
 
-import java.util.NoSuchElementException;
-
 class Tour {
-    Coup coup1, coup2;
-    Case pion;
+    private Case pion;
+    private Coup coup1, coup2;
 
-    boolean estVide() {
-        return coup1 == null && coup2 == null;
+    int lignePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer la ligne du pion : pion non sélectionné");
+        }
+        return pion.ligne();
+    }
+
+    int colonnePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer la colonne du pion : pion non sélectionné");
+        }
+        return pion.colonne();
+    }
+
+    Epoque epoquePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer l'époque du pion : pion non sélectionné");
+        }
+        return pion.epoque();
+    }
+
+    boolean pionSelectione() {
+        return pion != null;
+    }
+
+    boolean estCommence() {
+        return coup1 != null;
     }
 
     boolean estTermine() {
-        return ((coup1 != null) && (coup2 != null));
+        return pion != null && coup1 != null && coup2 != null;
+    }
+
+    void selectionnerPion(int l, int c, Epoque e) {
+        if (pionSelectione()) {
+            throw new IllegalStateException("Impossible de sélectionner le pion : pion déjà sélectionné");
+        }
+        pion = new Case(l, c, e);
+    }
+
+    boolean deselectionnerPion(int l, int c, Epoque e) {
+        if (pionSelectione() && l == lignePion() && c == colonnePion() && e == epoquePion() && !estCommence()) {
+            pion = null;
+            return true;
+        }
+        return false;
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
+        if (!pionSelectione()) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : aucun pion sélectionné");
+        }
         if (estTermine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
         }
         if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
-        if (coup1==null) {
-            pion = new Case(coup.lignePion(), coup.colonnePion(), coup.epoquePion());
-            coup1 = coup;
-            coup1.jouer();
-        } else {
-            /*if (pion.ligne() != coup.lignePion() || pion.colonne() != coup.colonnePion() ||
-                    pion.epoque() != coup.epoquePion()) {                                               //rentre ici
-                return false;*/
-            coup2=coup;
-            coup2.jouer();
-            }
-            //coup2 = coup;
-        //}
 
+        if (!estCommence()) {
+            coup1 = coup;
+        } else {
+            coup2 = coup;
+        }
+        coup.jouer();
+        pion = coup.pion();
         return true;
     }
 
-    void annulerCoup() {
-        if (estVide()) {
-            throw new NoSuchElementException("Impossible d'annuler un coup : aucun coup joué ce tour");
+    boolean annulerCoup() {
+        if (!estCommence()) {
+            if (pionSelectione()) {
+                pion = null;
+                return true;
+            }
+            return false;
         }
         if (estTermine()) {
             coup2.annuler();
+            pion = coup2.pion();
             coup2 = null;
         } else {
             coup1.annuler();
+            pion = coup1.pion();
             coup1 = null;
-            pion = null;
         }
+        return true;
     }
 }

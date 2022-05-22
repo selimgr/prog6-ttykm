@@ -124,9 +124,11 @@ class VueJeu extends JPanel {
         // --
         //setEnabled à modifer à l'avenir en fonction de l'action possible par le joueur courant
         JButton recolter = new JButton("Recolter une graine");
+        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
+        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         grainesButtons.add(planter);
@@ -182,7 +184,6 @@ class VueJeu extends JPanel {
         vueNiveau.miseAJour();
         JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
-
 
     public int getTaille(){
         return passe.getHeight();

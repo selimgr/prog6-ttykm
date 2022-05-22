@@ -1,14 +1,12 @@
 package Modele;
 
 public class Mouvement extends Coup {
-    boolean voyageTemporelArriere;
-    boolean graineRecuperee;
-    int[] dBlancPlateau, dNoirPlateau;
+    private Case arriveePion;
+    private boolean positionPionChangee;
+    private boolean voyageTemporelArriere;
 
     Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
-        dBlancPlateau = new int[Epoque.NOMBRE];
-        dNoirPlateau = new int[Epoque.NOMBRE];
     }
 
     static boolean estCorrect(int dL, int dC, int dEpoque) {
@@ -17,7 +15,6 @@ public class Mouvement extends Coup {
 
     static boolean estDeplacement(int dL, int dC, int dEpoque) {
         return Math.abs(dL) + Math.abs(dC) < 2 && dL + dC != 0 && dEpoque == 0;
-
     }
 
     static boolean estVoyageTemporel(int dL, int dC, int dEpoque) {
@@ -25,66 +22,71 @@ public class Mouvement extends Coup {
     }
 
     @Override
+    Case pion() {
+        if (positionPionChangee) {
+            return arriveePion;
+        }
+        return super.pion();
+    }
+
+    @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        int dL = destL - pionL;
-        int dC = destC - pionC;
-        int dEpoque = eDest.indice() - ePion.indice();
+        verifierPremierCoupCree();
+
+        int dL = destL - pion().ligne();
+        int dC = destC - pion().colonne();
+        int dEpoque = eDest.indice() - pion().epoque().indice();
+
+        if (Plateau.aMur(destL, destC) || (
+                (joueur().pions() == Pion.BLANC && !plateau().aBlanc(pion().ligne(), pion().colonne(), pion().epoque())) ||
+                        (joueur().pions() == Pion.NOIR && !plateau().aNoir(pion().ligne(), pion().colonne(), pion().epoque())))) {
+            return false;
+        }
+        arriveePion = new Case(destL, destC, eDest);
 
         if (estDeplacement(dL, dC, dEpoque)) {
-            return !plateau.aObstacleMortel(destL, destC, ePion, dL, dC) &&
-                    creerDeplacementPion(pionL, pionC, destL, destC);
+            return !plateau().aObstacleMortel(destL, destC, pion().epoque(), dL, dC) &&
+                    creerDeplacementPion(pion().ligne(), pion().colonne(), destL, destC);
         }
-        else if (estVoyageTemporel(dL, dC, dEpoque)) {
-            if (plateau.estOccupable(pionL, pionC, eDest)) {
-                return false;
-            }
-            Piece pion = Piece.depuisValeur(plateau.contenu(pionL, pionC, ePion));
-            ajouterPionPlateau(pionL, pionC, eDest, pion);
-
-            if (dEpoque == 1) {
-                supprimerPionPlateau(pionL, pionC, ePion, pion);
-                return true;
-            }
-            voyageTemporelArriere = true;
-            return joueur.nombrePionsReserve() > 0;
+        if (estVoyageTemporel(dL, dC, dEpoque)) {
+            return plateau().estOccupable(pion().ligne(), pion().colonne(), eDest) && creerVoyageTemporel(eDest);
         }
-        else {
-            return false; // IA peut envoyer de mauvaise action
-        }
+        return false;
     }
 
     private boolean creerDeplacementPion(int departL, int departC, int arriveeL, int arriveeC) {
         int dL = arriveeL - departL;
         int dC = arriveeC - departC;
-        if (!plateau.aPion(departL, departC, ePion)) {
-            return false;
-        }
-        Piece pion = Piece.depuisValeur(plateau.contenu(departL, departC, ePion));
+        Piece pion = recupererPion(departL, departC, pion().epoque());
 
-        if (plateau.estOccupable(arriveeL, arriveeC, ePion)) {
-            deplacerPion(departL, departC, arriveeL, arriveeC, pion);
+        // Si la case d'arrivée a un obstacle, on supprime le pion car il est poussé sur cette obstacle et meurt
+        if (plateau().aObstacleMortel(arriveeL, arriveeC, pion().epoque(), dL, dC)) {
+            supprimer(pion, departL, departC, pion().epoque());
         }
-        else if (plateau.aPion(arriveeL, arriveeC, ePion)) {
-            if (pion == Piece.depuisValeur(plateau.contenu(arriveeL, arriveeC, ePion))) {
-                supprimerPionPlateau(departL, departC, ePion, pion);
-                supprimerPionPlateau(arriveeL, arriveeC, ePion, pion);
-            } else {
-                if (!creerDeplacementPion(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC)) {
-                    return false;
-                }
-                deplacerPion(departL, departC, arriveeL, arriveeC, pion);
+        // Si le case d'arrivée est occupable, on déplace le pion dessus
+        else if (plateau().estOccupable(arriveeL, arriveeC, pion().epoque())) {
+            deplacer(pion, departL, departC, pion().epoque(), arriveeL, arriveeC, pion().epoque());
+        }
+        else if (plateau().aPion(arriveeL, arriveeC, pion().epoque())) {
+            // Si les pions sont différents, on déplace les deux pions dans la même direction
+            // (le pion de départ pousse le pion d'arrivée)
+            if (pion != recupererPion(arriveeL, arriveeC, pion().epoque())) {
+                deplacer(pion, departL, departC, pion().epoque(), arriveeL, arriveeC, pion().epoque());
+                return creerDeplacementPion(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC);
             }
+            // Sinon la case d'arrivée a un pion identique à celui qui joue,
+            // on supprime les deux car un paradoxe temporel est créé
+            supprimer(pion, departL, departC, pion().epoque());
+            supprimer(pion, arriveeL, arriveeC, pion().epoque());
         }
-        else if (plateau.aObstacleMortel(arriveeL, arriveeC, ePion, dL, dC)) {
-            supprimerPionPlateau(departL, departC, ePion, pion);
+        // Si la case d'arrivée a un arbre, on déplace l'arbre et le pion (le pion pousse l'arbre)
+        else if (plateau().aArbre(arriveeL, arriveeC, pion().epoque())) {
+            deplacer(pion, departL, departC, pion().epoque(), arriveeL, arriveeC, pion().epoque());
+            return creerDeplacementArbre(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC);
         }
-        else if (plateau.aArbre(arriveeL, arriveeC, ePion)) {
-            if (!creerDeplacementArbre(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC)) {
-                return false;
-            }
-            deplacerPion(departL, departC, arriveeL, arriveeC, pion);
-        } else {
-            throw new IllegalStateException("Déplacement invalide");
+        else {
+            throw new IllegalStateException("Impossible de créer le déplacement (" + departL + ", " + departC + ") -> (" +
+                    arriveeL + ", " + arriveeC + ") dans le " + pion().epoque() + " : déplacement du pion invalide");
         }
         return true;
     }
@@ -93,85 +95,67 @@ public class Mouvement extends Coup {
         int dL = arriveeL - departL;
         int dC = arriveeC - departC;
 
-        if (!plateau.aArbre(departL, departC, ePion)) {
-            throw new IllegalStateException("Arbre attendu sur la case (" + departL + ", " + departC + ", " + ePion + ")");
+        if (!plateau().aArbre(departL, departC, pion().epoque())) {
+            throw new IllegalStateException("Arbre attendu sur la case (" + departL + ", " + departC + ", " + pion().epoque() + ")");
         }
-        if (plateau.aObstacleMortel(arriveeL, arriveeC, ePion, dL, dC)) {
+        if (plateau().aObstacleMortel(arriveeL, arriveeC, pion().epoque(), dL, dC)) {
             throw new IllegalStateException(
-                    "Aucun obstacle mortel attendu après la case (" + arriveeL + ", " + arriveeC + ", " + ePion + ")"
-            );
+                    "Aucun obstacle mortel attendu après la case (" + arriveeL + ", " + arriveeC + ", " + pion().epoque() + ")");
         }
-        if (plateau.estVide(arriveeL, arriveeC, ePion)) {
-            supprimer(departL, departC, ePion, Piece.ARBRE);
-            ajouterArbreCouche(arriveeL, arriveeC, dL, dC);
-        }
-        else if (plateau.aGraine(arriveeL, arriveeC, ePion)) {
-            supprimer(departL, departC, ePion, Piece.ARBRE);
-            supprimer(arriveeL, arriveeC, ePion, Piece.GRAINE);
-            graineRecuperee = true;
-        }
-        else if (plateau.aPion(arriveeL, arriveeC, ePion)) {
-            supprimer(departL, departC, ePion, Piece.ARBRE);
-            Piece pion = Piece.depuisValeur(plateau.contenu(arriveeL, arriveeC, ePion));
-            supprimerPionPlateau(arriveeL, arriveeC, ePion, pion);
-            ajouterArbreCouche(arriveeL, arriveeC, dL, dC);
-        }
-        else if (plateau.aArbre(arriveeL, arriveeC, ePion)) {
-            if (!creerDeplacementArbre(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC)) {
-                return false;
+
+        // Si la case d'arrivée est vide, a une graine ou a un pion, on déplace l'arbre (on le fait tomber)
+        if (plateau().estOccupable(arriveeL, arriveeC, pion().epoque()) || plateau().aPion(arriveeL, arriveeC, pion().epoque())) {
+            deplacer(Piece.ARBRE, departL, departC, pion().epoque(), arriveeL, arriveeC, pion().epoque());
+
+            // Si la case d'arrivée a une graine, on récupère la graine en faisant tomber l'arbre dessus
+            if (plateau().aGraine(arriveeL, arriveeC, pion().epoque())) {
+                supprimer(Piece.GRAINE, arriveeL, arriveeC, pion().epoque());
             }
-            supprimer(departL, departC, ePion, Piece.ARBRE);
-            ajouterArbreCouche(arriveeL, arriveeC, dL, dC);
+            // Si la case d'arrivée a un pion, l'arbre tombe sur lui et le tue donc on le supprime
+            if (plateau().aPion(arriveeL, arriveeC, pion().epoque())) {
+                supprimer(recupererPion(arriveeL, arriveeC, pion().epoque()), arriveeL, arriveeC, pion().epoque());
+            }
+        }
+        // Si la case d'arrivée a un arbre, on fait tomber l'arbre si c'est possible
+        else if (plateau().aArbre(arriveeL, arriveeC, pion().epoque())) {
+            deplacer(Piece.ARBRE, departL, departC, pion().epoque(), arriveeL, arriveeC, pion().epoque());
+            return creerDeplacementArbre(arriveeL, arriveeC, arriveeL + dL, arriveeC + dC);
         }
         else {
-            throw new IllegalStateException("Déplacement invalide");
+            throw new IllegalStateException("Impossible de créer le déplacement (" + departL + ", " + departC + ") -> (" +
+                    arriveeL + ", " + arriveeC + ") dans le " + pion().epoque() + " : déplacement de l'arbre invalide");
         }
         return true;
     }
 
-    private void deplacerPion(int departL, int departC, int arriveeL, int arriveeC, Piece pion) {
-        supprimer(departL, departC, ePion, pion);
-        ajouter(arriveeL, arriveeC, ePion, pion);
+    private boolean creerVoyageTemporel(Epoque eDest) {
+        int dEpoque = eDest.indice() - pion().epoque().indice();
+        Piece pion = recupererPion(pion().ligne(), pion().colonne(), pion().epoque());
+
+        // Si le voyage temporel est en arrière, on ajoute le pion de départ car il se duplique, on vérifie alors que
+        // le nombre de pions dans la réserve du joueur est suffisant
+        if (dEpoque == -1) {
+            ajouter(pion, pion().ligne(), pion().colonne(), pion().epoque());
+
+            if (joueur().nombrePionsReserve() <= 0) {
+                return false;
+            }
+            voyageTemporelArriere = true;
+        }
+
+        // On déplace le pion à la même position sur la nouvelle époque
+        deplacer(pion, pion().ligne(), pion().colonne(), pion().epoque(), pion().ligne(), pion().colonne(), eDest);
+        return true;
     }
 
-    private void ajouterPionPlateau(int l, int c, Epoque e, Piece pion) {
-        ajouter(l, c, e, pion);
-
-        switch (pion) {
-            case BLANC:
-                dBlancPlateau[e.indice()]++;
-            case NOIR:
-                dNoirPlateau[e.indice()]++;
-            default:
-                throw new IllegalArgumentException("Pion attendu");
+    private Piece recupererPion(int l, int c, Epoque e) {
+        if (plateau().aBlanc(l, c, e)) {
+            return Piece.BLANC;
         }
-    }
-
-    private void supprimerPionPlateau(int l, int c, Epoque e, Piece pion) {
-        supprimer(l, c, e, pion);
-
-        switch (pion) {
-            case BLANC:
-                dBlancPlateau[e.indice()]--;
-            case NOIR:
-                dNoirPlateau[e.indice()]--;
-            default:
-                throw new IllegalArgumentException("Pion attendu");
+        if (plateau().aNoir(l, c, e)) {
+            return Piece.NOIR;
         }
-    }
-
-    private void ajouterArbreCouche(int l, int c, int dL, int dC) {
-        if (dL == -1 && dC == 0) {
-            ajouter(l, c, ePion, Piece.ARBRE_COUCHE_HAUT);
-        } else if (dL == 0 && dC == 1) {
-            ajouter(l, c, ePion, Piece.ARBRE_COUCHE_DROITE);
-        } else if (dL == 1 && dC == 0) {
-            ajouter(l, c, ePion, Piece.ARBRE_COUCHE_BAS);
-        } else if (dL == 0 && dC == -1) {
-            ajouter(l, c, ePion, Piece.ARBRE_COUCHE_GAUCHE);
-        } else {
-            throw new IllegalArgumentException("Impossible d'ajouter l'arbre couché : direction incorrecte");
-        }
+        throw new IllegalStateException("Pion attendu sur la case (" + l + ", " + c + ", " + e + ")");
     }
 
     @Override
@@ -179,19 +163,10 @@ public class Mouvement extends Coup {
         super.jouer();
 
         if (voyageTemporelArriere) {
-            joueur.enleverPionReserve();
+            joueur().enleverPionReserve();
         }
-        if (graineRecuperee) {
-            plateau.ajouterGraineReserve();
-        }
-        for (int i = 0; i < Epoque.NOMBRE; i++) {
-            if(dBlancPlateau[i]!=0) {
-                plateau.modifierNombrePionPlateau(Piece.BLANC, Epoque.depuisIndice(i), dBlancPlateau[i]);
-            }
-            if(dNoirPlateau[i]!=0) {
-                plateau.modifierNombrePionPlateau(Piece.NOIR, Epoque.depuisIndice(i), dNoirPlateau[i]);
-            }
-        }
+        // On change la position du pion
+        positionPionChangee = true;
     }
 
     @Override
@@ -199,14 +174,9 @@ public class Mouvement extends Coup {
         super.annuler();
 
         if (voyageTemporelArriere) {
-            joueur.ajouterPionReserve();
+            joueur().ajouterPionReserve();
         }
-        if (graineRecuperee) {
-            plateau.enleverGraineReserve();
-        }
-        for (int i = 0; i < Epoque.NOMBRE; i++) {
-            plateau.modifierNombrePionPlateau(Piece.BLANC, Epoque.depuisIndice(i), -dBlancPlateau[i]);
-            plateau.modifierNombrePionPlateau(Piece.NOIR, Epoque.depuisIndice(i), -dNoirPlateau[i]);
-        }
+        // On change remet la position de départ du pion
+        positionPionChangee = false;
     }
 }

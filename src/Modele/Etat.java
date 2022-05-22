@@ -1,37 +1,36 @@
 package Modele;
 
-// TODO: faire en sorte de donner la pièce qui change au lieu du contenu
+import static java.util.Objects.requireNonNull;
 
 public class Etat {
-    private final int l, c;
-    private final Epoque e;
-    private final int contenuAvant, contenuApres;
+    private final Piece piece;
+    private final Case depart, arrivee;
 
-    Etat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
-        this.l = l;
-        this.c = c;
-        this.e = e;
-        this.contenuAvant = contenuAvant;
-        this.contenuApres = contenuApres;
+    Etat(Piece piece, Case depart, Case arrivee) {
+        requireNonNull(piece, "La pièce ne doit pas être null");
+
+        if (depart == null && arrivee == null) {
+            throw new IllegalArgumentException("Impossible de créer un état avec les cases avant et après null");
+        }
+        this.piece = piece;
+        this.depart = depart;
+        this.arrivee = arrivee;
     }
 
-    int ligne() {
-        return l;
+    Piece piece() {
+        return piece;
     }
 
-    int colonne() {
-        return c;
+    Case depart() {
+        return depart;
     }
 
-    Epoque epoque() {
-        return e;
+    Case arrivee() {
+        return arrivee;
     }
 
-    int contenuAvant() {
-        return contenuAvant;
-    }
-
-    int contenuApres() {
-        return contenuApres;
+    @Override
+    public String toString() {
+        return "[" + piece + " : " + depart + " -> " + arrivee + "]";
     }
 }

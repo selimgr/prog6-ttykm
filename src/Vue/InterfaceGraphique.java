@@ -29,6 +29,7 @@ public class InterfaceGraphique implements Runnable {
         device = env.getDefaultScreenDevice();
         DisplayMode dm = device.getDisplayMode();
 
+        // TODO: Gérer la taille de la fenêtre dans default.cfg
         int width = dm.getWidth() / 2;
         int height = dm.getHeight() / 2 + 80;
 

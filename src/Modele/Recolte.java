@@ -1,5 +1,7 @@
 package Modele;
 
+// TODO: A tester
+
 public class Recolte extends Coup {
 
     Recolte(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
@@ -12,53 +14,43 @@ public class Recolte extends Coup {
 
     @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        int dL = destL - pionL;
-        int dC = destC - pionC;
-        int dEpoque = eDest.indice() - ePion.indice();
+        verifierPremierCoupCree();
+
+        int dL = destL - pion().ligne();
+        int dC = destC - pion().colonne();
+        int dEpoque = eDest.indice() - pion().epoque().indice();
 
         if (!estCorrecte(dL, dC, dEpoque)) {
             throw new IllegalArgumentException("Impossible de créer la récolte : récolte incorrecte");
         }
-        if (!plateau.aGraine(destL, destC, eDest)) {
+        if (!plateau().aGraine(destL, destC, eDest)) {
             return false;
         }
-        supprimer(destL, destC, eDest, Piece.GRAINE);
+        supprimer(Piece.GRAINE, destL, destC, eDest);
 
         if (eDest.indice() + 1 < Epoque.NOMBRE) {
             Epoque eSuivante = Epoque.depuisIndice(eDest.indice() + 1);
 
-            if (plateau.aArbuste(destL, destC, eSuivante)) {
-                supprimer(destL, destC, eSuivante, Piece.ARBUSTE);
+            if (plateau().aArbuste(destL, destC, eSuivante)) {
+                supprimer(Piece.ARBUSTE, destL, destC, eSuivante);
 
                 if (eSuivante.indice() + 1 < Epoque.NOMBRE) {
                     eSuivante = Epoque.depuisIndice(eSuivante.indice() + 1);
 
-                    if (plateau.aArbre(destL, destC, eSuivante)) {
-                        supprimer(destL, destC, eSuivante, Piece.ARBRE);
-                    } else if (plateau.aArbreCouche(destL - 1, destC, eDest)) {
-                        supprimer(destL, destC, eSuivante, Piece.ARBRE_COUCHE_HAUT);
-                    } else if (plateau.aArbreCouche(destL, destC + 1, eDest)) {
-                        supprimer(destL, destC, eSuivante, Piece.ARBRE_COUCHE_DROITE);
-                    } else if (plateau.aArbreCouche(destL + 1, destC, eDest)) {
-                        supprimer(destL, destC, eSuivante, Piece.ARBRE_COUCHE_BAS);
-                    } else if (plateau.aArbreCouche(destL, destC - 1, eDest)) {
-                        supprimer(destL, destC, eSuivante, Piece.ARBRE_COUCHE_GAUCHE);
+                    if (plateau().aArbre(destL, destC, eSuivante)) {
+                        supprimer(Piece.ARBRE, destL, destC, eSuivante);
+                    } else if (plateau().aArbreCouche(destL - 1, destC, eDest)) {
+                        supprimer(Piece.ARBRE_COUCHE_HAUT, destL, destC, eSuivante);
+                    } else if (plateau().aArbreCouche(destL, destC + 1, eDest)) {
+                        supprimer(Piece.ARBRE_COUCHE_DROITE, destL, destC, eSuivante);
+                    } else if (plateau().aArbreCouche(destL + 1, destC, eDest)) {
+                        supprimer(Piece.ARBRE_COUCHE_BAS, destL, destC, eSuivante);
+                    } else if (plateau().aArbreCouche(destL, destC - 1, eDest)) {
+                        supprimer(Piece.ARBRE_COUCHE_GAUCHE, destL, destC, eSuivante);
                     }
                 }
             }
         }
         return true;
-    }
-
-    @Override
-    public void jouer() {
-        super.jouer();
-        plateau.ajouterGraineReserve();
-    }
-
-    @Override
-    public void annuler() {
-        super.annuler();
-        plateau.enleverGraineReserve();
     }
 }

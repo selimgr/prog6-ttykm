@@ -1,7 +1,10 @@
 package Vue.JComposants;
 
+import Controleur.ControleurMediateur;
 import Modele.Epoque;
+import Modele.Jeu;
 import Modele.Plateau;
+import Patterns.Observateur;
 import Vue.CollecteurEvenements;
 
 import javax.swing.*;
@@ -10,7 +13,7 @@ import java.util.Objects;
 
 // 1 =
 
-public class CPlateau extends JPanel {
+public class CPlateau extends JPanel implements Observateur {
     Image current;
     CollecteurEvenements c;
     int num;
@@ -84,5 +87,10 @@ public class CPlateau extends JPanel {
     }
     private int getOffsetY(){
         return 70*this.getHeight()/770;
+    }
+
+    @Override
+    public void miseAJour() {
+        repaint();
     }
 }

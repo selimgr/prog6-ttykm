@@ -19,7 +19,7 @@ public enum Epoque {
         return indice;
     }
 
-    public static Epoque depuisIndice(int indice) {
+    static Epoque depuisIndice(int indice) {
         switch (indice) {
             case 0:
                 return PASSE;
@@ -28,7 +28,7 @@ public enum Epoque {
             case 2:
                 return FUTUR;
             default:
-                throw new IllegalArgumentException("Aucune époque correspondant à cet indice");
+                throw new IllegalArgumentException("Aucune époque correspondant à l'indice " + indice);
         }
     }
 

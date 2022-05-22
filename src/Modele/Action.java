@@ -1,9 +1,11 @@
-package Controleur;
+package Modele;
 
 public enum Action {
     MOUVEMENT("Mouvement", 0),
     PLANTATION("Plantation", 1),
     RECOLTE("Récolte", 2);
+
+    public static int NOMBRE = values().length;
 
     private final String nom;
     private final int valeur;
@@ -26,7 +28,7 @@ public enum Action {
             case 2:
                 return RECOLTE;
             default:
-                throw new IllegalArgumentException("Aucune action correspondant à cette valeur");
+                throw new IllegalArgumentException("Aucune action correspondant à la valeur " + valeur);
         }
     }
 

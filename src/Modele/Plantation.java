@@ -1,5 +1,7 @@
 package Modele;
 
+// TODO: A tester
+
 public class Plantation extends Coup {
 
     Plantation(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
@@ -11,51 +13,37 @@ public class Plantation extends Coup {
     }
 
     private boolean estPlantable(int l, int c, Epoque e) {
-        return !plateau.aGraine(l, c, e) && !plateau.aArbuste(l, c, e) &&
-                !plateau.aArbre(l, c, e) && !plateau.aArbreCouche(l, c, e);
+        return plateau().estVide(l, c, e) || (plateau().aPion(l, c, e) && !plateau().aGraine(l, c, e));
     }
 
     @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        int dL = destL - pionL;
-        int dC = destC - pionC;
-        int dEpoque = eDest.indice() - ePion.indice();
+        verifierPremierCoupCree();
 
-        if (!estCorrecte(dL, dC, dEpoque)) {
-            throw new IllegalArgumentException("Impossible de créer la plantation : plantation incorrecte");
-        }
-        if (!estPlantable(destL, destC, eDest) || plateau.nombreGrainesReserve() == 0) {
+        int dL = destL - pion().ligne();
+        int dC = destC - pion().colonne();
+        int dEpoque = eDest.indice() - pion().epoque().indice();
+
+        if (!estCorrecte(dL, dC, dEpoque) || !estPlantable(destL, destC, eDest) || plateau().nombreGrainesReserve() == 0) {
             return false;
         }
-        ajouter(destL, destC, eDest, Piece.GRAINE);
+        ajouter(Piece.GRAINE, destL, destC, eDest);
 
         if (eDest.indice() + 1 < Epoque.NOMBRE) {
             Epoque eSuivante = Epoque.depuisIndice(eDest.indice() + 1);
 
-            if (estPlantable(destL, destC, eSuivante)) {
-                ajouter(destL, destC, eSuivante, Piece.ARBUSTE);
+            if (plateau().estVide(destL, destC, eSuivante)) {
+                ajouter(Piece.ARBUSTE, destL, destC, eSuivante);
 
                 if (eSuivante.indice() + 1 < Epoque.NOMBRE) {
                     eSuivante = Epoque.depuisIndice(eSuivante.indice() + 1);
 
-                    if (estPlantable(destL, destC, Epoque.depuisIndice(eDest.indice() + 2))) {
-                        ajouter(destL, destC, eSuivante, Piece.ARBRE);
+                    if (plateau().estVide(destL, destC, eSuivante)) {
+                        ajouter(Piece.ARBRE, destL, destC, eSuivante);
                     }
                 }
             }
         }
         return true;
-    }
-
-    @Override
-    public void jouer() {
-        super.jouer();
-        plateau.enleverGraineReserve();
-    }
-
-    @Override
-    public void annuler() {
-        super.annuler();
-        plateau.ajouterGraineReserve();
     }
 }

@@ -11,6 +11,8 @@ enum Piece {
     ARBRE_COUCHE_BAS("Arbre couché vers le bas", 128),
     ARBRE_COUCHE_GAUCHE("Arbre couché vers la gauche", 256);
 
+    public static final int NOMBRE = values().length;
+
     private final String nom;
     private final int valeur;
 
@@ -44,8 +46,37 @@ enum Piece {
             case 256:
                 return ARBRE_COUCHE_GAUCHE;
             default:
-                throw new IllegalArgumentException("Aucune pièce correspondant à cette valeur");
+                throw new IllegalArgumentException("Aucune pièce correspondant à la valeur " + valeur);
         }
+    }
+
+    Pion toPion() {
+        switch (this) {
+            case BLANC:
+                return Pion.BLANC;
+            case NOIR:
+                return Pion.NOIR;
+            default:
+                return null;
+        }
+    }
+
+    static Piece directionArbreCouche(int dL, int dC) {
+        if (dL == 0) {
+            if (dC == 1) {
+                return ARBRE_COUCHE_DROITE;
+            } else if (dC == -1) {
+                return ARBRE_COUCHE_GAUCHE;
+            }
+        } else if (dC == 0) {
+            if (dL == 1) {
+                return ARBRE_COUCHE_BAS;
+            } else if (dL == -1) {
+                return ARBRE_COUCHE_HAUT;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Impossible de renvoyer la direction de l'arbre couché : déplacement " + dL + ", " + dC + " incorrect");
     }
 
     @Override

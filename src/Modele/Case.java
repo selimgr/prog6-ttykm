@@ -1,15 +1,13 @@
 package Modele;
 
+import java.util.Objects;
+
 public class Case {
     private final int ligne, colonne;
     private final Epoque epoque;
 
     public Case(int ligne, int colonne, Epoque e) {
-        if (Math.min(ligne, colonne) < 0 || Math.max(ligne, colonne) >= Plateau.TAILLE) {
-            throw new IllegalArgumentException(
-                    "Impossible de créer la case (" + ligne + ", " + colonne + ", " + e + ") : case invalide"
-            );
-        }
+        Plateau.verifierCoordoneesCorrectes(ligne, colonne, e);
         this.ligne = ligne;
         this.colonne = colonne;
         epoque = e;
@@ -34,5 +32,30 @@ public class Case {
     @Override
     public String toString() {
         return "(" + ligne + ", " + colonne + ", " + epoque + ")";
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Case)) {
+            return false;
+        }
+        Case c = (Case) o;
+
+        for (int i = 0; i < attributs().length; ++i){
+            if (!Objects.equals(attributs()[i], c.attributs()[i])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override public int hashCode() {
+        return Objects.hash(attributs());
+    }
+
+    private Object[] attributs() {
+        return new Object[]{ligne, colonne, epoque};
     }
 }

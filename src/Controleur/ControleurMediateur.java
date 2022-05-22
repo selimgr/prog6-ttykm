@@ -4,18 +4,12 @@ import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
 
+// TODO: A tester
 // TODO: Compléter le controleur
 
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
-    int departL, departC;
-    Epoque eDepart;
-    Action action;
-    boolean attendAction1 = true;  //sorte d'AEFD
-    boolean attendAction2 = false;
-    boolean attendFocus =  false;   //
-
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -66,7 +60,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 
     @Override
-    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1, String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
+    public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
+                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
@@ -96,93 +91,38 @@ public class ControleurMediateur implements CollecteurEvenements {
     public void afficherRegles() {vues.afficherR();}
 
     @Override
-    public void selectionnerPion(int l, int c, Epoque e) {
-        departL = l;
-        departC = c;
-        eDepart = e;
-        fixerAction(Action.MOUVEMENT);
+    public void jouer(int l, int c, Epoque e) {
+        jeu.jouerCoup(l, c, e);
     }
 
     @Override
-    public void deplacer(int l, int c, Epoque e) {
-        if (eDepart != null) {
-            //System.out.println("je joue le mouvement " + departL +", "+departC+", "+eDepart+" vers "+l+", "+c+", "+e);
-            jeu.jouerMouvement(departL, departC, eDepart, l, c, e);
-        }
-        eDepart = null;
+    public void annuler() {
+        jeu.annulerCoup();
     }
 
     @Override
-    public void planterGraine(int l, int c) {
-        if (eDepart != null) {
-            jeu.jouerPlantation(departL, departC, eDepart, l, c, eDepart);
-        }
-        eDepart = null;
+    public void selectionnerPlanterGraine() {
+        jeu.selectionnerPlantation();
     }
 
     @Override
-    public void recolterGraine(int l, int c) {
-        if (eDepart != null) {
-            jeu.jouerRecolte(departL, departC, eDepart, l, c, eDepart);
-        }
-        eDepart = null;
+    public void selectionnerRecolterGraine() {
+        jeu.selectionnerRecolte();
     }
 
     @Override
-    public void fixerAction(Action a) {
-        action = a;
+    public void changerFocusPasse() {
+        jeu.focusPasse();
     }
 
     @Override
-    public void clicSouris(int l, int c, Epoque e) {
-        if (attendAction1 || attendAction2) {
-            if (eDepart == null && !jeu().plateau().aPion(l, c, e)) {
-                return;
-            }
-            if (eDepart == null) {
-                selectionnerPion(l, c, e);
-                return;
-            }
+    public void changerFocusPresent() {
+        jeu.focusPresent();
+    }
 
-            switch (action) {
-                case MOUVEMENT:
-                    deplacer(l, c, e);
-                    System.out.println("mouvement");
-                    break;
-                case PLANTATION:
-                    planterGraine(l, c);
-                    break;
-                case RECOLTE:
-                    recolterGraine(l, c);
-                    break;
-                default:
-                    throw new IllegalStateException("Aucune action sélectionnée");
-            }
-        } else { //attend focus
-            jeu().changerFocus(e);
-        }
-
-        eDepart = null;
-        action = null;
-
-        vues.metAjour();
-
-        if(attendAction1) { //AEFD
-            attendAction1 = false;
-            attendAction2 = true;
-        } else {
-            if (attendAction2) {
-                attendAction2 = false;
-                attendFocus = true;
-            } else {
-                if(attendFocus){
-                    attendFocus = false;
-                    attendAction1 = true;
-                    //changer joueur
-                }
-            }
-        }
-
+    @Override
+    public void changerFocusFutur() {
+        jeu.focusFutur();
     }
 
     @Override

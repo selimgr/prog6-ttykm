@@ -5,70 +5,115 @@ import java.util.Deque;
 import java.util.Iterator;
 
 public abstract class Coup {
-    protected final Plateau plateau;
-    protected final Joueur joueur;
-    protected final int pionL, pionC;
-    protected final Epoque ePion;
-    private Deque<Etat> etats;
+    private final Plateau plateau;
+    private final Joueur joueur;
+    private final Case pion;
+    private final Deque<Etat> etats;
+    private boolean coupJoue;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         plateau = p;
         joueur = j;
-        this.pionL = pionL;
-        this.pionC = pionC;
-        this.ePion = ePion;
+        pion = new Case(pionL, pionC, ePion);
         etats = new ArrayDeque<>();
     }
 
-    int lignePion() {
-        return pionL;
+    Plateau plateau() {
+        return plateau;
     }
 
-    int colonnePion() {
-        return pionC;
+    Joueur joueur() {
+        return joueur;
     }
 
-    Epoque epoquePion() {
-        return ePion;
+    Case pion() {
+        return pion;
     }
 
-    private void ajouterEtat(int l, int c, Epoque e, int contenuAvant, int contenuApres) {
-        etats.push(new Etat(l, c, e, contenuAvant, contenuApres));
-    }
-    
-    protected void ajouter(int l, int c, Epoque e, Piece p) {
-        ajouterEtat(l, c, e, plateau.contenu(l, c, e), plateau.ajout(l, c, e, p));
+    protected void deplacer(Piece p, int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
+        etats.add(new Etat(p, new Case(departL, departC, eDepart), new Case(arriveeL, arriveeC, eArrivee)));
     }
 
-    protected void supprimer(int l, int c, Epoque e, Piece p) {
-        ajouterEtat(l, c, e, plateau.contenu(l, c, e), plateau.suppression(l, c, e, p));
+    protected void ajouter(Piece p, int l, int c, Epoque e) {
+        etats.add(new Etat(p, null, new Case(l, c, e)));
+    }
+
+    protected void supprimer(Piece p, int l, int c, Epoque e) {
+        etats.add(new Etat(p, new Case(l, c, e), null));
+    }
+
+    protected void verifierPremierCoupCree() {
+        if (!etats.isEmpty()) {
+            throw new IllegalStateException("Impossible de créer un nouveau coup : un coup a déjà été créé");
+        }
     }
 
     abstract boolean creer(int destL, int destC, Epoque eDest);
 
     public void jouer() {
-        Iterator<Etat> it = etats.iterator();
-
-        while (it.hasNext()) {
-            Etat q = it.next();
-
-            if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuAvant()) {
-                throw new IllegalStateException("Etat du plateau incorrect");
-            }
-            plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuApres());
+        if (etats.isEmpty()) {
+            throw new IllegalStateException("Impossible de jouer le coup : aucun coup créé");
         }
-    }
+        if (coupJoue) {
+            throw new IllegalStateException("Impossible de jouer le coup : coup déjà joué");
+        }
+        coupJoue = true;
 
-    public void annuler() {
+        // On parcourt les états dans le sens inverse
         Iterator<Etat> it = etats.descendingIterator();
 
         while (it.hasNext()) {
             Etat q = it.next();
 
-            if (plateau.contenu(q.ligne(), q.colonne(), q.epoque()) != q.contenuApres()) {
-                throw new IllegalStateException("Etat du plateau incorrect");
+            // On supprime la pièce sur la case de départ
+            if (q.depart() != null) {
+                plateau.supprimer(q.depart().ligne(), q.depart().colonne(), q.depart().epoque(), q.piece());
             }
-            plateau.fixerCase(q.ligne(), q.colonne(), q.epoque(), q.contenuAvant());
+
+            if (q.arrivee() != null) {
+                // Si la pièce est un arbre, on ajoute l'arbre couché correspondant sur la case d'arrivée
+                if (q.piece() == Piece.ARBRE && q.depart() != null) {
+                    int dL = q.arrivee().ligne() - q.depart().ligne();
+                    int dC = q.arrivee().colonne() - q.depart().colonne();
+                    Piece p = Piece.directionArbreCouche(dL, dC);
+                    plateau.ajouter(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), p);
+                }
+                // Sinon on ajoute la pièce
+                else {
+                    plateau.ajouter(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), q.piece());
+                }
+            }
+        }
+    }
+
+    public void annuler() {
+        if (etats.isEmpty()) {
+            throw new IllegalStateException("Impossible d'annuler le coup : aucun coup créé");
+        }
+        if (!coupJoue) {
+            throw new IllegalStateException("Impossible d'annuler le coup : le coup n'a pas encore été joué");
+        }
+        coupJoue = false;
+
+        for (Etat q : etats) {
+            if (q.arrivee() != null) {
+                // Si la pièce est un arbre, on supprime l'arbre couché correspondant sur la case d'arrivée
+                if (q.piece() == Piece.ARBRE && q.depart() != null) {
+                    int dL = q.arrivee().ligne() - q.depart().ligne();
+                    int dC = q.arrivee().colonne() - q.depart().colonne();
+                    Piece p = Piece.directionArbreCouche(dL, dC);
+                    plateau.supprimer(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), p);
+                }
+                // Sinon on supprime la pièce
+                else {
+                    plateau.supprimer(q.arrivee().ligne(), q.arrivee().colonne(), q.arrivee().epoque(), q.piece());
+                }
+            }
+
+            // On remet la pièce sur la case de départ
+            if (q.depart() != null) {
+                plateau.ajouter(q.depart().ligne(), q.depart().colonne(), q.depart().epoque(), q.piece());
+            }
         }
     }
 }

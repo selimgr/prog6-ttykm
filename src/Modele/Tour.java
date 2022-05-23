@@ -3,6 +3,11 @@ package Modele;
 class Tour {
     private Case pion;
     private Coup coup1, coup2;
+    private int nombreCoupsRestants;
+
+    Tour() {
+        nombreCoupsRestants = 2;
+    }
 
     int lignePion() {
         if (pion == null) {
@@ -25,27 +30,23 @@ class Tour {
         return pion.epoque();
     }
 
-    boolean pionSelectione() {
+    boolean pionSelectionne() {
         return pion != null;
     }
 
-    boolean estCommence() {
-        return coup1 != null;
-    }
-
-    boolean estTermine() {
-        return pion != null && coup1 != null && coup2 != null;
+    int nombreCoupsRestants() {
+        return nombreCoupsRestants;
     }
 
     void selectionnerPion(int l, int c, Epoque e) {
-        if (pionSelectione()) {
+        if (pionSelectionne()) {
             throw new IllegalStateException("Impossible de sélectionner le pion : pion déjà sélectionné");
         }
         pion = new Case(l, c, e);
     }
 
     boolean deselectionnerPion(int l, int c, Epoque e) {
-        if (pionSelectione() && l == lignePion() && c == colonnePion() && e == epoquePion() && !estCommence()) {
+        if (pionSelectionne() && l == lignePion() && c == colonnePion() && e == epoquePion() && nombreCoupsRestants == 2) {
             pion = null;
             return true;
         }
@@ -53,42 +54,49 @@ class Tour {
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
-        if (!pionSelectione()) {
+        if (!pionSelectionne()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : aucun pion sélectionné");
         }
-        if (estTermine()) {
-            throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
+        if (nombreCoupsRestants == 0) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : tous les coups ont déjà été joués ce tour");
         }
         if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
 
-        if (!estCommence()) {
+        if (nombreCoupsRestants == 2) {
             coup1 = coup;
         } else {
             coup2 = coup;
         }
         coup.jouer();
         pion = coup.pion();
+        nombreCoupsRestants--;
         return true;
     }
 
     boolean annulerCoup() {
-        if (!estCommence()) {
-            if (pionSelectione()) {
+        switch (nombreCoupsRestants) {
+            case 0:
+                coup2.annuler();
+                pion = coup2.pion();
+                coup2 = null;
+                nombreCoupsRestants++;
+                break;
+            case 1:
+                coup1.annuler();
+                pion = coup1.pion();
+                coup1 = null;
+                nombreCoupsRestants++;
+                break;
+            case 2:
+                if (!pionSelectionne()) {
+                    return false;
+                }
                 pion = null;
-                return true;
-            }
-            return false;
-        }
-        if (estTermine()) {
-            coup2.annuler();
-            pion = coup2.pion();
-            coup2 = null;
-        } else {
-            coup1.annuler();
-            pion = coup1.pion();
-            coup1 = null;
+                break;
+            default:
+                throw new IllegalStateException("Impossible d'annuler un coup : nombre incorrect de coups joués");
         }
         return true;
     }

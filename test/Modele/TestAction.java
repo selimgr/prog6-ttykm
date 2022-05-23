@@ -9,16 +9,20 @@ public class TestAction {
 
     @Test
     public void testValeur() {
-        assertEquals(0, Action.MOUVEMENT.valeur());
-        assertEquals(1, Action.PLANTATION.valeur());
-        assertEquals(2, Action.RECOLTE.valeur());
+        assertEquals(0, Action.SELECTION_PION.valeur());
+        assertEquals(1, Action.MOUVEMENT.valeur());
+        assertEquals(2, Action.PLANTATION.valeur());
+        assertEquals(3, Action.RECOLTE.valeur());
+        assertEquals(4, Action.CHANGEMENT_FOCUS.valeur());
     }
 
     @Test
     public void testDepuisValeur() {
-        assertEquals(Action.MOUVEMENT, Action.depuisValeur(0));
-        assertEquals(Action.PLANTATION, Action.depuisValeur(1));
-        assertEquals(Action.RECOLTE, Action.depuisValeur(2));
+        assertEquals(Action.SELECTION_PION, Action.depuisValeur(0));
+        assertEquals(Action.MOUVEMENT, Action.depuisValeur(1));
+        assertEquals(Action.PLANTATION, Action.depuisValeur(2));
+        assertEquals(Action.RECOLTE, Action.depuisValeur(3));
+        assertEquals(Action.CHANGEMENT_FOCUS, Action.depuisValeur(4));
     }
 
     @Test
@@ -34,8 +38,10 @@ public class TestAction {
 
     @Test
     public void testToString() {
+        assertEquals("Sélectionner un pion", Action.SELECTION_PION.toString());
         assertEquals("Mouvement", Action.MOUVEMENT.toString());
-        assertEquals("Plantation", Action.PLANTATION.toString());
-        assertEquals("Récolte", Action.RECOLTE.toString());
+        assertEquals("Planter une graine", Action.PLANTATION.toString());
+        assertEquals("Récolter une graine", Action.RECOLTE.toString());
+        assertEquals("Changer le focus d'époque", Action.CHANGEMENT_FOCUS.toString());
     }
 }

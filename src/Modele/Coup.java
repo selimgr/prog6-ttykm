@@ -30,6 +30,35 @@ public abstract class Coup {
         return pion;
     }
 
+    private void verifierCoupCree(String message) {
+        if (etats.isEmpty()) {
+            throw new IllegalStateException(message + " : aucun coup créé");
+        }
+    }
+
+    public boolean estMouvement() {
+        verifierCoupCree("Impossible de vérifier si le coup est un mouvement");
+        return etats.element().piece() == Piece.BLANC || etats.element().piece() == Piece.NOIR;
+    }
+
+    public boolean estPlantation() {
+        verifierCoupCree("Impossible de vérifier si le coup est une plantation");
+        return etats.element().piece() == Piece.GRAINE && etats.element().depart() == null;
+    }
+
+    public boolean estRecolte() {
+        verifierCoupCree("Impossible de vérifier si le coup est une récolte");
+        return etats.element().piece() == Piece.GRAINE && etats.element().arrivee() == null;
+    }
+
+    Case depart() {
+        return etats.element().depart();
+    }
+
+    Case arrivee() {
+        return etats.element().arrivee();
+    }
+
     protected void deplacer(Piece p, int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
         etats.add(new Etat(p, new Case(departL, departC, eDepart), new Case(arriveeL, arriveeC, eArrivee)));
     }
@@ -42,7 +71,7 @@ public abstract class Coup {
         etats.add(new Etat(p, new Case(l, c, e), null));
     }
 
-    protected void verifierPremierCoupCree() {
+    protected void verifierAucunCoupCree() {
         if (!etats.isEmpty()) {
             throw new IllegalStateException("Impossible de créer un nouveau coup : un coup a déjà été créé");
         }

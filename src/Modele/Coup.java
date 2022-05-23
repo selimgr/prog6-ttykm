@@ -26,6 +26,10 @@ public abstract class Coup {
         return joueur;
     }
 
+    /**
+     * Position actuelle du pion sélectionné jouant le coup
+     * @return La case où se situe actuellement le pion
+     */
     Case pion() {
         return pion;
     }
@@ -36,11 +40,19 @@ public abstract class Coup {
         }
     }
 
+    /**
+     * Case sur laquelle sur la pièce jouée au départ du coup
+     * @return La case de départ du coup
+     */
     public Case depart() {
         verifierCoupCree("Impossible de récupérer la case de départ");
         return etats.element().depart();
     }
 
+    /**
+     * Case sur laquelle sur la pièce jouée à la fin du coup
+     * @return La case d'arrivée du coup
+     */
     public Case arrivee() {
         verifierCoupCree("Impossible de récupérer la case d'arrivée");
         return etats.element().arrivee();

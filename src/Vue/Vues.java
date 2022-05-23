@@ -30,12 +30,6 @@ public class Vues {
         vueJeu.nouvellePartie();
     }
 
-    public void metAjour() { ///////// IMPLEMENTATION INCERTAINE //TODO: verifier
-        frame.repaint();
-        vueJeu.vueNiveau.miseAJour();
-        vueJeu.repaint();
-    }
-
     private void afficher(String nom) {
         CardLayout layout = (CardLayout) frame.getContentPane().getLayout();
         layout.show(frame.getContentPane(), nom);

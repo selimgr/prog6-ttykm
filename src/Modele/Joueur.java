@@ -2,6 +2,8 @@ package Modele;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: Implémenter méthodes estIA, estHumain
+
 public class Joueur {
     private final String nom;
     private final TypeJoueur type;

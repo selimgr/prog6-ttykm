@@ -24,6 +24,8 @@ public class VueMenuSaisies extends JPanel {
     private JComboBox typeJ2;
     private JComboBox niveauJ2;
     private JComboBox niveauJ1;
+    private JLabel JoueurCommence;
+    private JComboBox comboBox1;
 
     public VueMenuSaisies(CollecteurEvenements c) {
         controleur = c;
@@ -32,6 +34,8 @@ public class VueMenuSaisies extends JPanel {
         typeJ2 = new JComboBox();
         niveauJ1 = new JComboBox();
         niveauJ2 = new JComboBox();
+
+        comboBox1 = new JComboBox();
 
         MenuSaisies = this;
         $$$setupUI$$$();

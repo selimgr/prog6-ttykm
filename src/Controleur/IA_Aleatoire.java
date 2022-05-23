@@ -6,24 +6,24 @@ import java.util.List;
 import java.util.Random;
 
 public class IA_Aleatoire extends IA {
-    Jeu jeu;
-    Joueur j;
     List<Coup> coups;
-    Coup c1;
-    Coup c2;
 
-    IA_Aleatoire(Jeu jeu,Joueur j) {
-        this.jeu = jeu;
-        this.j =j;
+
+    IA_Aleatoire(Jeu jeu, Joueur ia, Joueur adv, ControleurMediateur ctrl) {
+        super(jeu,ia,adv,ctrl);
     }
 
     public int calcul(Plateau p, int horizon,int minmax){
         //recherche des coups jouables
         int lA,cA,eA;
-        coups = jeu.plateau().casesJouablesEpoque(j,false,0,0, null);
+        coups = jeu.plateau().casesJouablesEpoque(ia,false,0,0, null);
         Random r = new Random();
         int alea = r.nextInt(coups.size());
         c1 = coups.get(alea);
+        lA = c1.depart().ligne();
+        cA = c1.depart().colonne();
+        eA = c1.depart().epoque().indice();
+        Plateau p1 = p;
         ctrl.jouer(c1.depart().ligne(),c1.depart().colonne(),c1.depart().epoque());
         // TODO :  Interface IA avec jeu : à modifier pour passer par jeu ou controleur mediateur dans une fonction (+ IA abstract class ?)
         lA = c1.depart().ligne();
@@ -31,7 +31,7 @@ public class IA_Aleatoire extends IA {
         eA = c1.depart().epoque().indice();
         ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
         // Second coup avec pion déjà choisi
-        coups = jeu.plateau().casesJouablesEpoque(j,true,lA,cA,Epoque.depuisIndice(eA));
+        coups = jeu.plateau().casesJouablesEpoque(ia,true,lA,cA,Epoque.depuisIndice(eA));
         alea = r.nextInt(coups.size());
         c2 = coups.get(alea);
         lA = c2.depart().ligne();
@@ -48,14 +48,7 @@ public class IA_Aleatoire extends IA {
                 alea = 1;
             }
         }
-        switch (alea){
-            case 0:
-                ctrl.changerFocusPasse();break;
-            case 1:
-                ctrl.changerFocusPresent();break;
-            case 2:
-                ctrl.changerFocusFutur();break;
-        }
+        ctrl.jouer(0,0,Epoque.depuisIndice(alea));
         return 1;
     }
 
@@ -63,6 +56,10 @@ public class IA_Aleatoire extends IA {
         return p.coupJouables(ia) - p.coupJouables(adversaire);
     }
 
+    @Override
+    void jouer() {
+        calcul(jeu.plateau(),0,1);
+    }
 
 
 }

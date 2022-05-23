@@ -72,19 +72,19 @@ public class ControleurMediateur implements CollecteurEvenements {
         vues.nouvellePartie();
         switch (typeJ1){
             case IA_DIFFICILE:
-                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2());break;
+                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
             case IA_MOYEN:
-                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2());break;
+                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
             case IA_FACILE:
-                ia1 = new IA_Aleatoire(jeu,jeu.joueur1());break;
+                ia1 = new IA_Aleatoire(jeu,jeu.joueur1(),jeu.joueur2(),this);break;
         }
         switch (typeJ2){
             case IA_DIFFICILE:
-                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1());break;
+                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
             case IA_MOYEN:
-                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1());break;
+                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
             case IA_FACILE:
-                ia1 = new IA_Aleatoire(jeu,jeu.joueur2());break;
+                ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
         }
         if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence()){
             if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
@@ -114,11 +114,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouer(int l, int c, Epoque e) {
-        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence()){
+        jeu.jouer(l, c, e);
+        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence() && !jeu().pionSelectionne()){
             if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
             if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
-        } else {
-            jeu.jouer(l, c, e);
         }
     }
 

@@ -11,13 +11,20 @@ public abstract class IA {
     Joueur ia;
     Joueur adversaire;
     //List<Coup> coups;
-    Coup c1;
-    Coup c2;
     HashMap<String,Integer> antiCycle;
     int horizon;
     ControleurMediateur ctrl;
     int[] alphaBeta;
+    Coup c1;
+    Coup c2;
 
+    IA(Jeu jeu,Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
+        this.jeu = jeu;
+        this.ia =ia;
+        this.adversaire =adversaire;
+        c1=c2=null;
+        this.ctrl =ctrl;
+    }
 
 
     int calcul(Plateau p, int horizon,int minmax) {

@@ -7,8 +7,8 @@ import Modele.Plateau;
 public class IA_Moyen extends IA {
     ControleurMediateur ctrl;
 
-    IA_Moyen(Jeu jeu, Joueur ia, Joueur adversaire) {
-
+    IA_Moyen(Jeu jeu, Joueur ia, Joueur adversaire, ControleurMediateur ctrl) {
+        super(jeu,ia,adversaire,ctrl);
     }
     public int calcul(Plateau p, int horizon, int minmax) {
         return 1;

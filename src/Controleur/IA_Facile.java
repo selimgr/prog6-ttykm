@@ -13,8 +13,8 @@ public class IA_Facile extends IA {
     Coup c2;
 
 
-    IA_Facile(Jeu jeu, Joueur ia, Joueur adversaire) {
-
+    IA_Facile(Jeu jeu, Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
+    super(jeu,ia,adversaire,ctrl);
     }
     public int calcul(Plateau p, int horizon,int minmax) {
         return 1;

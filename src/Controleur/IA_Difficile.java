@@ -10,11 +10,9 @@ import java.util.List;
 public class IA_Difficile extends IA {
 
 
-    IA_Difficile(Jeu jeu, Joueur ia, Joueur adversaire) {
+    IA_Difficile(Jeu jeu, Joueur ia, Joueur adversaire, ControleurMediateur ctrl) {
+        super(jeu,ia,adversaire,ctrl);
         horizon = 300;
-        this.ia = ia;
-        this.adversaire = adversaire;
-        this.jeu = jeu;
         antiCycle = new HashMap<>();
         alphaBeta = new int[horizon];
     }

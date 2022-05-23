@@ -42,7 +42,7 @@ class VueMenuPrincipal extends JPanel {
 
         add(Box.createRigidArea(new Dimension(10, 30)));
 
-        JButton didacticiel = new JButton(" Didacticiel");
+        JButton didacticiel = new JButton("Didacticiel");
         add(didacticiel);
 
         JButton quitter = new JButton("Quitter");

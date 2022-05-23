@@ -25,8 +25,13 @@ public class IA_Aleatoire extends IA {
             return 0;
         }
         alea = r.nextInt(coups.size());
-        c1 = coups.get(alea);
-        System.out.println(( (Mouvement) c1).toString());
+        c1=null;
+        while(c1 == null || c1.depart() == null ) {
+            alea = r.nextInt(coups.size());
+            c1 = coups.get(alea);
+        }
+        System.out.println("depart c1 "+ c1.depart());
+        System.out.println("arrivee c1 "+ c1.arrivee());
         if (jeu.nombreCoupsRestantsTour() ==2 && !jeu.pionSelectionne()) {
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
         }
@@ -42,10 +47,13 @@ public class IA_Aleatoire extends IA {
         // Second coup avec pion déjà choisi
         if (jeu.plateau().aPion(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque())) {
             coups = jeu.plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
-            alea = r.nextInt(coups.size());
-            c2 = coups.get(alea);
-            System.out.print(( (Mouvement) c2).toString() + " -- ");
-            System.out.println(( (Mouvement) c2).arrivee().toString());
+            c2=null;
+            while(c2 == null || c2.depart() == null ) {
+                alea = r.nextInt(coups.size());
+                c2 = coups.get(alea);
+            }
+            System.out.println("depart c2 "+ c2.depart());
+            System.out.println("arrivee c2 "+ c2.arrivee());
             if (jeu.nombreCoupsRestantsTour() == 1 && jeu.pionSelectionne()) {
                 ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
             } else {

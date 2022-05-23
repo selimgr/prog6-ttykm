@@ -151,7 +151,7 @@ public class Jeu extends Observable {
         verifierPartieEnCours("Impossible de jouer");
         int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        if (nombrePionPlateau == 0 || tourTermine()) {
+        if (tourTermine() || (nombrePionPlateau == 0 && (!pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()))) {
             changerFocus(e);
             return;
         }

@@ -179,4 +179,12 @@ public class Mouvement extends Coup {
         // On change remet la position de départ du pion
         positionPionChangee = false;
     }
+    @Override
+    public String toString() {
+        return "Arrivee = " + arriveePion.toString() +" estvoyageTemporelArriere : " + voyageTemporelArriere;
+    }
+    @Override
+    public Case arrivee() {
+        return arriveePion;
+    }
 }

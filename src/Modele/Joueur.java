@@ -6,6 +6,7 @@ public class Joueur {
     private final String nom;
     private final TypeJoueur type;
     private final Pion pions;
+    private final int handicap;
     private Epoque focus;
     private int nombrePionsReserve;
     private int nombreVictoires;
@@ -19,7 +20,14 @@ public class Joueur {
         this.nom = nom;
         this.type = type;
         this.pions = pions;
+        this.handicap = handicap;
 
+        if (handicap < 0 || handicap > HANDICAP_MAX) {
+            throw new IllegalStateException("Handicap " + handicap + " incorrect");
+        }
+    }
+
+    void initialiserJoueur() {
         // blanc commence dans le passé
         if (pions == Pion.BLANC) {
             fixerFocus(Epoque.PASSE);
@@ -27,10 +35,6 @@ public class Joueur {
         // noir commence dans le futur
         else {
             fixerFocus(Epoque.FUTUR);
-        }
-
-        if (handicap < 0 || handicap > HANDICAP_MAX) {
-            throw new IllegalStateException("Handicap " + handicap + " incorrect");
         }
         nombrePionsReserve = Pion.NOMBRE_MAX_RESERVE - handicap;
     }
@@ -45,6 +49,10 @@ public class Joueur {
 
     public Pion pions() {
         return pions;
+    }
+
+    public int handicap() {
+        return handicap;
     }
 
     public Epoque focus() {
@@ -92,12 +100,13 @@ public class Joueur {
     @Override
     public String toString() {
         return "Joueur{" +
-                "nom='" + nom + '\'' +
+                "nom='" + nom + "'" +
                 ", type=" + type +
-                ", focus=" + focus +
                 ", pions=" + pions +
+                ", handicap=" + handicap +
+                ", focus=" + focus +
                 ", nombrePionsReserve=" + nombrePionsReserve +
                 ", nombreVictoires=" + nombreVictoires +
-                '}';
+                "}";
     }
 }

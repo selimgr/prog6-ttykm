@@ -246,9 +246,9 @@ public class Plateau {
                 if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
             }
         }
+
         return new ArrayList<Case>();
     }
-
     // TODO : Implémenter casesJouables
     public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
@@ -283,6 +283,8 @@ public class Plateau {
             if (coup.creer(0,0,Epoque.FUTUR)) jouables.add(coup);
             if (coup.creer(1,0,Epoque.PRESENT)) jouables.add(coup);
             if (coup.creer(0,0,Epoque.PASSE)) jouables.add(coup);
+            // TODO : Ajouter action sur les graines
+            // ...
         }
         return jouables;
     }

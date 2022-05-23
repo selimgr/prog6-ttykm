@@ -14,7 +14,9 @@ public class TestMouvement {
     public void initialisation() {
         p = new Plateau();
         j1 = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
-        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
+        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 3);
+        j1.initialiserJoueur();
+        j2.initialiserJoueur();
     }
 
     private void nouveauCoup1() {
@@ -129,15 +131,11 @@ public class TestMouvement {
         assertTrue(c1.creer(0, 1, Epoque.PASSE));
         nouveauCoup1();
         assertTrue(c1.creer(1, 0, Epoque.PASSE));
-        nouveauCoup1();
-        assertTrue(c1.creer(0, 0, Epoque.PRESENT));
 
         nouveauCoup2();
         assertTrue(c2.creer(2, 3, Epoque.FUTUR));
         nouveauCoup2();
         assertTrue(c2.creer(3, 2, Epoque.FUTUR));
-        nouveauCoup2();
-        assertTrue(c2.creer(0, 0, Epoque.PRESENT));
 
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         nouveauCoup3();
@@ -157,10 +155,10 @@ public class TestMouvement {
     private void assertCreerIncorrect() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
 
-        for (int i = -10; i < 10; i++) {
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
             Epoque e = Epoque.depuisIndice(i);
 
-            if (i != 0) {
+            if (i != e.indice()) {
                 nouveauCoup3();
                 assertFalse(c3.creer(0, 2, e));
                 nouveauCoup3();
@@ -170,18 +168,18 @@ public class TestMouvement {
                 nouveauCoup3();
                 assertFalse(c3.creer(1, 3, e));
             }
-            if (i != -1 && i != 1) {
+            if (e == Epoque.PRESENT) {
                 nouveauCoup3();
                 assertFalse(c3.creer(1, 2, e));
             }
         }
         for (int i = -10; i < 10; i++) {
             for (int j = -10; j < 10; j++) {
-                if ((i != 0 || (j != 1 && j != -1)) && (j != 0 || (i != 1 && i != -1))) {
+                if (((i != 0 && i != 2) || j != 2) && (i != 1 || (j != 1 && j != 3))) {
                     nouveauCoup3();
                     assertFalse(c3.creer(i, j, Epoque.PRESENT));
                 }
-                if (i != 0 || j != 0) {
+                if (i != 1 || j != 2) {
                     nouveauCoup3();
                     assertFalse(c3.creer(i, j, Epoque.PASSE));
                     nouveauCoup3();
@@ -194,24 +192,28 @@ public class TestMouvement {
     @Test
     public void testEstCorrect() {
         assertMouvementsCorrects();
+        p = new Plateau();
         assertMouvementsIncorrects();
     }
 
     @Test
     public void testEstDeplacement() {
         assertDeplacementsCorrects();
+        p = new Plateau();
         assertDeplacementsIncorrects();
     }
 
     @Test
     public void testEstVoyageTemporel() {
         assertVoyagesTemporelsCorrects();
+        p = new Plateau();
         assertVoyagesTemporelsIncorrects();
     }
 
     @Test
     public void testCreerMouvementCorrect() {
         assertCreerCorrect();
+        p = new Plateau();
         assertCreerIncorrect();
     }
 
@@ -220,15 +222,15 @@ public class TestMouvement {
         nouveauCoup1();
         assertFalse(c1.creer(2, 3, Epoque.PASSE));
         nouveauCoup1();
-        assertFalse(c1.creer(2, 3, Epoque.PASSE));
+        assertFalse(c1.creer(3, 2, Epoque.PASSE));
         p.supprimer(3, 3, Epoque.PRESENT, Piece.NOIR);
         nouveauCoup1();
         assertFalse(c1.creer(3, 3, Epoque.PRESENT));
 
         nouveauCoup2();
-        assertFalse(c2.creer(0, 0, Epoque.FUTUR));
+        assertFalse(c2.creer(0, 1, Epoque.FUTUR));
         nouveauCoup2();
-        assertFalse(c2.creer(2, 3, Epoque.FUTUR));
+        assertFalse(c2.creer(1, 0, Epoque.FUTUR));
         p.supprimer(0, 0, Epoque.PRESENT, Piece.BLANC);
         nouveauCoup2();
         assertFalse(c2.creer(0, 0, Epoque.PRESENT));
@@ -345,7 +347,7 @@ public class TestMouvement {
         p.ajouter(2, 3, Epoque.FUTUR, Piece.BLANC);
         p.ajouter(1, 3, Epoque.FUTUR, obstacle);
         nouveauCoup2();
-        assertTrue(c2.creer(1, 3, Epoque.FUTUR));
+        assertTrue(c2.creer(2, 3, Epoque.FUTUR));
     }
 
     @Test
@@ -460,7 +462,7 @@ public class TestMouvement {
         assertFalse(c2.creer(2, 3, Epoque.FUTUR));
     }
 
-    private void assertVoyageTemporelCasIncorrects(Coup c3) {
+    private void assertVoyageTemporelCasIncorrects() {
         nouveauCoup1();
         assertFalse(c1.creer(0, 0, Epoque.PASSE));
         nouveauCoup1();
@@ -473,9 +475,11 @@ public class TestMouvement {
         assertFalse(c3.creer(1, 2, Epoque.PRESENT));
     }
 
-    private void assertVoyageTemporelPossible(Coup c3) {
+    private void assertVoyageTemporelPossible() {
+        p.supprimer(0, 0, Epoque.PRESENT, Piece.BLANC);
         nouveauCoup1();
         assertTrue(c1.creer(0, 0, Epoque.PRESENT));
+        p.supprimer(3, 3, Epoque.PRESENT, Piece.NOIR);
         nouveauCoup2();
         assertTrue(c2.creer(3, 3, Epoque.PRESENT));
         nouveauCoup3();
@@ -484,7 +488,7 @@ public class TestMouvement {
         assertTrue(c3.creer(1, 2, Epoque.FUTUR));
     }
 
-    private void assertVoyageTemporelImpossible(Coup c3) {
+    private void assertVoyageTemporelImpossible() {
         nouveauCoup1();
         assertFalse(c1.creer(0, 0, Epoque.PRESENT));
         nouveauCoup2();
@@ -496,8 +500,6 @@ public class TestMouvement {
     }
 
     private void ajouterPieceVoyageTemporel(Piece piece) {
-        p.ajouter(0, 0, Epoque.PRESENT, piece);
-        p.ajouter(3, 3, Epoque.PRESENT, piece);
         p.ajouter(1, 2, Epoque.PASSE, piece);
         p.ajouter(1, 2, Epoque.FUTUR, piece);
     }
@@ -505,80 +507,80 @@ public class TestMouvement {
     @Test
     public void testCreerVoyageTemporelSurCaseVide() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelPossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelPossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurGraine() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.GRAINE);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelPossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelPossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurBlanc() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.BLANC);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurNoir() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.NOIR);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbuste() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBUSTE);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbre() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBRE);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbreCoucheHaut() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBRE_COUCHE_HAUT);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbreCoucheDroite() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBRE_COUCHE_DROITE);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbreCoucheBas() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBRE_COUCHE_BAS);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
     public void testCreerVoyageTemporelSurArbreCoucheGauche() {
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         ajouterPieceVoyageTemporel(Piece.ARBRE_COUCHE_GAUCHE);
-        assertVoyageTemporelCasIncorrects(c3);
-        assertVoyageTemporelImpossible(c3);
+        assertVoyageTemporelCasIncorrects();
+        assertVoyageTemporelImpossible();
     }
 
     @Test
@@ -594,7 +596,7 @@ public class TestMouvement {
     @Test
     public void testExceptionAucunCoupJoue() {
         nouveauCoup1();
-        c1.creer(0, 0, Epoque.PRESENT);
+        c1.creer(0, 1, Epoque.PASSE);
         IllegalStateException e = assertThrows(IllegalStateException.class, c1::annuler);
         assertTrue(e.getMessage().contains("Impossible d'annuler le coup : le coup n'a pas encore été joué"));
     }
@@ -700,7 +702,7 @@ public class TestMouvement {
 
     @Test
     public void testJouerDeplacementSurPionSimpleMort() {
-        nouveauCoup2();
+        c2 = new Mouvement(p, j2, 0, 1, Epoque.PASSE);
         p.ajouter(0, 1, Epoque.PASSE, Piece.NOIR);
         assertTrue(p.aBlanc(0, 0, Epoque.PASSE));
         assertTrue(p.aNoir(0, 1, Epoque.PASSE));
@@ -1043,7 +1045,7 @@ public class TestMouvement {
     public void testJouerDeplacementSurPionObstacleArbreCoucheGauche() {
         nouveauCoup1();
         p.ajouter(0, 1, Epoque.PASSE, Piece.NOIR);
-        p.ajouter(0, 2, Epoque.PASSE, Piece.ARBRE_COUCHE_HAUT);
+        p.ajouter(0, 2, Epoque.PASSE, Piece.ARBRE_COUCHE_GAUCHE);
         assertTrue(p.aBlanc(0, 0, Epoque.PASSE));
         assertTrue(p.aNoir(0, 1, Epoque.PASSE));
         assertTrue(p.aArbreCoucheVersLaGauche(0, 2, Epoque.PASSE));
@@ -1152,36 +1154,36 @@ public class TestMouvement {
 
     @Test
     public void testJouerDeplacementSurArbreSimpleGauche() {
-        nouveauCoup1();
-        p.ajouter(3, 2, Epoque.PASSE, Piece.ARBRE);
-        assertTrue(p.aBlanc(3, 3, Epoque.PASSE));
-        assertTrue(p.aArbre(3, 2, Epoque.PASSE));
-        assertTrue(p.estVide(3, 1, Epoque.PASSE));
-        assertTrue(p.estVide(3, 0, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        nouveauCoup2();
+        p.ajouter(3, 2, Epoque.FUTUR, Piece.ARBRE);
+        assertTrue(p.aNoir(3, 3, Epoque.FUTUR));
+        assertTrue(p.aArbre(3, 2, Epoque.FUTUR));
+        assertTrue(p.estVide(3, 1, Epoque.FUTUR));
+        assertTrue(p.estVide(3, 0, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
-        c1.creer(0, 1, Epoque.PASSE);
-        c1.jouer();
-        assertTrue(p.estVide(3, 3, Epoque.PASSE));
-        assertTrue(p.aBlanc(3, 2, Epoque.PASSE));
-        assertTrue(p.aArbreCoucheVersLaGauche(3, 1, Epoque.PASSE));
-        assertTrue(p.aArbreCouche(3, 1, Epoque.PASSE));
-        assertTrue(p.estVide(3, 0, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        c2.creer(3, 2, Epoque.FUTUR);
+        c2.jouer();
+        assertTrue(p.estVide(3, 3, Epoque.FUTUR));
+        assertTrue(p.aNoir(3, 2, Epoque.FUTUR));
+        assertTrue(p.aArbreCoucheVersLaGauche(3, 1, Epoque.FUTUR));
+        assertTrue(p.aArbreCouche(3, 1, Epoque.FUTUR));
+        assertTrue(p.estVide(3, 0, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
-        c1.annuler();
-        assertTrue(p.aBlanc(3, 3, Epoque.PASSE));
-        assertTrue(p.aArbre(3, 2, Epoque.PASSE));
-        assertTrue(p.estVide(3, 1, Epoque.PASSE));
-        assertTrue(p.estVide(3, 0, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        c2.annuler();
+        assertTrue(p.aNoir(3, 3, Epoque.FUTUR));
+        assertTrue(p.aArbre(3, 2, Epoque.FUTUR));
+        assertTrue(p.estVide(3, 1, Epoque.FUTUR));
+        assertTrue(p.estVide(3, 0, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
@@ -1189,36 +1191,36 @@ public class TestMouvement {
 
     @Test
     public void testJouerDeplacementSurArbreSimpleHaut() {
-        nouveauCoup1();
-        p.ajouter(2, 3, Epoque.PASSE, Piece.ARBRE);
-        assertTrue(p.aBlanc(3, 3, Epoque.PASSE));
-        assertTrue(p.aArbre(2, 3, Epoque.PASSE));
-        assertTrue(p.estVide(1, 3, Epoque.PASSE));
-        assertTrue(p.estVide(0, 3, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        nouveauCoup2();
+        p.ajouter(2, 3, Epoque.FUTUR, Piece.ARBRE);
+        assertTrue(p.aNoir(3, 3, Epoque.FUTUR));
+        assertTrue(p.aArbre(2, 3, Epoque.FUTUR));
+        assertTrue(p.estVide(1, 3, Epoque.FUTUR));
+        assertTrue(p.estVide(0, 3, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
-        c1.creer(1, 0, Epoque.PASSE);
-        c1.jouer();
-        assertTrue(p.estVide(3, 3, Epoque.PASSE));
-        assertTrue(p.aBlanc(2, 3, Epoque.PASSE));
-        assertTrue(p.aArbreCoucheVersLeHaut(1, 3, Epoque.PASSE));
-        assertTrue(p.aArbreCouche(1, 3, Epoque.PASSE));
-        assertTrue(p.estVide(0, 3, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        c2.creer(2, 3, Epoque.FUTUR);
+        c2.jouer();
+        assertTrue(p.estVide(3, 3, Epoque.FUTUR));
+        assertTrue(p.aNoir(2, 3, Epoque.FUTUR));
+        assertTrue(p.aArbreCoucheVersLeHaut(1, 3, Epoque.FUTUR));
+        assertTrue(p.aArbreCouche(1, 3, Epoque.FUTUR));
+        assertTrue(p.estVide(0, 3, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
-        c1.annuler();
-        assertTrue(p.aBlanc(3, 3, Epoque.PASSE));
-        assertTrue(p.aArbre(2, 3, Epoque.PASSE));
-        assertTrue(p.estVide(1, 3, Epoque.PASSE));
-        assertTrue(p.estVide(0, 3, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.PASSE));
-        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.PASSE));
+        c2.annuler();
+        assertTrue(p.aNoir(3, 3, Epoque.FUTUR));
+        assertTrue(p.aArbre(2, 3, Epoque.FUTUR));
+        assertTrue(p.estVide(1, 3, Epoque.FUTUR));
+        assertTrue(p.estVide(0, 3, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
+        assertEquals(1, p.nombrePionPlateau(Pion.NOIR, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(0, p.nombrePlateauVide(Pion.NOIR));
         assertEquals(5, p.nombreGrainesReserve());
@@ -1504,7 +1506,7 @@ public class TestMouvement {
     }
 
     @Test
-    public void testJouerMouvementAvantSurCaseVide() {
+    public void testJouerVoyageTemporelAvantSurCaseVide() {
         nouveauCoup3();
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
@@ -1515,8 +1517,8 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.creer(1, 2, Epoque.FUTUR);
-        c1.jouer();
+        c3.creer(1, 2, Epoque.FUTUR);
+        c3.jouer();
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
         assertTrue(p.estVide(1, 2, Epoque.PRESENT));
         assertTrue(p.aBlanc(1, 2, Epoque.FUTUR));
@@ -1525,7 +1527,7 @@ public class TestMouvement {
         assertEquals(2, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.annuler();
+        c3.annuler();
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
         assertTrue(p.estVide(1, 2, Epoque.FUTUR));
@@ -1537,7 +1539,7 @@ public class TestMouvement {
     }
 
     @Test
-    public void testJouerMouvementAvantSurGraine() {
+    public void testJouerVoyageTemporelAvantSurGraine() {
         nouveauCoup3();
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         p.ajouter(1, 2, Epoque.FUTUR, Piece.GRAINE);
@@ -1550,8 +1552,8 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.creer(1, 2, Epoque.FUTUR);
-        c1.jouer();
+        c3.creer(1, 2, Epoque.FUTUR);
+        c3.jouer();
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
         assertTrue(p.estVide(1, 2, Epoque.PRESENT));
         assertTrue(p.aGraine(1, 2, Epoque.FUTUR));
@@ -1561,7 +1563,7 @@ public class TestMouvement {
         assertEquals(2, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.annuler();
+        c3.annuler();
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
         assertTrue(p.aGraine(1, 2, Epoque.FUTUR));
@@ -1574,7 +1576,7 @@ public class TestMouvement {
     }
 
     @Test
-    public void testJouerMouvementArriereSurCaseVide() {
+    public void testJouerVoyageTemporelArriereSurCaseVide() {
         nouveauCoup3();
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
@@ -1585,8 +1587,8 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.creer(1, 2, Epoque.FUTUR);
-        c1.jouer();
+        c3.creer(1, 2, Epoque.PASSE);
+        c3.jouer();
         assertTrue(p.aBlanc(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
         assertTrue(p.estVide(1, 2, Epoque.FUTUR));
@@ -1595,7 +1597,7 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(3, j1.nombrePionsReserve());
-        c1.annuler();
+        c3.annuler();
         assertTrue(p.estVide(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
         assertTrue(p.estVide(1, 2, Epoque.FUTUR));
@@ -1607,7 +1609,7 @@ public class TestMouvement {
     }
 
     @Test
-    public void testJouerMouvementArriereSurGraine() {
+    public void testJouerVoyageTemporelArriereSurGraine() {
         nouveauCoup3();
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);
         p.ajouter(1, 2, Epoque.PASSE, Piece.GRAINE);
@@ -1620,8 +1622,8 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
-        c1.creer(1, 2, Epoque.FUTUR);
-        c1.jouer();
+        c3.creer(1, 2, Epoque.PASSE);
+        c3.jouer();
         assertTrue(p.aGraine(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
@@ -1631,7 +1633,7 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(3, j1.nombrePionsReserve());
-        c1.annuler();
+        c3.annuler();
         assertTrue(p.aGraine(1, 2, Epoque.PASSE));
         assertFalse(p.aBlanc(1, 2, Epoque.PASSE));
         assertTrue(p.aBlanc(1, 2, Epoque.PRESENT));
@@ -1641,5 +1643,39 @@ public class TestMouvement {
         assertEquals(1, p.nombrePionPlateau(Pion.BLANC, Epoque.FUTUR));
         assertEquals(0, p.nombrePlateauVide(Pion.BLANC));
         assertEquals(4, j1.nombrePionsReserve());
+    }
+
+    @Test
+    public void testReservePionVide() {
+        p.ajouter(1, 1, Epoque.FUTUR, Piece.BLANC);
+        Coup c = new Mouvement(p, j1, 1, 1, Epoque.FUTUR);
+        assertEquals(4, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 1, Epoque.PRESENT));
+        c.jouer();
+        assertEquals(3, j1.nombrePionsReserve());
+
+        c = new Mouvement(p, j1, 1, 1, Epoque.PRESENT);
+        assertEquals(3, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 1, Epoque.PASSE));
+        c.jouer();
+        assertEquals(2, j1.nombrePionsReserve());
+
+        p.ajouter(1, 2, Epoque.FUTUR, Piece.BLANC);
+        c = new Mouvement(p, j1, 1, 2, Epoque.FUTUR);
+        assertEquals(2, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 2, Epoque.PRESENT));
+        c.jouer();
+        assertEquals(1, j1.nombrePionsReserve());
+
+        c = new Mouvement(p, j1, 1, 2, Epoque.PRESENT);
+        assertEquals(1, j1.nombrePionsReserve());
+        assertTrue(c.creer(1, 2, Epoque.PASSE));
+        c.jouer();
+        assertEquals(0, j1.nombrePionsReserve());
+
+        p.ajouter(1, 3, Epoque.FUTUR, Piece.BLANC);
+        c = new Mouvement(p, j1, 1, 3, Epoque.FUTUR);
+        assertEquals(0, j1.nombrePionsReserve());
+        assertFalse(c.creer(1, 3, Epoque.PRESENT));
     }
 }

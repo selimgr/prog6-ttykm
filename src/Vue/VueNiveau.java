@@ -1,6 +1,6 @@
 package Vue;
 
-import Modele.Jeu;
+import Modele.Pion;
 import Patterns.Observateur;
 import Vue.JComposants.CPlateau;
 
@@ -12,16 +12,17 @@ import java.awt.event.ComponentEvent;
 
 class VueNiveau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
-
-    CPlateau passe;
-    CPlateau present;
-    CPlateau futur;
+    CPlateau passe, present, futur;
+    MatteBorder top, bottom;
 
     VueNiveau(CollecteurEvenements c) {
         controleur = c;
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
         futur = new CPlateau(3, controleur);
+        c.jeu().ajouteObservateur(passe);
+        c.jeu().ajouteObservateur(present);
+        c.jeu().ajouteObservateur(futur);
 
         setBackground(new Color(255, 255, 255));
         setBorder(BorderFactory.createEmptyBorder(140, 100, 140, 100));
@@ -67,14 +68,13 @@ class VueNiveau extends JPanel implements Observateur {
         passe.addMouseListener(new AdaptateurSouris(c, passe , "plateauPasse"));
         present.addMouseListener(new AdaptateurSouris(c, present,"plateauPresent"));
         futur.addMouseListener(new AdaptateurSouris(c,futur,"plateauFutur"));
+
+        top = BorderFactory.createMatteBorder(10, 0, 0, 0, Color.WHITE);
+        bottom = BorderFactory.createMatteBorder(0, 0, 10, 0, Color.BLACK);
     }
 
     @Override
     public void miseAJour() {
-        // --
-        MatteBorder top = BorderFactory.createMatteBorder(10, 0, 0, 0, Color.WHITE);
-        MatteBorder bottom = BorderFactory.createMatteBorder(0, 0, 10, 0, Color.BLACK);
-        // --
         CompoundBorder passe_focus = null;
         CompoundBorder present_focus = null;
         CompoundBorder futur_focus = null;

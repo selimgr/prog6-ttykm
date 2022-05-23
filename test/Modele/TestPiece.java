@@ -59,6 +59,33 @@ public class TestPiece {
     }
 
     @Test
+    public void testDirectionArbreCouche() {
+        assertEquals(Piece.ARBRE_COUCHE_HAUT, Piece.directionArbreCouche(-1, 0));
+        assertEquals(Piece.ARBRE_COUCHE_DROITE, Piece.directionArbreCouche(0, 1));
+        assertEquals(Piece.ARBRE_COUCHE_BAS, Piece.directionArbreCouche(1, 0));
+        assertEquals(Piece.ARBRE_COUCHE_GAUCHE, Piece.directionArbreCouche(0, -1));
+    }
+
+    @Test
+    public void testExceptionDirectionArbreCouche() {
+        for (int i = -10; i < 10; i++) {
+            for (int j = -10; j < 10; j++) {
+                if (i < -1 || j < -1 || i > 1 || j > 1 || (i == 0 && j == 0)) {
+                    final int l = i;
+                    final int c = j;
+                    IllegalArgumentException e = assertThrows(
+                            IllegalArgumentException.class,
+                            () -> Piece.directionArbreCouche(l, c)
+                    );
+                    assertTrue(e.getMessage().contains(
+                            "Impossible de renvoyer la direction de l'arbre couché : déplacement " +
+                                l + ", " + c + " incorrect"));
+                }
+            }
+        }
+    }
+
+    @Test
     public void testToString() {
         assertEquals("Blanc", Piece.BLANC.toString());
         assertEquals("Noir", Piece.NOIR.toString());

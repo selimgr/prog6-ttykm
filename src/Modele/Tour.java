@@ -1,20 +1,27 @@
 package Modele;
 
-// TODO: A tester
-
 class Tour {
     private Case pion;
     private Coup coup1, coup2;
 
     int lignePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer la ligne du pion : pion non sélectionné");
+        }
         return pion.ligne();
     }
 
     int colonnePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer la colonne du pion : pion non sélectionné");
+        }
         return pion.colonne();
     }
 
     Epoque epoquePion() {
+        if (pion == null) {
+            throw new IllegalStateException("Impossible de renvoyer l'époque du pion : pion non sélectionné");
+        }
         return pion.epoque();
     }
 
@@ -30,22 +37,15 @@ class Tour {
         return pion != null && coup1 != null && coup2 != null;
     }
 
-    private boolean pionsIdentiques(int l, int c, Epoque e) {
-        return l == lignePion() && c == colonnePion() && e == epoquePion();
-    }
-
     void selectionnerPion(int l, int c, Epoque e) {
         if (pionSelectione()) {
             throw new IllegalStateException("Impossible de sélectionner le pion : pion déjà sélectionné");
-        }
-        if (estCommence()) {
-            throw new IllegalStateException("Impossible de sélectionner le pion : tour commencé");
         }
         pion = new Case(l, c, e);
     }
 
     boolean deselectionnerPion(int l, int c, Epoque e) {
-        if (pionsIdentiques(l, c, e) && pionSelectione() && !estCommence()) {
+        if (pionSelectione() && l == lignePion() && c == colonnePion() && e == epoquePion() && !estCommence()) {
             pion = null;
             return true;
         }
@@ -59,7 +59,7 @@ class Tour {
         if (estTermine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tour terminé");
         }
-        if (!pionsIdentiques(destL, destC, eDest) || !coup.creer(destL, destC, eDest)) {
+        if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
 
@@ -69,20 +69,26 @@ class Tour {
             coup2 = coup;
         }
         coup.jouer();
+        pion = coup.pion();
         return true;
     }
 
     boolean annulerCoup() {
         if (!estCommence()) {
+            if (pionSelectione()) {
+                pion = null;
+                return true;
+            }
             return false;
         }
         if (estTermine()) {
             coup2.annuler();
+            pion = coup2.pion();
             coup2 = null;
         } else {
             coup1.annuler();
+            pion = coup1.pion();
             coup1 = null;
-            pion = null;
         }
         return true;
     }

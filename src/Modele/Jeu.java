@@ -10,8 +10,6 @@ import static java.util.Objects.requireNonNull;
 
 // TODO: Prendre en compte le fait que annuler doit pouvoir annuler le changement du focus (gérer dans l'historique)
 
-// TODO: Implémenter une méthode renvoyant la prochaine action à jouer
-
 public class Jeu extends Observable {
     private Plateau plateau;
     private Joueur joueur1;

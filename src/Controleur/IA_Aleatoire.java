@@ -15,7 +15,7 @@ public class IA_Aleatoire extends IA {
     }
 
     public int calcul(Plateau p, int horizon,int minmax){
-        //recherche des coups jouables
+        // Recherche des coups jouables
         int lA,cA,eA,alea;
         coups = jeu.plateau().casesJouablesEpoque(ia,false,0,0, null);
         Random r = new Random();
@@ -26,13 +26,29 @@ public class IA_Aleatoire extends IA {
         }
         alea = r.nextInt(coups.size());
         c1 = coups.get(alea);
-        ctrl.jouer(c1.depart().ligne(),c1.depart().colonne(),c1.depart().epoque()); // Selection
-        ctrl.jouer(c1.arrivee().ligne(),c1.arrivee().colonne(),c1.arrivee().epoque()); // coup 1
+        System.out.println(c1.toString());
+        if (jeu.nombreCoupsRestantsTour() ==2 && !jeu.pionSelectionne()) {
+            ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
+        }
+        else {
+            throw new IllegalStateException("IA ne doit pas avoir de pion préselectionné");
+        }
+        if (jeu.nombreCoupsRestantsTour() == 2 && jeu.pionSelectionne()) {
+            ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
+        }
+        else {
+            throw new IllegalStateException(("IA ne peut pas jouer le coup 1"));
+        }
         // Second coup avec pion déjà choisi
         coups = jeu.plateau().casesJouablesEpoque(ia,true,c1.arrivee().ligne(),c1.arrivee().colonne(),c1.arrivee().epoque());
         alea = r.nextInt(coups.size());
         c2 = coups.get(alea);
-        ctrl.jouer(c2.arrivee().ligne(),c2.arrivee().colonne(),c2.arrivee().epoque()); // coup 2
+        System.out.println(c2.toString());
+        if (jeu.nombreCoupsRestantsTour() == 1 && jeu.pionSelectionne()) {
+            ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
+        } else {
+            throw new IllegalStateException("IA ne peut pas jour coup 2");
+        }
         //Changement de focus
         alea = r.nextInt(3);
         gestionFocus(alea);
@@ -48,6 +64,7 @@ public class IA_Aleatoire extends IA {
                 alea = 1;
             }
         }
+        System.out.println("Focus choisi = " +alea);
         ctrl.jouer(0,0,Epoque.depuisIndice(alea));
     }
 

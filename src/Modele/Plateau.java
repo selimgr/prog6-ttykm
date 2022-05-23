@@ -265,32 +265,38 @@ public class Plateau {
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
         pions = chercherPions(j,Epoque.PASSE);
+        gestionCoupsJouables(j, jouables, pions);
         pions = chercherPions(j,Epoque.PRESENT);
+        gestionCoupsJouables(j, jouables, pions);
         pions = chercherPions(j,Epoque.FUTUR);
         gestionCoupsJouables(j, jouables, pions);
         return jouables.size();
     }
 
-    private  ArrayList<Coup> gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions){
+    private  void gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions){
         Iterator<Case> it  = pions.iterator();
+        ArrayList<Coup> coup = new ArrayList<>();
+
         while(it.hasNext()){
             Case cas = it.next();
             Epoque eActu = cas.epoque();
             // Mouvement possible :
-            //Coup coup = new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu);
-            ArrayList<Coup> coup = new ArrayList<>();
-            for(int k = 0; k <7;k++) coup.add(new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu));
-            if (coup.get(0).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(0));
-            if (coup.get(1).creer(cas.ligne()-1,cas.colonne(),eActu)) jouables.add(coup.get(1));
-            if (coup.get(2).creer(cas.ligne(), cas.colonne()+1, eActu)) jouables.add(coup.get(2));
-            if (coup.get(3).creer(cas.ligne(), cas.colonne()-1,eActu)) jouables.add(coup.get(3));
-            if (coup.get(4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR)) jouables.add(coup.get(4));
-            if (coup.get(5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(5));
-            if (coup.get(6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(6));
+            for(int i = 0; i < pions.size(); i++)  {
+                for (int k = 0; k <7;k++) {
+                    coup.add(new Mouvement(this, j, cas.ligne(), cas.colonne(), eActu));
+                }
+                if (coup.get(i).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(0));
+                if (coup.get(i+1).creer(cas.ligne()-1,cas.colonne(),eActu)) jouables.add(coup.get(1));
+                if (coup.get(i+2).creer(cas.ligne(), cas.colonne()+1, eActu)) jouables.add(coup.get(2));
+                if (coup.get(i+3).creer(cas.ligne(), cas.colonne()-1,eActu)) jouables.add(coup.get(3));
+                if (coup.get(i+4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR)) jouables.add(coup.get(4));
+                if (coup.get(i+5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(5));
+                if (coup.get(i+6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(6));
+            }
+
             // TODO : Ajouter action sur les graines
             // ...
         }
-        return jouables;
     }
 
 
@@ -312,7 +318,7 @@ public class Plateau {
     }
 
     public String hash() {
-        String plateauStr = new String();
+        String plateauStr = "";
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             for (int j = 0; j < TAILLE; j++) {
                 for (int k = 0; k < TAILLE; k++) {

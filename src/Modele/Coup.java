@@ -10,12 +10,14 @@ public abstract class Coup {
     private final Case pion;
     private final Deque<Etat> etats;
     private boolean coupJoue;
+    private int[] alphaBeta;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         plateau = p;
         joueur = j;
         pion = new Case(pionL, pionC, ePion);
         etats = new ArrayDeque<>();
+        alphaBeta = new int[300];
     }
 
     Plateau plateau() {
@@ -26,7 +28,7 @@ public abstract class Coup {
         return joueur;
     }
 
-    Case pion() {
+    public Case pion() {
         return pion;
     }
 

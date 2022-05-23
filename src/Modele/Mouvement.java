@@ -22,7 +22,7 @@ public class Mouvement extends Coup {
     }
 
     @Override
-    Case pion() {
+    public Case pion() {
         if (positionPionChangee) {
             return arriveePion;
         }

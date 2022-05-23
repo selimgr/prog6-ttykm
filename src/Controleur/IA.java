@@ -35,8 +35,9 @@ public abstract class IA {
         Coup premierCoup = null;
         Coup secondCoup = null;
         int valeur = -100000*minmax;
-        int cA, lA, eA,valeur2;
-
+        int valeur2,lA,cA;
+        Case arr, dep;
+        Epoque eA;
         ArrayList<Coup> C = p.casesJouablesEpoque(ia,false,0,0,null);
         Iterator<Coup> it = C.iterator();
 
@@ -44,11 +45,10 @@ public abstract class IA {
         while (it.hasNext()){
             Coup c = it.next();
             jeu.plateau().fixerPlateau(copieP);
-            ctrl.jouer(c.lignePion(),c.colonnePion(),c.epoquePion());
-            lA = c.lignePion()+ c.deplacementLignePion();
-            cA = c.deplacementColonnePion()+ c.deplacementColonnePion();
-            eA = c.epoquePion().indice() + c.deplacementEpoquePion();
-            ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
+            ctrl.jouer(c.pion().ligne(),c.pion().colonne(),c.pion().epoque());
+            // if instance of Mouvement ;
+            arr = c.getArrivee();
+            ctrl.jouer(lA,cA,eA);
             C2 = p.casesJouablesEpoque(ia,true,lA,cA,Epoque.depuisIndice(eA));
             Iterator<Coup> it2 = C2.iterator();
             while (it2.hasNext()){
@@ -56,7 +56,7 @@ public abstract class IA {
                 lA = c2.lignePion()+ c.deplacementLignePion();
                 cA = c2.deplacementColonnePion()+ c.deplacementColonnePion();
                 eA = c2.epoquePion().indice() + c.deplacementEpoquePion();
-                ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
+                ctrl.jouer(lA,cA,eA);
                 valeur2 = valeur;
                 valeur = Math.max(valeur*minmax,calcul(copieP,horizon-1,minmax*-1)*minmax);
                 if (valeur2 < valeur || horizon == this.horizon) {

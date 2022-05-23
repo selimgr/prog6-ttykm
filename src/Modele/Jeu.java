@@ -300,7 +300,7 @@ public class Jeu extends Observable {
 
     public boolean tourCommence() {
         verifierPartieCree("Impossible de vérifier si le tour est commencé");
-        return tourActuel.estCommence();
+        return !tourActuel.estCommence();
     }
 
     public boolean tourTermine() {

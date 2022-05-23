@@ -117,9 +117,9 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence()){
             if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
             if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
+        } else {
+            jeu.jouer(l, c, e);
         }
-        jeu.jouer(l, c, e);
-
     }
 
     @Override

@@ -149,6 +149,12 @@ public class Jeu extends Observable {
 
     public void jouer(int l, int c, Epoque e) {
         verifierPartieEnCours("Impossible de jouer");
+        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
+
+        if (nombrePionPlateau == 0 || tourTermine()) {
+            changerFocus(e);
+            return;
+        }
 
         if (!tourActuel.pionSelectione() && !tourActuel.estCommence()) {
             selectionnerPion(l, c, e);
@@ -207,36 +213,6 @@ public class Jeu extends Observable {
         if (tourActuel.annulerCoup()) {
             metAJour();
         }
-    }
-
-    public void focusPasse() {
-        verifierPartieEnCours("Impossible de changer le focus");
-        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
-
-        if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
-            return;
-        }
-        changerFocus(Epoque.PASSE);
-    }
-
-    public void focusPresent() {
-        verifierPartieEnCours("Impossible de changer le focus");
-        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
-
-        if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
-            return;
-        }
-        changerFocus(Epoque.PRESENT);
-    }
-
-    public void focusFutur() {
-        verifierPartieEnCours("Impossible de changer le focus");
-        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
-
-        if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
-            return;
-        }
-        changerFocus(Epoque.FUTUR);
     }
 
     private void changerFocus(Epoque nouveau) {

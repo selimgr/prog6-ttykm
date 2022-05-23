@@ -111,21 +111,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void changerFocusPasse() {
-        jeu.focusPasse();
-    }
-
-    @Override
-    public void changerFocusPresent() {
-        jeu.focusPresent();
-    }
-
-    @Override
-    public void changerFocusFutur() {
-        jeu.focusFutur();
-    }
-
-    @Override
     public void toucheClavier(String touche) {
 
     }

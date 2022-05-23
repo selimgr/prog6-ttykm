@@ -36,6 +36,16 @@ public abstract class Coup {
         }
     }
 
+    public Case depart() {
+        verifierCoupCree("Impossible de récupérer la case de départ");
+        return etats.element().depart();
+    }
+
+    public Case arrivee() {
+        verifierCoupCree("Impossible de récupérer la case d'arrivée");
+        return etats.element().arrivee();
+    }
+
     public boolean estMouvement() {
         verifierCoupCree("Impossible de vérifier si le coup est un mouvement");
         return etats.element().piece() == Piece.BLANC || etats.element().piece() == Piece.NOIR;
@@ -49,14 +59,6 @@ public abstract class Coup {
     public boolean estRecolte() {
         verifierCoupCree("Impossible de vérifier si le coup est une récolte");
         return etats.element().piece() == Piece.GRAINE && etats.element().arrivee() == null;
-    }
-
-    Case depart() {
-        return etats.element().depart();
-    }
-
-    Case arrivee() {
-        return etats.element().arrivee();
     }
 
     protected void deplacer(Piece p, int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {

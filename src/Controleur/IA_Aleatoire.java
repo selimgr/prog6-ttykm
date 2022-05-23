@@ -4,6 +4,7 @@ import Modele.*;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class IA_Aleatoire extends IA {
     List<Coup> coups;
@@ -15,32 +16,31 @@ public class IA_Aleatoire extends IA {
 
     public int calcul(Plateau p, int horizon,int minmax){
         //recherche des coups jouables
-        int lA,cA,eA;
+        int lA,cA,eA,alea;
         coups = jeu.plateau().casesJouablesEpoque(ia,false,0,0, null);
         Random r = new Random();
-        int alea = r.nextInt(coups.size());
+        if (coups.size() == 0) {
+            alea = r.nextInt(3);
+            gestionFocus(alea);
+            return 0;
+        }
+        alea = r.nextInt(coups.size());
         c1 = coups.get(alea);
-        lA = c1.depart().ligne();
-        cA = c1.depart().colonne();
-        eA = c1.depart().epoque().indice();
-        Plateau p1 = p;
-        ctrl.jouer(c1.depart().ligne(),c1.depart().colonne(),c1.depart().epoque());
-        // TODO :  Interface IA avec jeu : à modifier pour passer par jeu ou controleur mediateur dans une fonction (+ IA abstract class ?)
-        lA = c1.depart().ligne();
-        cA = c1.depart().colonne();
-        eA = c1.depart().epoque().indice();
-        ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
+        ctrl.jouer(c1.depart().ligne(),c1.depart().colonne(),c1.depart().epoque()); // Selection
+        ctrl.jouer(c1.arrivee().ligne(),c1.arrivee().colonne(),c1.arrivee().epoque()); // coup 1
         // Second coup avec pion déjà choisi
-        coups = jeu.plateau().casesJouablesEpoque(ia,true,lA,cA,Epoque.depuisIndice(eA));
+        coups = jeu.plateau().casesJouablesEpoque(ia,true,c1.arrivee().ligne(),c1.arrivee().colonne(),c1.arrivee().epoque());
         alea = r.nextInt(coups.size());
         c2 = coups.get(alea);
-        lA = c2.depart().ligne();
-        cA = c2.depart().colonne();
-        eA = c2.depart().epoque().indice();
-        ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
+        ctrl.jouer(c2.arrivee().ligne(),c2.arrivee().colonne(),c2.arrivee().epoque()); // coup 2
         //Changement de focus
         alea = r.nextInt(3);
-        if (c2.depart().epoque().indice() == alea){
+        gestionFocus(alea);
+        return 1;
+    }
+
+    void gestionFocus(int alea ){
+        if (ia.focus().indice() == alea){
             if (alea == 1){
                 alea = alea + 1;
             }
@@ -49,7 +49,6 @@ public class IA_Aleatoire extends IA {
             }
         }
         ctrl.jouer(0,0,Epoque.depuisIndice(alea));
-        return 1;
     }
 
     public int fonctionApproximation(Plateau p){
@@ -57,7 +56,7 @@ public class IA_Aleatoire extends IA {
     }
 
     @Override
-    void jouer() {
+    void jouer()  {
         calcul(jeu.plateau(),0,1);
     }
 

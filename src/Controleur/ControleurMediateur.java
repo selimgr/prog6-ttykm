@@ -86,10 +86,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             case IA_FACILE:
                 ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
         }
-        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence()){
-            if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
-            else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
-        }
     }
 
     @Override
@@ -115,10 +111,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void jouer(int l, int c, Epoque e) {
         jeu.jouer(l, c, e);
-        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence() && !jeu().pionSelectionne()){
-            if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
-            if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
-        }
     }
 
     @Override
@@ -138,10 +130,25 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void toucheClavier(String touche) {
+        switch (touche) {
+            case "IA":
+                jouerIA();
+                break;
+            default:
+                System.out.println("Touche inconnue : " + touche);
 
+        }
     }
 
     @Override
     public void temps() {
+    }
+
+    @Override
+    public void jouerIA() {
+        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.tourCommence() && !jeu().pionSelectionne()) {
+            if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
+            else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
+        }
     }
 }

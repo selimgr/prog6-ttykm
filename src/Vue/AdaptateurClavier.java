@@ -2,6 +2,7 @@ package Vue;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.lang.invoke.SwitchPoint;
 
 class AdaptateurClavier extends KeyAdapter {
     CollecteurEvenements controleur;
@@ -12,6 +13,12 @@ class AdaptateurClavier extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent event) {
-
+        switch (event.getKeyCode()) {
+            case KeyEvent.VK_I:
+                controleur.toucheClavier("IA");
+                break;
+            default:
+                System.out.println("Touche non supporter");
+        }
     }
 }

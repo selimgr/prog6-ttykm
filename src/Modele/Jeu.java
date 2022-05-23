@@ -17,7 +17,6 @@ public class Jeu extends Observable {
     private int joueurActuel;
     private Tour tourActuel;
     private Action prochaineAction;
-    private boolean focusSelectionne;
     private boolean partieTerminee;
     private final Random rand;
 
@@ -221,12 +220,7 @@ public class Jeu extends Observable {
         if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
             return;
         }
-
-        if (joueurActuel().focus() == Epoque.PASSE) {
-            focusSelectionne = true;
-        } else if (focusSelectionne) {
-            changerFocus(Epoque.PASSE);
-        }
+        changerFocus(Epoque.PASSE);
     }
 
     public void focusPresent() {
@@ -236,12 +230,7 @@ public class Jeu extends Observable {
         if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
             return;
         }
-
-        if (joueurActuel().focus() == Epoque.PRESENT) {
-            focusSelectionne = true;
-        } else if (focusSelectionne) {
-            changerFocus(Epoque.PRESENT);
-        }
+        changerFocus(Epoque.PRESENT);
     }
 
     public void focusFutur() {
@@ -251,16 +240,11 @@ public class Jeu extends Observable {
         if (nombrePionPlateau != 0 && !tourActuel.estTermine()) {
             return;
         }
-
-        if (joueurActuel().focus() == Epoque.FUTUR) {
-            focusSelectionne = true;
-        } else if (focusSelectionne) {
-            changerFocus(Epoque.FUTUR);
-        }
+        changerFocus(Epoque.FUTUR);
     }
 
     private void changerFocus(Epoque nouveau) {
-        if (plateau.nombrePionPlateau(joueurActuel().pions(), nouveau) == 0) {
+        if (joueurActuel().focus() == nouveau) {
             return;
         }
         joueurActuel().fixerFocus(nouveau);
@@ -272,7 +256,6 @@ public class Jeu extends Observable {
         } else {
             tourActuel = new Tour();
         }
-        focusSelectionne = false;
         metAJour();
     }
 

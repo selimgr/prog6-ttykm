@@ -45,55 +45,55 @@ public class TestCoup {
 
     @Test
     public void testDeplacerEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.deplacer(Piece.BLANC, 0, 0, Epoque.PASSE, 0, 1, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.deplacer(Piece.NOIR, 3, 3, Epoque.FUTUR, 3, 2, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.deplacer(Piece.BLANC, 1, 2, Epoque.PRESENT, 1, 1, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testAjouterEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.ajouter(Piece.NOIR, 0, 1, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.ajouter(Piece.NOIR, 3, 2, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.ajouter(Piece.NOIR, 1, 1, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testSupprimerEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.supprimer(Piece.BLANC, 0, 0, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.supprimer(Piece.NOIR, 3, 3, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.supprimer(Piece.BLANC, 1, 2, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 

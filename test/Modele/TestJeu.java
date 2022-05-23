@@ -755,11 +755,6 @@ public class TestJeu {
             j.jouer(0, 2, Epoque.PASSE);
             assertEquals(Epoque.PASSE, j.joueurActuel().focus());
 
-            j.focusPresent();
-            assertEquals(Epoque.PASSE, j.joueurActuel().focus());
-            j.focusFutur();
-            assertEquals(Epoque.PASSE, j.joueurActuel().focus());
-
             j.focusPasse();
             assertEquals(Epoque.PASSE, j.joueurActuel().focus());
             j.focusPasse();
@@ -777,11 +772,6 @@ public class TestJeu {
             j.jouer(3, 1, Epoque.FUTUR);
             assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
 
-            j.focusPasse();
-            assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
-            j.focusPresent();
-            assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
-
             j.focusFutur();
             assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
         } else {
@@ -791,11 +781,6 @@ public class TestJeu {
             j.jouer(3, 2, Epoque.FUTUR);
             assertFocusResteFutur();
             j.jouer(3, 1, Epoque.FUTUR);
-            assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
-
-            j.focusPresent();
-            assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
-            j.focusPasse();
             assertEquals(Epoque.FUTUR, j.joueurActuel().focus());
 
             j.focusFutur();
@@ -813,11 +798,6 @@ public class TestJeu {
             j.jouer(0, 1, Epoque.PASSE);
             assertFocusRestePasse();
             j.jouer(0, 2, Epoque.PASSE);
-            assertEquals(Epoque.PASSE, j.joueurActuel().focus());
-
-            j.focusFutur();
-            assertEquals(Epoque.PASSE, j.joueurActuel().focus());
-            j.focusPresent();
             assertEquals(Epoque.PASSE, j.joueurActuel().focus());
 
             j.focusPasse();

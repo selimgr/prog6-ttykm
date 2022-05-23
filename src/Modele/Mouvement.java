@@ -31,7 +31,7 @@ public class Mouvement extends Coup {
 
     @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        verifierPremierCoupCree();
+        verifierAucunCoupCree();
 
         int dL = destL - pion().ligne();
         int dC = destC - pion().colonne();

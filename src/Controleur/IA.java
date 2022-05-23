@@ -21,15 +21,8 @@ public abstract class IA {
 
 
     int calcul(Plateau p, int horizon,int minmax) {
-        /* --------- Feuille --------- */
-        if (jeu.vainqueur() == ia){return 1000;}
-        if (jeu.vainqueur() == adversaire){return -1000;}
-        if (horizon <= 0 ){return fonctionApproximation(p);}
-        // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
-        if ( antiCycle.get(p.hash()) != null && antiCycle.get(p.hash()) >= horizon){return -1000*minmax;}
 
-        /* --------- Cas général --------- */
-        antiCycle.put(p.hash(),horizon);
+        /* --------- Initialisation --------- */
         ArrayList<Coup> C2;
         Plateau copieP = p.copier();
         Joueur j = adversaire; if (minmax ==1){j = ia;}
@@ -42,23 +35,35 @@ public abstract class IA {
         ArrayList<Coup> C = p.casesJouablesEpoque(ia,false,0,0,null);
         Iterator<Coup> it = C.iterator();
 
+        /* --------- Feuille --------- */
+        if (jeu.vainqueur() == ia){return 1000;}
+        if (jeu.vainqueur() == adversaire){return -1000;}
+        if (horizon <= 0 ){return fonctionApproximation(p);}
+        // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
+        if ( antiCycle.get(p.hash()) != null && antiCycle.get(p.hash()) >= horizon){return 0;}
+
+
+        /* --------- Cas général --------- */
+        antiCycle.put(p.hash(),horizon);
         //Parcours de l'arbre ...
         while (it.hasNext()){
             Coup c = it.next();
             jeu.plateau().fixerPlateau(copieP);
+            // Selectionner pion
             ctrl.jouer(c.depart().ligne(),c.depart().colonne(),c.depart().epoque());
-            // if instance of Mouvement ;
             arr = c.arrivee();
             if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+            // Premier coup
             ctrl.jouer(arr.ligne(),arr.colonne(),arr.epoque());
-            C2 = p.casesJouablesEpoque(ia,true,arr.ligne(),arr.colonne(),arr.epoque());
+            C2 = p.casesJouablesEpoque(j,true,arr.ligne(),arr.colonne(),arr.epoque());
             Iterator<Coup> it2 = C2.iterator();
             while (it2.hasNext()){
                 Coup c2 = it.next();
                 arr = c2.arrivee();
                 if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
                 if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+                // Second coup
                 ctrl.jouer(arr.ligne(),arr.colonne(),arr.epoque());
                 valeur2 = valeur;
                 valeur = Math.max(valeur*minmax,calcul(copieP,horizon-1,minmax*-1)*minmax);

@@ -184,8 +184,4 @@ class VueJeu extends JPanel {
         vueNiveau.miseAJour();
         JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
-
-    public int getTaille(){
-        return passe.getHeight();
-    }
 }

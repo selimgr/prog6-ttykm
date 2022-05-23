@@ -1,9 +1,6 @@
 package Controleur;
 
-import Modele.Coup;
-import Modele.Epoque;
-import Modele.Joueur;
-import Modele.Plateau;
+import Modele.*;
 
 import java.util.List;
 import java.util.Random;
@@ -16,7 +13,7 @@ public class IA_Facile extends IA {
     Coup c2;
 
 
-    IA_Facile() {
+    IA_Facile(Jeu jeu, Joueur ia, Joueur adversaire) {
 
     }
     public int calcul(Plateau p, int horizon,int minmax) {

@@ -1,11 +1,13 @@
 package Controleur;
 
+import Modele.Jeu;
+import Modele.Joueur;
 import Modele.Plateau;
 
 public class IA_Moyen extends IA {
     ControleurMediateur ctrl;
 
-    IA_Moyen() {
+    IA_Moyen(Jeu jeu, Joueur ia, Joueur adversaire) {
 
     }
     public int calcul(Plateau p, int horizon, int minmax) {

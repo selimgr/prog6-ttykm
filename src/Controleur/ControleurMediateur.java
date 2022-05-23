@@ -107,7 +107,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void afficherRegles() {vues.afficherR();}
+    public void afficherRegles() {
+        vues.afficherR();
+    }
 
     @Override
     public void jouer(int l, int c, Epoque e) {

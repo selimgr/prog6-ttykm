@@ -29,12 +29,14 @@ public class Jeu extends Observable {
     public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
         if (joueur1 == null) {
             joueur1 = new Joueur(nom, type, p, handicap);
-        } else if (joueur2 == null) {
+        }
+        else if (joueur2 == null) {
             if (p == joueur1.pions()) {
                 throw new IllegalArgumentException("Impossible de créer le nouveau joueur : le joueur 1 possède déjà les pions " + p);
             }
             joueur2 = new Joueur(nom, type, p, handicap);
-        } else {
+        }
+        else {
             throw new IllegalStateException("Impossible d'ajouter un nouveau joueur : tous les joueurs ont déjà été ajoutés");
         }
     }
@@ -115,7 +117,7 @@ public class Jeu extends Observable {
     public void selectionnerPlantation() {
         verifierPartieEnCours("Impossible de sélectionner l'action planter une graine");
 
-        if (!pionSelectionne()) {
+        if (prochaineActionSelectionPion() || prochaineActionChangementFocus()) {
             return;
         }
 
@@ -129,7 +131,7 @@ public class Jeu extends Observable {
     public void selectionnerRecolte() {
         verifierPartieEnCours("Impossible de sélectionner l'action récolter une graine");
 
-        if (!pionSelectionne()) {
+        if (prochaineActionSelectionPion() || prochaineActionChangementFocus()) {
             return;
         }
 
@@ -142,25 +144,24 @@ public class Jeu extends Observable {
 
     private void selectionnerPion(int l, int c, Epoque e) {
         if (e == joueurActuel().focus() && (
-                (joueurActuel().pions() == Pion.BLANC && plateau.aBlanc(l, c, e)) ||
-                (joueurActuel().pions() == Pion.NOIR && plateau.aNoir(l, c, e)))) {
+                (joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) ||
+                (joueurActuel().aPionsNoirs() && plateau.aNoir(l, c, e)))) {
             tourActuel.selectionnerPion(l, c, e);
         }
     }
 
     public void jouer(int l, int c, Epoque e) {
         verifierPartieEnCours("Impossible de jouer");
-        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        if (nombreCoupsRestantsTour() == 0 ||
-                (nombrePionPlateau == 0 && (!pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()))) {
+        if (prochaineActionChangementFocus()) {
             changerFocus(e);
             return;
         }
 
-        if (!pionSelectionne() && nombreCoupsRestantsTour() == 2) {
+        if (prochaineActionSelectionPion()) {
             selectionnerPion(l, c, e);
             prochaineAction = Action.MOUVEMENT;
+            metAJour();
             return;
         }
 
@@ -215,6 +216,7 @@ public class Jeu extends Observable {
         if (tourActuel.annulerCoup()) {
             metAJour();
         }
+        prochaineAction = Action.MOUVEMENT;
     }
 
     private void changerFocus(Epoque nouveau) {
@@ -267,13 +269,31 @@ public class Jeu extends Observable {
         }
     }
 
-    public boolean pionSelectionne() {
-        verifierPartieCree("Impossible de vérifier si le pion est sélectionné");
-        return tourActuel.pionSelectionne();
+    public boolean prochaineActionSelectionPion() {
+        verifierPartieCree("Impossible de récupérer la prochaine action");
+        return !tourActuel.pionSelectionne() && tourActuel.nombreCoupsRestants() == 2;
     }
 
-    public int nombreCoupsRestantsTour() {
-        verifierPartieCree("Impossible de récupérer le nombre de coups restants à jouer pendant ce tour");
-        return tourActuel.nombreCoupsRestants();
+    public boolean prochaineActionMouvement() {
+        verifierPartieCree("Impossible de récupérer la prochaine action");
+        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.MOUVEMENT;
+    }
+
+    public boolean prochaineActionPlantation() {
+        verifierPartieCree("Impossible de récupérer la prochaine action");
+        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.PLANTATION;
+    }
+
+    public boolean prochaineActionRecolte() {
+        verifierPartieCree("Impossible de récupérer la prochaine action");
+        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.RECOLTE;
+    }
+
+    public boolean prochaineActionChangementFocus() {
+        verifierPartieCree("Impossible de récupérer la prochaine action");
+        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
+
+        return tourActuel.nombreCoupsRestants() == 0 ||
+                (nombrePionPlateau == 0 && (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
     }
 }

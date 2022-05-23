@@ -31,12 +31,14 @@ public class Jeu extends Observable {
     public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
         if (joueur1 == null) {
             joueur1 = new Joueur(nom, type, p, handicap);
-        } else if (joueur2 == null) {
+        }
+        else if (joueur2 == null) {
             if (p == joueur1.pions()) {
                 throw new IllegalArgumentException("Impossible de créer le nouveau joueur : le joueur 1 possède déjà les pions " + p);
             }
             joueur2 = new Joueur(nom, type, p, handicap);
-        } else {
+        }
+        else {
             throw new IllegalStateException("Impossible d'ajouter un nouveau joueur : tous les joueurs ont déjà été ajoutés");
         }
     }
@@ -144,8 +146,8 @@ public class Jeu extends Observable {
 
     private void selectionnerPion(int l, int c, Epoque e) {
         if (e == joueurActuel().focus() && (
-                (joueurActuel().pions() == Pion.BLANC && plateau.aBlanc(l, c, e)) ||
-                (joueurActuel().pions() == Pion.NOIR && plateau.aNoir(l, c, e)))) {
+                (joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) ||
+                (joueurActuel().aPionsNoirs() && plateau.aNoir(l, c, e)))) {
             tourActuel.selectionnerPion(l, c, e);
         }
     }

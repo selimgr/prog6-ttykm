@@ -46,7 +46,7 @@ public class VueMenuSaisies extends JPanel {
                     nomJ1.getText(),
                     TypeJoueur.values()[typeJ1.getSelectedIndex()],
                     Pion.NOIR,
-                    3,
+                    0,
                     // --
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],

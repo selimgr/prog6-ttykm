@@ -29,10 +29,8 @@ public class TestJeu {
         assertTrue(e.getMessage().contains("Impossible d'annuler : aucune partie créée"));
         e = assertThrows(IllegalStateException.class, j::pionSelectionne);
         assertTrue(e.getMessage().contains("Impossible de vérifier si le pion est sélectionné : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::tourCommence);
-        assertTrue(e.getMessage().contains("Impossible de vérifier si le tour est commencé : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::tourTermine);
-        assertTrue(e.getMessage().contains("Impossible de vérifier si le tour est terminé : aucune partie créée"));
+        e = assertThrows(IllegalStateException.class, j::nombreCoupsRestantsTour);
+        assertTrue(e.getMessage().contains("Impossible de récupérer le nombre de coups restants à jouer pendant ce tour"));
     }
 
     @Test
@@ -116,8 +114,7 @@ public class TestJeu {
         assertFalse(j.partieTerminee());
         assertNull(j.vainqueur());
         assertFalse(j.pionSelectionne());
-        assertFalse(j.tourCommence());
-        assertFalse(j.tourTermine());
+        assertEquals(2, j.nombreCoupsRestantsTour());
     }
 
     private void initialiserPartie() {
@@ -276,61 +273,53 @@ public class TestJeu {
     @Test
     public void testJouerAnnulerMouvement() {
         initialiserPartie();
-        assertFalse(j.tourCommence());
-        assertFalse(j.tourTermine());
+        assertEquals(2, j.nombreCoupsRestantsTour());
         assertFalse(j.pionSelectionne());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
             j.jouer(0, 0, Epoque.PASSE);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aBlanc(0, 0, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
             j.jouer(0, 1, Epoque.PASSE);
             assertTrue(j.plateau().estVide(0, 0, Epoque.PASSE));
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(2, 3, Epoque.PASSE));
             j.jouer(2, 3, Epoque.PASSE);
             assertTrue(j.plateau().estVide(2, 3, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 2, Epoque.PASSE));
             j.jouer(0, 2, Epoque.PASSE);
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 3, Epoque.PASSE));
             j.jouer(0, 3, Epoque.PASSE);
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 3, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 2, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(0, 0, Epoque.PASSE));
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aBlanc(0, 0, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -344,54 +333,47 @@ public class TestJeu {
         } else {
             j.jouer(3, 3, Epoque.FUTUR);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aNoir(3, 3, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
             j.jouer(3, 2, Epoque.FUTUR);
             assertTrue(j.plateau().estVide(3, 3, Epoque.FUTUR));
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(1, 0, Epoque.FUTUR));
             j.jouer(1, 0, Epoque.FUTUR);
             assertTrue(j.plateau().estVide(1, 0, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 1, Epoque.FUTUR));
             j.jouer(3, 1, Epoque.FUTUR);
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 0, Epoque.FUTUR));
             j.jouer(3, 0, Epoque.FUTUR);
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 0, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 1, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().estVide(3, 3, Epoque.FUTUR));
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aNoir(3, 3, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -408,55 +390,47 @@ public class TestJeu {
     @Test
     public void testJouerAnnulerPlantation() {
         initialiserPartie();
-        assertFalse(j.tourCommence());
-        assertFalse(j.tourTermine());
+        assertEquals(2, j.nombreCoupsRestantsTour());
         assertFalse(j.pionSelectionne());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
             j.jouer(0, 0, Epoque.PASSE);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.selectionnerPlantation();
             j.jouer(0, 0, Epoque.PASSE);
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(2, 3, Epoque.PASSE));
             j.selectionnerPlantation();
             j.jouer(2, 3, Epoque.PASSE);
             assertFalse(j.plateau().aGraine(2, 3, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.selectionnerPlantation();
             j.jouer(0, 1, Epoque.PASSE);
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(1, 0, Epoque.PASSE));
             j.selectionnerPlantation();
             j.jouer(0, 2, Epoque.PASSE);
             assertFalse(j.plateau().aGraine(1, 0, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.annuler();
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.annuler();
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -485,48 +459,41 @@ public class TestJeu {
         } else {
             j.jouer(3, 3, Epoque.FUTUR);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.selectionnerPlantation();
             j.jouer(3, 3, Epoque.FUTUR);
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(1, 0, Epoque.FUTUR));
             j.selectionnerPlantation();
             j.jouer(1, 0, Epoque.FUTUR);
             assertFalse(j.plateau().aGraine(1, 0, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.selectionnerPlantation();
             j.jouer(3, 2, Epoque.FUTUR);
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(2, 3, Epoque.FUTUR));
             j.selectionnerPlantation();
             j.jouer(3, 1, Epoque.FUTUR);
             assertFalse(j.plateau().aGraine(2, 3, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.annuler();
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.annuler();
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -558,59 +525,51 @@ public class TestJeu {
     @Test
     public void testJouerAnnulerRecolte() {
         initialiserPartie();
-        assertFalse(j.tourCommence());
-        assertFalse(j.tourTermine());
+        assertEquals(2, j.nombreCoupsRestantsTour());
         assertFalse(j.pionSelectionne());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
             j.jouer(0, 0, Epoque.PASSE);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(0, 0, Epoque.PASSE, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.selectionnerRecolte();
             j.jouer(0, 0, Epoque.PASSE);
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(2, 3, Epoque.PASSE, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(2, 3, Epoque.PASSE));
             j.selectionnerRecolte();
             j.jouer(2, 3, Epoque.PASSE);
             assertTrue(j.plateau().aGraine(2, 3, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(0, 1, Epoque.PASSE, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.selectionnerRecolte();
             j.jouer(0, 1, Epoque.PASSE);
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(1, 0, Epoque.PASSE, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(1, 0, Epoque.PASSE));
             j.selectionnerRecolte();
             j.jouer(1, 0, Epoque.PASSE);
             assertTrue(j.plateau().aGraine(1, 0, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -639,52 +598,45 @@ public class TestJeu {
         } else {
             j.jouer(3, 3, Epoque.FUTUR);
             assertTrue(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(3, 3, Epoque.FUTUR, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.selectionnerRecolte();
             j.jouer(3, 3, Epoque.FUTUR);
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(1, 0, Epoque.FUTUR, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(1, 0, Epoque.FUTUR));
             j.selectionnerRecolte();
             j.jouer(1, 0, Epoque.FUTUR);
             assertTrue(j.plateau().aGraine(1, 0, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(3, 2, Epoque.FUTUR, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.selectionnerRecolte();
             j.jouer(3, 2, Epoque.FUTUR);
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             j.plateau().ajouter(2, 3, Epoque.FUTUR, Piece.GRAINE);
             assertTrue(j.plateau().aGraine(2, 3, Epoque.FUTUR));
             j.selectionnerRecolte();
             j.jouer(2, 3, Epoque.FUTUR);
             assertTrue(j.plateau().aGraine(2, 3, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertTrue(j.tourTermine());
+            assertEquals(0, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
-            assertTrue(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(1, j.nombreCoupsRestantsTour());
 
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
 
             assertTrue(j.pionSelectionne());
             j.annuler();
@@ -843,8 +795,7 @@ public class TestJeu {
             assertEquals(j.joueur2(), j.joueurSuivant());
             assertFalse(j.partieTerminee());
             assertFalse(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
             assertEquals(0, j.joueur1().nombreVictoires());
             assertEquals(1, j.joueur2().nombreVictoires());
             assertEquals(2, j.joueur1().nombrePionsReserve());
@@ -954,8 +905,7 @@ public class TestJeu {
             assertEquals(j.joueur1(), j.joueurSuivant());
             assertFalse(j.partieTerminee());
             assertFalse(j.pionSelectionne());
-            assertFalse(j.tourCommence());
-            assertFalse(j.tourTermine());
+            assertEquals(2, j.nombreCoupsRestantsTour());
             assertEquals(1, j.joueur1().nombreVictoires());
             assertEquals(0, j.joueur2().nombreVictoires());
             assertEquals(2, j.joueur1().nombrePionsReserve());

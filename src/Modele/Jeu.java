@@ -7,7 +7,10 @@ import java.util.Random;
 import static java.util.Objects.requireNonNull;
 
 // TODO: Ajouter des logs quand des actions correctes et incorrectes sont effectuées
+
 // TODO: Prendre en compte le fait que annuler doit pouvoir annuler le changement du focus (gérer dans l'historique)
+
+// TODO: Implémenter une méthode renvoyant la prochaine action à jouer
 
 public class Jeu extends Observable {
     private Plateau plateau;
@@ -151,29 +154,30 @@ public class Jeu extends Observable {
         verifierPartieEnCours("Impossible de jouer");
         int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        if (tourTermine() || (nombrePionPlateau == 0 && (!pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()))) {
+        if (nombreCoupsRestantsTour() == 0 ||
+                (nombrePionPlateau == 0 && (!pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()))) {
             changerFocus(e);
             return;
         }
 
-        if (!tourActuel.pionSelectione() && !tourActuel.estCommence()) {
+        if (!pionSelectionne() && nombreCoupsRestantsTour() == 2) {
             selectionnerPion(l, c, e);
             prochaineAction = Action.MOUVEMENT;
+            return;
         }
-        else if (!tourActuel.estTermine()) {
-            switch (prochaineAction) {
-                case MOUVEMENT:
-                    jouerMouvement(l, c, e);
-                    break;
-                case PLANTATION:
-                    jouerPlantation(l, c, e);
-                    break;
-                case RECOLTE:
-                    jouerRecolte(l, c, e);
-                    break;
-            }
-            prochaineAction = Action.MOUVEMENT;
+
+        switch (prochaineAction) {
+            case MOUVEMENT:
+                jouerMouvement(l, c, e);
+                break;
+            case PLANTATION:
+                jouerPlantation(l, c, e);
+                break;
+            case RECOLTE:
+                jouerRecolte(l, c, e);
+                break;
         }
+        prochaineAction = Action.MOUVEMENT;
     }
 
     private void jouerMouvement(int l, int c, Epoque e) {
@@ -267,16 +271,11 @@ public class Jeu extends Observable {
 
     public boolean pionSelectionne() {
         verifierPartieCree("Impossible de vérifier si le pion est sélectionné");
-        return tourActuel.pionSelectione();
+        return tourActuel.pionSelectionne();
     }
 
-    public boolean tourCommence() {
-        verifierPartieCree("Impossible de vérifier si le tour est commencé");
-        return tourActuel.estCommence();
-    }
-
-    public boolean tourTermine() {
-        verifierPartieCree("Impossible de vérifier si le tour est terminé");
-        return tourActuel.estTermine();
+    public int nombreCoupsRestantsTour() {
+        verifierPartieCree("Impossible de récupérer le nombre de coups restants à jouer pendant ce tour");
+        return tourActuel.nombreCoupsRestants();
     }
 }

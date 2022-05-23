@@ -149,6 +149,9 @@ public class Jeu extends Observable {
     }
 
     public void jouer(int l, int c, Epoque e) {
+        if(this.partieTerminee()){
+            return ;
+        }
         verifierPartieEnCours("Impossible de jouer");
         int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 

@@ -1,12 +1,14 @@
 package Modele;
 
 public class Mouvement extends Coup {
+    private final Case departPion;
     private Case arriveePion;
     private boolean positionPionChangee;
     private boolean voyageTemporelArriere;
 
     Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
+        departPion = pion();
     }
 
     static boolean estCorrect(int dL, int dC, int dEpoque) {
@@ -27,6 +29,18 @@ public class Mouvement extends Coup {
             return arriveePion;
         }
         return super.pion();
+    }
+
+    @Override
+    public Case depart() {
+        verifierCoupCree("Impossible de récupérer la case de départ");
+        return departPion;
+    }
+
+    @Override
+    public Case arrivee() {
+        verifierCoupCree("Impossible de récupérer la case d'arrivée");
+        return arriveePion;
     }
 
     @Override

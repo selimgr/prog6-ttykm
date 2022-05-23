@@ -34,7 +34,7 @@ public abstract class Coup {
         return pion;
     }
 
-    private void verifierCoupCree(String message) {
+    protected void verifierCoupCree(String message) {
         if (etats.isEmpty()) {
             throw new IllegalStateException(message + " : aucun coup créé");
         }
@@ -44,19 +44,13 @@ public abstract class Coup {
      * Case sur laquelle sur la pièce jouée au départ du coup
      * @return La case de départ du coup
      */
-    public Case depart() {
-        verifierCoupCree("Impossible de récupérer la case de départ");
-        return etats.element().depart();
-    }
+    abstract public Case depart();
 
     /**
      * Case sur laquelle sur la pièce jouée à la fin du coup
      * @return La case d'arrivée du coup
      */
-    public Case arrivee() {
-        verifierCoupCree("Impossible de récupérer la case d'arrivée");
-        return etats.element().arrivee();
-    }
+    abstract public Case arrivee();
 
     public boolean estMouvement() {
         verifierCoupCree("Impossible de vérifier si le coup est un mouvement");

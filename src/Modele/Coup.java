@@ -53,11 +53,11 @@ public abstract class Coup {
         return etats.element().piece() == Piece.GRAINE && etats.element().arrivee() == null;
     }
 
-    Case depart() {
+    public Case depart() {
         return etats.element().depart();
     }
 
-    Case arrivee() {
+    public Case arrivee() {
         return etats.element().arrivee();
     }
 

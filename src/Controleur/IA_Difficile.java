@@ -16,6 +16,7 @@ public class IA_Difficile extends IA {
         this.adversaire = adversaire;
         this.jeu = jeu;
         antiCycle = new HashMap<>();
+        alphaBeta = new int[horizon];
     }
 
     public int fonctionApproximation(Plateau p){

@@ -16,6 +16,7 @@ public abstract class IA {
     HashMap<String,Integer> antiCycle;
     int horizon;
     ControleurMediateur ctrl;
+    int[] alphaBeta;
 
 
 
@@ -45,18 +46,20 @@ public abstract class IA {
         while (it.hasNext()){
             Coup c = it.next();
             jeu.plateau().fixerPlateau(copieP);
-            ctrl.jouer(c.pion().ligne(),c.pion().colonne(),c.pion().epoque());
+            ctrl.jouer(c.depart().ligne(),c.depart().colonne(),c.depart().epoque());
             // if instance of Mouvement ;
-            arr = c.getArrivee();
-            ctrl.jouer(lA,cA,eA);
-            C2 = p.casesJouablesEpoque(ia,true,lA,cA,Epoque.depuisIndice(eA));
+            arr = c.arrivee();
+            if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
+            if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+            ctrl.jouer(arr.ligne(),arr.colonne(),arr.epoque());
+            C2 = p.casesJouablesEpoque(ia,true,arr.ligne(),arr.colonne(),arr.epoque());
             Iterator<Coup> it2 = C2.iterator();
             while (it2.hasNext()){
                 Coup c2 = it.next();
-                lA = c2.lignePion()+ c.deplacementLignePion();
-                cA = c2.deplacementColonnePion()+ c.deplacementColonnePion();
-                eA = c2.epoquePion().indice() + c.deplacementEpoquePion();
-                ctrl.jouer(lA,cA,eA);
+                arr = c2.arrivee();
+                if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
+                if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+                ctrl.jouer(arr.ligne(),arr.colonne(),arr.epoque());
                 valeur2 = valeur;
                 valeur = Math.max(valeur*minmax,calcul(copieP,horizon-1,minmax*-1)*minmax);
                 if (valeur2 < valeur || horizon == this.horizon) {
@@ -91,18 +94,19 @@ public abstract class IA {
         System.out.println(c1.toString());
         System.out.println(c2.toString());
         // Calcul du déplacement de c2
-        int lA = this.c2.lignePion()+ this.c2.deplacementLignePion();
-        int cA = this.c2.deplacementColonnePion()+ this.c2.deplacementColonnePion();
-        int eA = this.c2.epoquePion().indice() + this.c2.deplacementEpoquePion();
+        int lA = c2.arrivee().ligne();
+        int cA = c2.arrivee().colonne();
+        Epoque eA = c2.arrivee().epoque();
         // On remet le plateau tel qu'il était ( assurance d'un plateau identique)
         jeu.plateau().fixerPlateau(p);
         //On joue les 2 coups
-        ctrl.jouer(this.c1.lignePion(), this.c1.colonnePion(), this.c1.epoquePion());
-        ctrl.jouer(this.c2.lignePion(), this.c2.colonnePion(), this.c2.epoquePion());
-        ctrl.jouer(lA,cA,Epoque.depuisIndice(eA));
+        ctrl.jouer(this.c1.depart().ligne(), this.c1.depart().colonne(), this.c1.depart().epoque());
+        ctrl.jouer(this.c2.depart().ligne(), this.c2.depart().colonne(), this.c2.depart().epoque());
+        ctrl.jouer(lA,cA,eA);
         //TODO : Gestion du focus
 
     }
+
 
 
 }

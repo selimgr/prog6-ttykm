@@ -1,8 +1,6 @@
 package Vue.JComposants;
 
-import Controleur.ControleurMediateur;
 import Modele.Epoque;
-import Modele.Jeu;
 import Modele.Plateau;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
@@ -19,9 +17,9 @@ public class CPlateau extends JPanel implements Observateur {
     int num;
 
     public CPlateau(int numero, CollecteurEvenements c){
-        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();
-        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
-        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();
+        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/custom/plateaux/Passé.png"))).getImage();
+        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/custom/plateaux/Présent.png"))).getImage();
+        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/custom/plateaux/Futur.png"))).getImage();
         this.c = c;
 
         num = numero;

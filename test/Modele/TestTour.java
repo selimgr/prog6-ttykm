@@ -13,7 +13,7 @@ public class TestTour {
 
     @Before
     public void initialisation() {
-        tour = new Tour();
+        tour = new Tour(Epoque.PASSE);
         plateau = new Plateau();
         joueur = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
         coup = new Mouvement(plateau, joueur, 0, 0, Epoque.PASSE);
@@ -41,6 +41,8 @@ public class TestTour {
     public void testInitialisation() {
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             Epoque e = Epoque.depuisIndice(i);
+            tour = new Tour(e);
+            assertEquals(e, tour.focus());
 
             for (int j = 0; j < Plateau.TAILLE; j++) {
                 for (int k = 0; k < Plateau.TAILLE; k++) {
@@ -96,36 +98,46 @@ public class TestTour {
 
     @Test
     public void testSelectionnerPion() {
-        tour.selectionnerPion(1, 3, Epoque.FUTUR);
+        IllegalArgumentException e1;
+        e1 = assertThrows(IllegalArgumentException.class, () -> tour.selectionnerPion(0, 0, Epoque.PRESENT));
+        assertTrue(e1.getMessage().contains("Impossible de sélectionner le pion : époque différente du focus actuel"));
+        e1 = assertThrows(IllegalArgumentException.class, () -> tour.selectionnerPion(0, 0, Epoque.FUTUR));
+        assertTrue(e1.getMessage().contains("Impossible de sélectionner le pion : époque différente du focus actuel"));
+
+        tour.selectionnerPion(1, 3, Epoque.PASSE);
         assertEquals(1, tour.lignePion());
         assertEquals(3, tour.colonnePion());
-        assertEquals(Epoque.FUTUR, tour.epoquePion());
+        assertEquals(Epoque.PASSE, tour.epoquePion());
 
-        IllegalStateException e = assertThrows(IllegalStateException.class, () -> tour.selectionnerPion(0, 1, Epoque.PRESENT));
-        assertTrue(e.getMessage().contains("Impossible de sélectionner le pion : pion déjà sélectionné"));
+        IllegalStateException e2;
+        e2 = assertThrows(IllegalStateException.class, () -> tour.selectionnerPion(0, 1, Epoque.PASSE));
+        assertTrue(e2.getMessage().contains("Impossible de sélectionner le pion : pion déjà sélectionné"));
 
-        tour.deselectionnerPion(1, 3, Epoque.FUTUR);
-        tour.selectionnerPion(2, 0, Epoque.PRESENT);
+        tour.deselectionnerPion(1, 3, Epoque.PASSE);
+        tour.selectionnerPion(2, 0, Epoque.PASSE);
         assertEquals(2, tour.lignePion());
         assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PRESENT, tour.epoquePion());
+        assertEquals(Epoque.PASSE, tour.epoquePion());
 
-        e = assertThrows(IllegalStateException.class, () -> tour.selectionnerPion(2, 0, Epoque.PRESENT));
-        assertTrue(e.getMessage().contains("Impossible de sélectionner le pion : pion déjà sélectionné"));
+        e2 = assertThrows(IllegalStateException.class, () -> tour.selectionnerPion(2, 0, Epoque.PASSE));
+        assertTrue(e2.getMessage().contains("Impossible de sélectionner le pion : pion déjà sélectionné"));
     }
 
     @Test
     public void testDeselectionnerPion() {
-        tour.selectionnerPion(0, 0, Epoque.PASSE);
-        assertTrue(tour.deselectionnerPion(0, 0, Epoque.PASSE));
-        tour.selectionnerPion(1, 1, Epoque.PRESENT);
         assertFalse(tour.deselectionnerPion(0, 0, Epoque.PASSE));
-        assertTrue(tour.deselectionnerPion(1, 1, Epoque.PRESENT));
+        tour.selectionnerPion(0, 0, Epoque.PASSE);
+        assertFalse(tour.deselectionnerPion(1, 0, Epoque.PASSE));
+        assertFalse(tour.deselectionnerPion(0, 1, Epoque.PASSE));
+        assertFalse(tour.deselectionnerPion(0, 0, Epoque.PRESENT));
+        assertFalse(tour.deselectionnerPion(0, 0, Epoque.FUTUR));
+        assertTrue(tour.deselectionnerPion(0, 0, Epoque.PASSE));
+
+        tour = new Tour(Epoque.FUTUR);
         tour.selectionnerPion(3, 3, Epoque.FUTUR);
         joueur = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
         coup = new Mouvement(plateau, joueur, 3, 3, Epoque.FUTUR);
         tour.jouerCoup(coup, 2, 3, Epoque.FUTUR);
-        assertFalse(tour.deselectionnerPion(2, 3, Epoque.FUTUR));
         assertFalse(tour.deselectionnerPion(3, 3, Epoque.FUTUR));
         tour.annulerCoup();
         assertTrue(tour.deselectionnerPion(3, 3, Epoque.FUTUR));
@@ -137,7 +149,7 @@ public class TestTour {
         IllegalStateException e;
 
         e = assertThrows(IllegalStateException.class, () -> tour.jouerCoup(coup, 0, 1, Epoque.PASSE));
-        assertTrue(e.getMessage().contains("Impossible de jouer un nouveau coup : aucun pion sélectionné"));
+        assertTrue(e.getMessage().contains("Impossible de jouer un nouveau coup : pion non sélectionné"));
 
         tour.selectionnerPion(0, 0, Epoque.PASSE);
         tour.jouerCoup(coup, 0, 1, Epoque.PASSE);
@@ -145,7 +157,7 @@ public class TestTour {
         tour.deselectionnerPion(0, 0, Epoque.PASSE);
 
         e = assertThrows(IllegalStateException.class, () -> tour.jouerCoup(coup, 1, 0, Epoque.PASSE));
-        assertTrue(e.getMessage().contains("Impossible de jouer un nouveau coup : aucun pion sélectionné"));
+        assertTrue(e.getMessage().contains("Impossible de jouer un nouveau coup : pion non sélectionné"));
 
         tour.selectionnerPion(0, 0, Epoque.PASSE);
         coup = new Mouvement(plateau, joueur, 0, 0, Epoque.PASSE);

@@ -62,8 +62,8 @@ public class Jeu extends Observable {
         joueur1.initialiserJoueur();
         joueur2.initialiserJoueur();
         plateau = new Plateau();
-        tourActuel = new Tour();
         partieTerminee = false;
+        tourActuel = new Tour(joueurActuel().focus());
         metAJour();
     }
 
@@ -230,7 +230,7 @@ public class Jeu extends Observable {
             partieTerminee = true;
             ajouterVictoire();
         } else {
-            tourActuel = new Tour();
+            tourActuel = new Tour(joueurActuel().focus());
         }
         metAJour();
     }

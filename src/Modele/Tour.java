@@ -1,32 +1,41 @@
 package Modele;
 
+import static java.util.Objects.requireNonNull;
+
 class Tour {
+    private final Epoque focus;
     private Case pion;
     private Coup coup1, coup2;
     private int nombreCoupsRestants;
 
-    Tour() {
+    Tour(Epoque focus) {
+        requireNonNull(focus);
+        this.focus = focus;
         nombreCoupsRestants = 2;
     }
 
-    int lignePion() {
+    Epoque focus() {
+        return focus;
+    }
+
+    private void verifierPionSelectionne(String message) {
         if (pion == null) {
-            throw new IllegalStateException("Impossible de renvoyer la ligne du pion : pion non sélectionné");
+            throw new IllegalStateException(message + " : pion non sélectionné");
         }
+    }
+
+    int lignePion() {
+        verifierPionSelectionne("Impossible de renvoyer la ligne du pion");
         return pion.ligne();
     }
 
     int colonnePion() {
-        if (pion == null) {
-            throw new IllegalStateException("Impossible de renvoyer la colonne du pion : pion non sélectionné");
-        }
+        verifierPionSelectionne("Impossible de renvoyer la colonne du pion");
         return pion.colonne();
     }
 
     Epoque epoquePion() {
-        if (pion == null) {
-            throw new IllegalStateException("Impossible de renvoyer l'époque du pion : pion non sélectionné");
-        }
+        verifierPionSelectionne("Impossible de renvoyer l'époque du pion");
         return pion.epoque();
     }
 
@@ -42,6 +51,9 @@ class Tour {
         if (pionSelectionne()) {
             throw new IllegalStateException("Impossible de sélectionner le pion : pion déjà sélectionné");
         }
+        if (e != focus) {
+            throw new IllegalArgumentException("Impossible de sélectionner le pion : époque différente du focus actuel");
+        }
         pion = new Case(l, c, e);
     }
 
@@ -54,9 +66,8 @@ class Tour {
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
-        if (!pionSelectionne()) {
-            throw new IllegalStateException("Impossible de jouer un nouveau coup : aucun pion sélectionné");
-        }
+        verifierPionSelectionne("Impossible de jouer un nouveau coup");
+
         if (nombreCoupsRestants == 0) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tous les coups ont déjà été joués ce tour");
         }

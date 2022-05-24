@@ -151,6 +151,9 @@ public class Jeu extends Observable {
     }
 
     public void jouer(int l, int c, Epoque e) {
+        if(this.partieTerminee()){
+            return ;
+        }
         verifierPartieEnCours("Impossible de jouer");
 
         if (prochaineActionChangementFocus()) {

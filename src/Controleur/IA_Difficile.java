@@ -16,7 +16,6 @@ public class IA_Difficile extends IA {
         antiCycle = new HashMap<>();
         alphaBeta = new int[horizon];
     }
-
     public int fonctionApproximation(Plateau p){
         return p.coupJouables(ia) - p.coupJouables(adversaire);
     }

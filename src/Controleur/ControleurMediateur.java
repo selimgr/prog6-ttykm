@@ -149,7 +149,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouerIA() {
-        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.nombreCoupsRestantsTour() == 2 && !jeu().pionSelectionne()) {
+        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.prochaineActionSelectionPion() ) {
             if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
             else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
         }

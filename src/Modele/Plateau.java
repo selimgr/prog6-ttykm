@@ -285,13 +285,13 @@ public class Plateau {
             for (int k = 0; k <7 ;k++) {
                 coup.add(new Mouvement(this, j, cas.ligne(), cas.colonne(), eActu));
             }
-                if (coup.get(i*7).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(0));
-                if (coup.get(i*7+1).creer(cas.ligne()-1,cas.colonne(),eActu)) jouables.add(coup.get(1));
-                if (coup.get(i*7+2).creer(cas.ligne(), cas.colonne()+1, eActu)) jouables.add(coup.get(2));
-                if (coup.get(i*7+3).creer(cas.ligne(), cas.colonne()-1,eActu)) jouables.add(coup.get(3));
-                if (coup.get(i*7+4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR)) jouables.add(coup.get(4));
-                if (coup.get(i*7+5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(5));
-                if (coup.get(i*7+6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(6));
+                if (coup.get(i*7).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(i*7));
+                if (coup.get(i*7+1).creer(cas.ligne()-1,cas.colonne(),eActu) ) jouables.add(coup.get(i*7+1));
+                if (coup.get(i*7+2).creer(cas.ligne(), cas.colonne()+1, eActu) ) jouables.add(coup.get(i*7+2));
+                if (coup.get(i*7+3).creer(cas.ligne(), cas.colonne()-1,eActu) ) jouables.add(coup.get(i*7+3));
+                if (coup.get(i*7+4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR) ) jouables.add(coup.get(i*7+4));
+                if (coup.get(i*7+5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(i*7+5));
+                if (coup.get(i*7+6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(i*7+6));
                 i++;
             // TODO : Ajouter action sur les graines
             // ...

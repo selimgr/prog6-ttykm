@@ -25,32 +25,27 @@ public class IA_Aleatoire extends IA {
             return 0;
         }
         alea = r.nextInt(coups.size());
+        System.out.println(coups.size() + " !1! " + alea);
         c1 = coups.get(alea);
         System.out.println(( (Mouvement) c1).toString());
-        if (jeu.nombreCoupsRestantsTour() ==2 && !jeu.pionSelectionne()) {
+        if (jeu.prochaineActionSelectionPion()) {
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
         }
         else {
             throw new IllegalStateException("IA ne doit pas avoir de pion préselectionné");
         }
-        if (jeu.nombreCoupsRestantsTour() == 2 && jeu.pionSelectionne()) {
-            ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
-        }
-        else {
-            throw new IllegalStateException(("IA ne peut pas jouer le coup 1"));
-        }
+        ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
         // Second coup avec pion déjà choisi
         if (jeu.plateau().aPion(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque())) {
             coups = jeu.plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
+            if (coups.size() ==0 ) throw new IllegalStateException("coups est vide");
             alea = r.nextInt(coups.size());
+            System.out.println(coups.size() + " !2! " + alea);
             c2 = coups.get(alea);
             System.out.print(( (Mouvement) c2).toString() + " -- ");
             System.out.println(( (Mouvement) c2).arrivee().toString());
-            if (jeu.nombreCoupsRestantsTour() == 1 && jeu.pionSelectionne()) {
-                ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
-            } else {
-                throw new IllegalStateException("IA ne peut pas jour coup 2");
-            }
+            ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
+
         }
         //Changement de focus
         alea = r.nextInt(3);

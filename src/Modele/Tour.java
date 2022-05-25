@@ -6,10 +6,13 @@ class Tour {
     private final Epoque focus;
     private Case pion;
     private Coup coup1, coup2;
+    private Epoque prochainFocus;
+    private boolean pionSelectionne;
     private int nombreCoupsRestants;
+    private boolean focusChange;
 
     Tour(Epoque focus) {
-        requireNonNull(focus);
+        requireNonNull(focus, "L'époque du focus du joueur ne doit pas être null");
         this.focus = focus;
         nombreCoupsRestants = 2;
     }
@@ -19,7 +22,7 @@ class Tour {
     }
 
     private void verifierPionSelectionne(String message) {
-        if (pion == null) {
+        if (!pionSelectionne()) {
             throw new IllegalStateException(message + " : pion non sélectionné");
         }
     }
@@ -39,27 +42,41 @@ class Tour {
         return pion.epoque();
     }
 
+    Epoque prochainFocus() {
+        if (!termine()) {
+            throw new IllegalStateException(
+                    "Impossible de renvoyer l'époque du prochain focus : changement de focus non effectué");
+        }
+        return prochainFocus;
+    }
+
     boolean pionSelectionne() {
-        return pion != null;
+        return pionSelectionne;
     }
 
     int nombreCoupsRestants() {
         return nombreCoupsRestants;
     }
 
-    void selectionnerPion(int l, int c, Epoque e) {
+    boolean termine() {
+        return focusChange;
+    }
+
+    boolean selectionnerPion(int l, int c, Epoque e) {
         if (pionSelectionne()) {
-            throw new IllegalStateException("Impossible de sélectionner le pion : pion déjà sélectionné");
+            throw new IllegalStateException("Impossible de sélectionner le pion : état du tour incorrect");
         }
-        if (e != focus) {
-            throw new IllegalArgumentException("Impossible de sélectionner le pion : époque différente du focus actuel");
+        if (e == focus) {
+            pion = new Case(l, c, e);
+            pionSelectionne = true;
         }
-        pion = new Case(l, c, e);
+        return pionSelectionne;
     }
 
     boolean deselectionnerPion(int l, int c, Epoque e) {
-        if (pionSelectionne() && l == lignePion() && c == colonnePion() && e == epoquePion() && nombreCoupsRestants == 2) {
-            pion = null;
+        if (pionSelectionne() && l == lignePion() && c == colonnePion() && e == epoquePion() &&
+                nombreCoupsRestants == 2 || termine()) {
+            pionSelectionne = false;
             return true;
         }
         return false;
@@ -68,7 +85,7 @@ class Tour {
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
         verifierPionSelectionne("Impossible de jouer un nouveau coup");
 
-        if (nombreCoupsRestants == 0) {
+        if (nombreCoupsRestants == 0 || termine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tous les coups ont déjà été joués ce tour");
         }
         if (!coup.creer(destL, destC, eDest)) {
@@ -86,28 +103,103 @@ class Tour {
         return true;
     }
 
-    boolean annulerCoup() {
+    boolean changerFocus(Epoque prochain) {
+        requireNonNull(prochain, "L'époque du prochain focus du joueur ne doit pas être null");
+
+        if (termine()) {
+            throw new IllegalStateException("Impossible de changer le focus : tour terminé");
+        }
+
+        if (prochain != focus) {
+            prochainFocus = prochain;
+            focusChange = true;
+        }
+        return focusChange;
+    }
+
+    boolean annuler() {
+        if (termine()) {
+            focusChange = false;
+            return true;
+        }
+
         switch (nombreCoupsRestants) {
             case 0:
                 coup2.annuler();
                 pion = coup2.pion();
-                coup2 = null;
                 nombreCoupsRestants++;
                 break;
             case 1:
                 coup1.annuler();
                 pion = coup1.pion();
-                coup1 = null;
                 nombreCoupsRestants++;
                 break;
             case 2:
                 if (!pionSelectionne()) {
                     return false;
                 }
-                pion = null;
+                pionSelectionne = false;
                 break;
             default:
                 throw new IllegalStateException("Impossible d'annuler un coup : nombre incorrect de coups joués");
+        }
+        return true;
+    }
+
+    boolean peutRefaire() {
+        if (termine()) {
+            return false;
+        }
+        if (!pionSelectionne()) {
+            return pion != null || prochainFocus != null;
+        }
+        switch (nombreCoupsRestants) {
+            case 0:
+                return prochainFocus != null;
+            case 1:
+                return coup2 != null || prochainFocus != null;
+            case 2:
+                return coup1 != null || prochainFocus != null;
+            default:
+                throw new IllegalStateException("Impossible de refaire un coup : nombre incorrect de coups joués");
+        }
+    }
+
+    boolean refaire() {
+        if (!peutRefaire()) {
+            return false;
+        }
+
+        if (!pionSelectionne()) {
+            if (pion != null) {
+                pionSelectionne = true;
+            } else {
+                focusChange = true;
+            }
+            return true;
+        }
+        switch (nombreCoupsRestants) {
+            case 0:
+                focusChange = true;
+                break;
+            case 1:
+                if (coup2 != null) {
+                    coup2.jouer();
+                    pion = coup2.pion();
+                    nombreCoupsRestants--;
+                } else {
+                    focusChange = true;
+                }
+                break;
+            case 2:
+                if (coup1 != null) {
+                    coup1.jouer();
+                    pion = coup1.pion();
+                    nombreCoupsRestants--;
+                } else {
+                    focusChange = true;
+                }
+                break;
         }
         return true;
     }

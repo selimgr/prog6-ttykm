@@ -155,8 +155,12 @@ class VueJeu extends JPanel {
         controles.setLayout(new FlowLayout(FlowLayout.RIGHT, -6, 0));
         controles.setOpaque(false);
 
-        controles.add(new JButton("<"));
-        controles.add(new JButton(">"));
+        JButton boutonAnnuler = new JButton("<");
+        JButton boutonRefaire = new JButton(">");
+        boutonAnnuler.addActionListener((e) -> c.annuler());
+        boutonRefaire.addActionListener((e) -> c.refaire());
+        controles.add(boutonAnnuler);
+        controles.add(boutonRefaire);
         controles.add(new JButton("Fin tour"));
 
         bas.add(grainesButtons, BorderLayout.PAGE_START);

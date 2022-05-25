@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestEtat {
+public class TestEffet {
 
     @Test
     public void testInitialisation() {
@@ -17,15 +17,15 @@ public class TestEtat {
                 for (int k = 0; k < Plateau.TAILLE; k++) {
                     for (int l = 0; l < Plateau.TAILLE; l++) {
                         Case c = new Case(k, l, e);
-                        Etat etat = new Etat(p, c, null);
+                        Effet etat = new Effet(p, c, null);
                         assertEquals(p, etat.piece());
                         assertEquals(c, etat.depart());
                         assertNull(etat.arrivee());
-                        etat = new Etat(p, null, c);
+                        etat = new Effet(p, null, c);
                         assertEquals(p, etat.piece());
                         assertNull(etat.depart());
                         assertEquals(c, etat.arrivee());
-                        etat = new Etat(p, c, c);
+                        etat = new Effet(p, c, c);
                         assertEquals(p, etat.piece());
                         assertEquals(c, etat.depart());
                         assertEquals(c, etat.arrivee());
@@ -38,7 +38,7 @@ public class TestEtat {
     private void exceptionPieceNull(Case depart, Case arrivee) {
         NullPointerException e = assertThrows(
                 NullPointerException.class,
-                () -> new Etat(null, depart, arrivee)
+                () -> new Effet(null, depart, arrivee)
         );
         assertTrue(e.getMessage().contains("La pièce ne doit pas être null"));
     }
@@ -66,7 +66,7 @@ public class TestEtat {
 
             IllegalArgumentException e = assertThrows(
                     IllegalArgumentException.class,
-                    () -> new Etat(p, null, null)
+                    () -> new Effet(p, null, null)
             );
             assertTrue(e.getMessage().contains("Impossible de créer un état avec les cases avant et après null"));
         }
@@ -74,11 +74,11 @@ public class TestEtat {
 
     @Test
     public void testToString() {
-        Etat e = new Etat(Piece.BLANC, new Case(0, 1, Epoque.PASSE), null);
+        Effet e = new Effet(Piece.BLANC, new Case(0, 1, Epoque.PASSE), null);
         assertEquals("[Blanc : (0, 1, Passé) -> null]", e.toString());
-        e = new Etat(Piece.ARBRE, new Case(2, 1, Epoque.PRESENT), new Case(2, 1, Epoque.FUTUR));
+        e = new Effet(Piece.ARBRE, new Case(2, 1, Epoque.PRESENT), new Case(2, 1, Epoque.FUTUR));
         assertEquals("[Arbre : (2, 1, Présent) -> (2, 1, Futur)]", e.toString());
-        e = new Etat(Piece.NOIR, null, new Case(3, 3, Epoque.FUTUR));
+        e = new Effet(Piece.NOIR, null, new Case(3, 3, Epoque.FUTUR));
         assertEquals("[Noir : null -> (3, 3, Futur)]", e.toString());
     }
 }

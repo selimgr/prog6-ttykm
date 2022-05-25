@@ -8,9 +8,9 @@ public class Main {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
+        } catch (Exception ignored) {
         }
+
         CollecteurEvenements controleur = new ControleurMediateur();
         InterfaceGraphique.demarrer(controleur);
     }

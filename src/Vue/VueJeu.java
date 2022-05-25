@@ -6,6 +6,8 @@ import Vue.JComposants.CInfoJoueur;
 import  javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 import static java.awt.GridBagConstraints.*;
@@ -250,12 +252,16 @@ class VueJeu extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         mainPanel.add(vueNiveau, c);
 
-        j1.setName((controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
+        j1.setName((!controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
 
-        j2.setName((controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
+        j2.setName((!controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
+
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.addKeyListener(new AdaptateurClavier(controleur));
+        topFrame.requestFocus();
         vueNiveau.miseAJour();
         texteJeu.setText("C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
 //        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");

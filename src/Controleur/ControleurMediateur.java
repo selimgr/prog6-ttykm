@@ -160,7 +160,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             default:
                 System.out.println("Touche inconnue : " + touche);
-
         }
     }
 

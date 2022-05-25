@@ -246,10 +246,10 @@ class VueJeu extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         mainPanel.add(vueNiveau, c);
 
-        j1.setName((controleur.jeu().joueur1().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur1().nom());
+        j1.setName((controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
 
-        j2.setName((controleur.jeu().joueur2().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur2().nom());
+        j2.setName((controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
         vueNiveau.miseAJour();

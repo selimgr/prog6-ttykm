@@ -71,6 +71,7 @@ class VueJeu extends JPanel {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(false);
         JMenuBar menuBar = new JMenuBar();
+        menuBar.setOpaque(false);
         menuBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         menuBar.setMargin(new Insets(10, 10, 2, 14));
         buttonsPanel.add(menuBar);

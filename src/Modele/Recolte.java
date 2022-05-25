@@ -1,6 +1,7 @@
 package Modele;
 
 public class Recolte extends Coup {
+    private Case graine;
 
     Recolte(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
@@ -11,8 +12,20 @@ public class Recolte extends Coup {
     }
 
     @Override
+    public Case depart() {
+        verifierCoupCree("Impossible de récupérer la case de départ");
+        return graine;
+    }
+
+    @Override
+    public Case arrivee() {
+        verifierCoupCree("Impossible de récupérer la case d'arrivée");
+        return null;
+    }
+
+    @Override
     boolean creer(int destL, int destC, Epoque eDest) {
-        verifierPremierCoupCree();
+        verifierAucunCoupCree();
 
         int dL = destL - pion().ligne();
         int dC = destC - pion().colonne();
@@ -21,6 +34,7 @@ public class Recolte extends Coup {
         if (!estCorrecte(dL, dC, dEpoque) || !plateau().aGraine(destL, destC, eDest)) {
             return false;
         }
+        graine = new Case(destL, destC, eDest);
         supprimer(Piece.GRAINE, destL, destC, eDest);
 
         if (eDest.indice() + 1 < Epoque.NOMBRE) {

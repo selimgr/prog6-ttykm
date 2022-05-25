@@ -43,12 +43,36 @@ public class Joueur {
         return nom;
     }
 
+    public boolean estHumain() {
+        return type == TypeJoueur.HUMAIN;
+    }
+
     public TypeJoueur type() {
         return type;
     }
 
+    public boolean estIaFacile() {
+        return type == TypeJoueur.IA_FACILE;
+    }
+
+    public boolean estIaMoyen() {
+        return type == TypeJoueur.IA_MOYEN;
+    }
+
+    public boolean estIaDifficile() {
+        return type == TypeJoueur.IA_DIFFICILE;
+    }
+
     public Pion pions() {
         return pions;
+    }
+
+    public boolean aPionsBlancs() {
+        return pions == Pion.BLANC;
+    }
+
+    public boolean aPionsNoirs() {
+        return pions == Pion.NOIR;
     }
 
     public int handicap() {
@@ -57,6 +81,18 @@ public class Joueur {
 
     public Epoque focus() {
         return focus;
+    }
+
+    public boolean aFocusPasse() {
+        return focus == Epoque.PASSE;
+    }
+
+    public boolean aFocusPresent() {
+        return focus == Epoque.PRESENT;
+    }
+
+    public boolean aFocusFutur() {
+        return focus == Epoque.FUTUR;
     }
 
     void fixerFocus(Epoque e) {
@@ -82,7 +118,7 @@ public class Joueur {
         nombrePionsReserve--;
     }
 
-    int nombreVictoires() {
+    public int nombreVictoires() {
         return nombreVictoires;
     }
 

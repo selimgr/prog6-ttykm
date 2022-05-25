@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+// TODO: Résoudre le bug d'affichage du focus quand on crée une nouvelle partie après une première partie terminée
+
 class VueNiveau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
     CPlateau passe, present, futur;

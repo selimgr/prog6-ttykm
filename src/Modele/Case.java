@@ -34,7 +34,8 @@ public class Case {
         return "(" + ligne + ", " + colonne + ", " + epoque + ")";
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -51,7 +52,8 @@ public class Case {
         return true;
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(attributs());
     }
 

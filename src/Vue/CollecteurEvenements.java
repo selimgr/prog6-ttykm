@@ -1,6 +1,5 @@
 package Vue;
 
-import Modele.Action;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
@@ -34,15 +33,11 @@ public interface CollecteurEvenements {
 
     void annuler();
 
+    void refaire();
+
     void selectionnerPlanterGraine();
 
     void selectionnerRecolterGraine();
-
-    void changerFocusPasse();
-
-    void changerFocusPresent();
-
-    void changerFocusFutur();
 
     void toucheClavier(String touche);
 

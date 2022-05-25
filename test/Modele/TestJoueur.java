@@ -29,14 +29,51 @@ public class TestJoueur {
                         Joueur joueur = new Joueur(nom, type, pion, l);
                         assertEquals(nom, joueur.nom());
                         assertEquals(type, joueur.type());
+
+                        switch (type) {
+                            case HUMAIN:
+                                assertTrue(joueur.estHumain());
+                                assertFalse(joueur.estIaFacile());
+                                assertFalse(joueur.estIaMoyen());
+                                assertFalse(joueur.estIaDifficile());
+                                break;
+                            case IA_FACILE:
+                                assertFalse(joueur.estHumain());
+                                assertTrue(joueur.estIaFacile());
+                                assertFalse(joueur.estIaMoyen());
+                                assertFalse(joueur.estIaDifficile());
+                                break;
+                            case IA_MOYEN:
+                                assertFalse(joueur.estHumain());
+                                assertFalse(joueur.estIaFacile());
+                                assertTrue(joueur.estIaMoyen());
+                                assertFalse(joueur.estIaDifficile());
+                                break;
+                            case IA_DIFFICILE:
+                                assertFalse(joueur.estHumain());
+                                assertFalse(joueur.estIaFacile());
+                                assertFalse(joueur.estIaMoyen());
+                                assertTrue(joueur.estIaDifficile());
+                                break;
+                        }
+
                         assertEquals(pion, joueur.pions());
                         assertEquals(l, joueur.handicap());
 
-                        assertNull(joueur.focus());
                         joueur.initialiserJoueur();
                         if (pion == Pion.BLANC) {
+                            assertTrue(joueur.aPionsBlancs());
+                            assertFalse(joueur.aPionsNoirs());
+                            assertTrue(joueur.aFocusPasse());
+                            assertFalse(joueur.aFocusPresent());
+                            assertFalse(joueur.aFocusFutur());
                             assertEquals(Epoque.PASSE, joueur.focus());
                         } else {
+                            assertFalse(joueur.aPionsBlancs());
+                            assertTrue(joueur.aPionsNoirs());
+                            assertFalse(joueur.aFocusPasse());
+                            assertFalse(joueur.aFocusPresent());
+                            assertTrue(joueur.aFocusFutur());
                             assertEquals(Epoque.FUTUR, joueur.focus());
                         }
 
@@ -78,10 +115,19 @@ public class TestJoueur {
     @Test
     public void testFocus() {
         j.fixerFocus(Epoque.PASSE);
+        assertTrue(j.aFocusPasse());
+        assertFalse(j.aFocusPresent());
+        assertFalse(j.aFocusFutur());
         assertEquals(Epoque.PASSE, j.focus());
         j.fixerFocus(Epoque.PRESENT);
+        assertFalse(j.aFocusPasse());
+        assertTrue(j.aFocusPresent());
+        assertFalse(j.aFocusFutur());
         assertEquals(Epoque.PRESENT, j.focus());
         j.fixerFocus(Epoque.FUTUR);
+        assertFalse(j.aFocusPasse());
+        assertFalse(j.aFocusPresent());
+        assertTrue(j.aFocusFutur());
         assertEquals(Epoque.FUTUR, j.focus());
     }
 

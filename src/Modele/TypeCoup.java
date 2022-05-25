@@ -1,16 +1,16 @@
 package Modele;
 
-public enum Action {
-    MOUVEMENT("Mouvement", 0),
-    PLANTATION("Plantation", 1),
-    RECOLTE("Récolte", 2);
+public enum TypeCoup {
+    MOUVEMENT("Effectuer un mouvement", 0),
+    PLANTATION("Planter une graine", 1),
+    RECOLTE("Récolter une graine", 2);
 
     public static int NOMBRE = values().length;
 
     private final String nom;
     private final int valeur;
 
-    Action(String nom, int valeur) {
+    TypeCoup(String nom, int valeur) {
         this.nom = nom;
         this.valeur = valeur;
     }
@@ -19,7 +19,7 @@ public enum Action {
         return valeur;
     }
 
-    static Action depuisValeur(int valeur) {
+    static TypeCoup depuisValeur(int valeur) {
         switch (valeur) {
             case 0:
                 return MOUVEMENT;

@@ -45,55 +45,55 @@ public class TestCoup {
 
     @Test
     public void testDeplacerEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.deplacer(Piece.BLANC, 0, 0, Epoque.PASSE, 0, 1, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.deplacer(Piece.NOIR, 3, 3, Epoque.FUTUR, 3, 2, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.deplacer(Piece.BLANC, 1, 2, Epoque.PRESENT, 1, 1, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testAjouterEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.ajouter(Piece.NOIR, 0, 1, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.ajouter(Piece.NOIR, 3, 2, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.ajouter(Piece.NOIR, 1, 1, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
     @Test
     public void testSupprimerEtat() {
-        c1.verifierPremierCoupCree();
+        c1.verifierAucunCoupCree();
         c1.supprimer(Piece.BLANC, 0, 0, Epoque.PASSE);
-        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierPremierCoupCree);
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c2.verifierPremierCoupCree();
+        c2.verifierAucunCoupCree();
         c2.supprimer(Piece.NOIR, 3, 3, Epoque.FUTUR);
-        e = assertThrows(IllegalStateException.class, c2::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c2::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
 
-        c3.verifierPremierCoupCree();
+        c3.verifierAucunCoupCree();
         c3.supprimer(Piece.BLANC, 1, 2, Epoque.PRESENT);
-        e = assertThrows(IllegalStateException.class, c3::verifierPremierCoupCree);
+        e = assertThrows(IllegalStateException.class, c3::verifierAucunCoupCree);
         assertTrue(e.getMessage().contains("Impossible de créer un nouveau coup : un coup a déjà été créé"));
     }
 
@@ -220,5 +220,252 @@ public class TestCoup {
         assertEquals(1, c3.pion().ligne());
         assertEquals(2, c3.pion().colonne());
         assertEquals(Epoque.PRESENT, c3.pion().epoque());
+    }
+
+    @Test
+    public void testPion() {
+        // Déplacement
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(0, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.creer(0, 1, Epoque.PASSE);
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(0, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.jouer();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.annuler();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(0, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+
+        // Voyage temporel
+        c1.jouer();
+        c1 = new Mouvement(p, j1, 0, 1, Epoque.PASSE);
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.creer(0, 1, Epoque.PRESENT);
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+        c1.jouer();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PRESENT, c1.pion().epoque());
+        c1.annuler();
+        assertEquals(0, c1.pion().ligne());
+        assertEquals(1, c1.pion().colonne());
+        assertEquals(Epoque.PASSE, c1.pion().epoque());
+
+        // Plantation
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+        c2.creer(2, 3, Epoque.FUTUR);
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+        c2.jouer();
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+        c2.annuler();
+        assertEquals(3, c2.pion().ligne());
+        assertEquals(3, c2.pion().colonne());
+        assertEquals(Epoque.FUTUR, c2.pion().epoque());
+
+        // Récolte
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
+        c3.creer(1, 1, Epoque.PRESENT);
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
+        c3.jouer();
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
+        c3.annuler();
+        assertEquals(1, c3.pion().ligne());
+        assertEquals(2, c3.pion().colonne());
+        assertEquals(Epoque.PRESENT, c3.pion().epoque());
+    }
+
+    @Test
+    public void testDepart() {
+        // Déplacement
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::depart);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case de départ : aucun coup créé"));
+        c1.creer(0, 1, Epoque.PASSE);
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(0, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+        c1.jouer();
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(0, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+        c1.annuler();
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(0, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+
+        // Voyage temporel
+        c1.jouer();
+        c1 = new Mouvement(p, j1, 0, 1, Epoque.PASSE);
+        e = assertThrows(IllegalStateException.class, c1::depart);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case de départ : aucun coup créé"));
+        c1.creer(0, 1, Epoque.PRESENT);
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(1, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+        c1.jouer();
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(1, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+        c1.annuler();
+        assertEquals(0, c1.depart().ligne());
+        assertEquals(1, c1.depart().colonne());
+        assertEquals(Epoque.PASSE, c1.depart().epoque());
+
+        // Plantation
+        e = assertThrows(IllegalStateException.class, c2::depart);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case de départ : aucun coup créé"));
+        c2.creer(2, 3, Epoque.FUTUR);
+        assertNull(c2.depart());
+        c2.jouer();
+        assertNull(c2.depart());
+        c2.annuler();
+        assertNull(c2.depart());
+
+        // Récolte
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        e = assertThrows(IllegalStateException.class, c3::depart);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case de départ : aucun coup créé"));
+        c3.creer(1, 1, Epoque.PRESENT);
+        assertEquals(1, c3.depart().ligne());
+        assertEquals(1, c3.depart().colonne());
+        assertEquals(Epoque.PRESENT, c3.depart().epoque());
+        c3.jouer();
+        assertEquals(1, c3.depart().ligne());
+        assertEquals(1, c3.depart().colonne());
+        assertEquals(Epoque.PRESENT, c3.depart().epoque());
+        c3.annuler();
+        assertEquals(1, c3.depart().ligne());
+        assertEquals(1, c3.depart().colonne());
+        assertEquals(Epoque.PRESENT, c3.depart().epoque());
+    }
+
+    @Test
+    public void testArrivee() {
+        // Déplacement
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::arrivee);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case d'arrivée : aucun coup créé"));
+        c1.creer(0, 1, Epoque.PASSE);
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PASSE, c1.arrivee().epoque());
+        c1.jouer();
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PASSE, c1.arrivee().epoque());
+        c1.annuler();
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PASSE, c1.arrivee().epoque());
+
+        // Voyage temporel
+        c1.jouer();
+        c1 = new Mouvement(p, j1, 0, 1, Epoque.PASSE);
+        e = assertThrows(IllegalStateException.class, c1::arrivee);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case d'arrivée : aucun coup créé"));
+        c1.creer(0, 1, Epoque.PRESENT);
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PRESENT, c1.arrivee().epoque());
+        c1.jouer();
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PRESENT, c1.arrivee().epoque());
+        c1.annuler();
+        assertEquals(0, c1.arrivee().ligne());
+        assertEquals(1, c1.arrivee().colonne());
+        assertEquals(Epoque.PRESENT, c1.arrivee().epoque());
+
+        // Plantation
+        e = assertThrows(IllegalStateException.class, c2::arrivee);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case d'arrivée : aucun coup créé"));
+        c2.creer(2, 3, Epoque.FUTUR);
+        assertEquals(2, c2.arrivee().ligne());
+        assertEquals(3, c2.arrivee().colonne());
+        assertEquals(Epoque.FUTUR, c2.arrivee().epoque());
+        c2.jouer();
+        assertEquals(2, c2.arrivee().ligne());
+        assertEquals(3, c2.arrivee().colonne());
+        assertEquals(Epoque.FUTUR, c2.arrivee().epoque());
+        c2.annuler();
+        assertEquals(2, c2.arrivee().ligne());
+        assertEquals(3, c2.arrivee().colonne());
+        assertEquals(Epoque.FUTUR, c2.arrivee().epoque());
+
+        // Récolte
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        e = assertThrows(IllegalStateException.class, c3::arrivee);
+        assertTrue(e.getMessage().contains("Impossible de récupérer la case d'arrivée : aucun coup créé"));
+        c3.creer(1, 1, Epoque.PRESENT);
+        assertNull(c3.arrivee());
+        c3.jouer();
+        assertNull(c3.arrivee());
+        c3.annuler();
+        assertNull(c3.arrivee());
+    }
+
+    @Test
+    public void testEstMouvement() {
+        IllegalStateException e = assertThrows(IllegalStateException.class, c1::estMouvement);
+        assertTrue(e.getMessage().contains("Impossible de vérifier si le coup est un mouvement : aucun coup créé"));
+
+        // Déplacement
+        c1.creer(0, 1, Epoque.PASSE);
+        assertTrue(c1.estMouvement());
+        assertFalse(c1.estPlantation());
+        assertFalse(c1.estRecolte());
+        c1.jouer();
+
+        // Voyage Temporel
+        c1 = new Mouvement(p, j1, 0, 1, Epoque.PASSE);
+        c1.creer(0, 1, Epoque.PRESENT);
+        assertTrue(c1.estMouvement());
+        assertFalse(c1.estPlantation());
+        assertFalse(c1.estRecolte());
+    }
+
+    @Test
+    public void testEstPlantation() {
+        IllegalStateException e = assertThrows(IllegalStateException.class, c2::estPlantation);
+        assertTrue(e.getMessage().contains("Impossible de vérifier si le coup est une plantation : aucun coup créé"));
+
+        // Déplacement
+        c2.creer(2, 3, Epoque.FUTUR);
+        assertTrue(c2.estPlantation());
+        assertFalse(c2.estMouvement());
+        assertFalse(c2.estRecolte());
+    }
+
+    @Test
+    public void testEstRecolte() {
+        IllegalStateException e = assertThrows(IllegalStateException.class, c3::estRecolte);
+        assertTrue(e.getMessage().contains("Impossible de vérifier si le coup est une récolte : aucun coup créé"));
+
+        // Déplacement
+        p.ajouter(1, 1, Epoque.PRESENT, Piece.GRAINE);
+        c3.creer(1, 1, Epoque.PRESENT);
+        assertTrue(c3.estRecolte());
+        assertFalse(c3.estMouvement());
+        assertFalse(c3.estPlantation());
     }
 }

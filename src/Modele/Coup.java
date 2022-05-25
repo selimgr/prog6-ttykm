@@ -8,7 +8,7 @@ public abstract class Coup {
     private final Plateau plateau;
     private final Joueur joueur;
     private final Case pion;
-    private final Deque<Etat> etats;
+    private final Deque<Effet> etats;
     private boolean coupJoue;
 
     Coup(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
@@ -26,23 +26,60 @@ public abstract class Coup {
         return joueur;
     }
 
+    /**
+     * Position actuelle du pion sélectionné jouant le coup
+     * @return La case où se situe actuellement le pion
+     */
     Case pion() {
         return pion;
     }
 
+    protected void verifierCoupCree(String message) {
+        if (etats.isEmpty()) {
+            throw new IllegalStateException(message + " : aucun coup créé");
+        }
+    }
+
+    /**
+     * Case sur laquelle sur la pièce jouée au départ du coup
+     * @return La case de départ du coup
+     */
+    abstract public Case depart();
+
+    /**
+     * Case sur laquelle sur la pièce jouée à la fin du coup
+     * @return La case d'arrivée du coup
+     */
+    abstract public Case arrivee();
+
+    public boolean estMouvement() {
+        verifierCoupCree("Impossible de vérifier si le coup est un mouvement");
+        return etats.element().piece() == Piece.BLANC || etats.element().piece() == Piece.NOIR;
+    }
+
+    public boolean estPlantation() {
+        verifierCoupCree("Impossible de vérifier si le coup est une plantation");
+        return etats.element().piece() == Piece.GRAINE && etats.element().depart() == null;
+    }
+
+    public boolean estRecolte() {
+        verifierCoupCree("Impossible de vérifier si le coup est une récolte");
+        return etats.element().piece() == Piece.GRAINE && etats.element().arrivee() == null;
+    }
+
     protected void deplacer(Piece p, int departL, int departC, Epoque eDepart, int arriveeL, int arriveeC, Epoque eArrivee) {
-        etats.add(new Etat(p, new Case(departL, departC, eDepart), new Case(arriveeL, arriveeC, eArrivee)));
+        etats.add(new Effet(p, new Case(departL, departC, eDepart), new Case(arriveeL, arriveeC, eArrivee)));
     }
 
     protected void ajouter(Piece p, int l, int c, Epoque e) {
-        etats.add(new Etat(p, null, new Case(l, c, e)));
+        etats.add(new Effet(p, null, new Case(l, c, e)));
     }
 
     protected void supprimer(Piece p, int l, int c, Epoque e) {
-        etats.add(new Etat(p, new Case(l, c, e), null));
+        etats.add(new Effet(p, new Case(l, c, e), null));
     }
 
-    protected void verifierPremierCoupCree() {
+    protected void verifierAucunCoupCree() {
         if (!etats.isEmpty()) {
             throw new IllegalStateException("Impossible de créer un nouveau coup : un coup a déjà été créé");
         }
@@ -60,10 +97,10 @@ public abstract class Coup {
         coupJoue = true;
 
         // On parcourt les états dans le sens inverse
-        Iterator<Etat> it = etats.descendingIterator();
+        Iterator<Effet> it = etats.descendingIterator();
 
         while (it.hasNext()) {
-            Etat q = it.next();
+            Effet q = it.next();
 
             // On supprime la pièce sur la case de départ
             if (q.depart() != null) {
@@ -95,7 +132,7 @@ public abstract class Coup {
         }
         coupJoue = false;
 
-        for (Etat q : etats) {
+        for (Effet q : etats) {
             if (q.arrivee() != null) {
                 // Si la pièce est un arbre, on supprime l'arbre couché correspondant sur la case d'arrivée
                 if (q.piece() == Piece.ARBRE && q.depart() != null) {

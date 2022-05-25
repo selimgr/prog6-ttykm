@@ -5,6 +5,7 @@ import Vue.CollecteurEvenements;
 import Vue.Vues;
 
 // TODO: A tester
+
 // TODO: Compléter le controleur
 
 public class ControleurMediateur implements CollecteurEvenements {
@@ -88,41 +89,49 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void afficherRegles() {vues.afficherR();}
-
-    @Override
-    public void jouer(int l, int c, Epoque e) {
-        jeu.jouer(l, c, e);
-    }
-
-    @Override
-    public void annuler() {
-        jeu.annuler();
+    public void afficherRegles() {
+        vues.afficherR();
     }
 
     @Override
     public void selectionnerPlanterGraine() {
-        jeu.selectionnerPlantation();
+        if (!jeu().prochaineActionJouerCoup()) {
+            return;
+        }
+
+        if (jeu().prochainCoupPlantation()) {
+            jeu().selectionnerMouvement();
+        } else {
+            jeu().selectionnerPlantation();
+        }
     }
 
     @Override
     public void selectionnerRecolterGraine() {
-        jeu.selectionnerRecolte();
+        if (!jeu().prochaineActionJouerCoup()) {
+            return;
+        }
+
+        if (jeu.prochainCoupRecolte()) {
+            jeu().selectionnerMouvement();
+        } else {
+            jeu().selectionnerRecolte();
+        }
     }
 
     @Override
-    public void changerFocusPasse() {
-        jeu.focusPasse();
+    public void jouer(int l, int c, Epoque e) {
+        jeu().jouer(l, c, e);
     }
 
     @Override
-    public void changerFocusPresent() {
-        jeu.focusPresent();
+    public void annuler() {
+        jeu().annuler();
     }
 
     @Override
-    public void changerFocusFutur() {
-        jeu.focusFutur();
+    public void refaire() {
+        jeu().refaire();
     }
 
     @Override

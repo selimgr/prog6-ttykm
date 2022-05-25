@@ -93,7 +93,7 @@ class VueJeu extends JPanel {
         regles.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent menuEvent) {
-//                c.afficherRegles();
+                controleur.afficherRegles();
             }
             @Override
             public void menuDeselected(MenuEvent menuEvent) {}
@@ -217,11 +217,11 @@ class VueJeu extends JPanel {
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
-//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
+        recolter.addActionListener((e) -> controleur.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
-//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
+        planter.addActionListener((e) -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         seedsButtons.add(planter);

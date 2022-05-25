@@ -79,27 +79,21 @@ class VueJeu extends JPanel {
         menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
         menuBar.add(menu);
 
-        JComponent[] menu_items = {
+        JMenuItem[] menu_items = {
                 new JCheckBoxMenuItem("Musique"),
                 new JMenuItem("Sauvegarder"),
                 new JMenuItem("Menu principal"),
                 new JMenuItem("Quitter")
         };
 
-        for (JComponent menu_item: menu_items)
+        menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[3].addActionListener(e -> controleur.toClose());
+
+        for (JMenuItem menu_item: menu_items)
             menu.add(menu_item);
 
         JMenu regles = new JMenu();
-        regles.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent menuEvent) {
-//                c.afficherRegles();
-            }
-            @Override
-            public void menuDeselected(MenuEvent menuEvent) {}
-            @Override
-            public void menuCanceled(MenuEvent menuEvent) {}
-        });
+        regles.addActionListener(e -> controleur.afficherRegles());
         regles.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
         menuBar.add(regles);
 

@@ -8,16 +8,15 @@ import static java.util.Objects.requireNonNull;
 
 // TODO: Ajouter des logs quand des actions correctes et incorrectes sont effectuées
 
-// TODO: Prendre en compte le fait que annuler doit pouvoir annuler le changement du focus (gérer dans l'historique)
-
 public class Jeu extends Observable {
     private Plateau plateau;
     private Joueur joueur1;
     private Joueur joueur2;
     private int joueurActuel;
     private Tour tourActuel;
-    private Action prochaineAction;
+    private TypeCoup prochainCoup;
     private boolean partieTerminee;
+    private Historique historique;
     private final Random rand;
 
     public Jeu() {
@@ -62,23 +61,10 @@ public class Jeu extends Observable {
         joueur1.initialiserJoueur();
         joueur2.initialiserJoueur();
         plateau = new Plateau();
-        tourActuel = new Tour();
         partieTerminee = false;
+        historique = new Historique();
+        tourActuel = historique.nouveauTour(joueurActuel().focus());
         metAJour();
-    }
-
-    private void verifierPartieCree(String message) {
-        if (joueurActuel == -1) {
-            throw new IllegalStateException(message + " : aucune partie créée");
-        }
-    }
-
-    private void verifierPartieEnCours(String message) {
-        verifierPartieCree(message);
-
-        if (partieTerminee()) {
-            throw new IllegalStateException(message + " : partie terminée");
-        }
     }
 
     public Plateau plateau() {
@@ -97,8 +83,6 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueurActuel() {
-        verifierPartieEnCours("Impossible de récupérer le joueur actuel");
-
         if (joueurActuel == 0) {
             return joueur1();
         }
@@ -106,136 +90,84 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueurSuivant() {
-        verifierPartieEnCours("Impossible de récupérer le joueur suivant");
         if (joueurActuel == 0) {
             return joueur2();
         }
         return joueur1();
     }
 
+    public void selectionnerMouvement() {
+        prochainCoup = TypeCoup.MOUVEMENT;
+        metAJour();
+    }
+
     public void selectionnerPlantation() {
-        verifierPartieEnCours("Impossible de sélectionner l'action planter une graine");
-
-        if (prochaineActionSelectionPion() || prochaineActionChangementFocus()) {
-            return;
-        }
-
-        if (prochaineAction == Action.PLANTATION) {
-            prochaineAction = Action.MOUVEMENT;
-        } else {
-            prochaineAction = Action.PLANTATION;
-        }
+        prochainCoup = TypeCoup.PLANTATION;
+        metAJour();
     }
 
     public void selectionnerRecolte() {
-        verifierPartieEnCours("Impossible de sélectionner l'action récolter une graine");
+        prochainCoup = TypeCoup.RECOLTE;
+        metAJour();
+    }
 
-        if (prochaineActionSelectionPion() || prochaineActionChangementFocus()) {
-            return;
+    public void jouer(int l, int c, Epoque e) {
+        if (prochaineActionSelectionPion()) {
+            selectionnerPion(l, c, e);
         }
+        else if (prochaineActionJouerCoup()) {
+            Coup coup;
 
-        if (prochaineAction == Action.RECOLTE) {
-            prochaineAction = Action.MOUVEMENT;
-        } else {
-            prochaineAction = Action.RECOLTE;
+            switch (prochainCoup) {
+                case MOUVEMENT:
+                    if (tourActuel.deselectionnerPion(l, c, e)) {
+                        metAJour();
+                        return;
+                    }
+                    coup = new Mouvement(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
+                            tourActuel.epoquePion());
+                    break;
+                case PLANTATION:
+                    coup = new Plantation(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
+                            tourActuel.epoquePion());
+                    break;
+                default:
+                    coup = new Recolte(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
+                            tourActuel.epoquePion());
+                    break;
+            }
+            jouerCoup(coup, l, c, e);
+        }
+        else {
+            changerFocus(e);
         }
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {
-        if (e == joueurActuel().focus() && (
-                (joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) ||
-                (joueurActuel().aPionsNoirs() && plateau.aNoir(l, c, e)))) {
-            tourActuel.selectionnerPion(l, c, e);
-            this.plateau.briller(l,c,e);
+        if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
+                plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
+            selectionnerMouvement();
         }
     }
 
-    public void jouer(int l, int c, Epoque e) {
-        if(this.partieTerminee()){
-            return ;
-        }
-        verifierPartieEnCours("Impossible de jouer");
-
-        if (prochaineActionChangementFocus()) {
-            changerFocus(e);
-            plateau.resetBrillance();
-            return;
-        }
-
-        if (prochaineActionSelectionPion()) {
-            selectionnerPion(l, c, e);
-            prochaineAction = Action.MOUVEMENT;
-            metAJour();
-            return;
-        }
-
-        switch (prochaineAction) {
-            case MOUVEMENT:
-                jouerMouvement(l, c, e);
-                break;
-            case PLANTATION:
-                jouerPlantation(l, c, e);
-                break;
-            case RECOLTE:
-                jouerRecolte(l, c, e);
-                break;
-        }
-        prochaineAction = Action.MOUVEMENT;
-    }
-
-    private void jouerMouvement(int l, int c, Epoque e) {
-        if (tourActuel.deselectionnerPion(l, c, e)) {
-            metAJour();
-            return;
-        }
-        Coup coup = new Mouvement(
-                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
-        );
+    private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
-            this.plateau.briller(l,c,e);
-            metAJour();
+            selectionnerMouvement();
         }
     }
 
-    private void jouerPlantation(int l, int c, Epoque e) {
-        Coup coup = new Plantation(
-                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
-        );
-        if (tourActuel.jouerCoup(coup, l, c, e)) {
-            metAJour();
-        }
-    }
-
-    private void jouerRecolte(int arriveeL, int arriveeC, Epoque eArrivee) {
-        Coup coup = new Recolte(
-                plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
-        );
-        if (tourActuel.jouerCoup(coup, arriveeL, arriveeC, eArrivee)) {
-            metAJour();
-        }
-    }
-
-    public void annuler() {
-        verifierPartieCree("Impossible d'annuler");
-
-        if (tourActuel.annulerCoup()) {
-            metAJour();
-        }
-        prochaineAction = Action.MOUVEMENT;
-    }
-
-    private void changerFocus(Epoque nouveau) {
-        if (joueurActuel().focus() == nouveau) {
+    private void changerFocus(Epoque e) {
+        if (!tourActuel.changerFocus(e)) {
             return;
         }
-        joueurActuel().fixerFocus(nouveau);
+        joueurActuel().fixerFocus(e);
         joueurActuel = (joueurActuel + 1) % 2;
 
         if (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2) {
             partieTerminee = true;
             ajouterVictoire();
         } else {
-            tourActuel = new Tour();
+            tourActuel = historique.nouveauTour(joueurActuel().focus());
         }
         metAJour();
     }
@@ -253,6 +185,32 @@ public class Jeu extends Observable {
             } else {
                 joueur2.ajouterVictoire();
             }
+        }
+    }
+
+    public void annuler() {
+        if (!historique.peutAnnuler()) {
+            return;
+        }
+
+        if (!tourActuel.pionSelectionne()) {
+            tourActuel = historique.tourPrecedent();
+        }
+        if (tourActuel.annuler()) {
+            selectionnerMouvement();
+        }
+    }
+
+    public void refaire() {
+        if (!historique.peutRefaire()) {
+            return;
+        }
+
+        if (tourActuel.termine()) {
+            tourActuel = historique.tourSuivant();
+        }
+        if (tourActuel.refaire()) {
+            selectionnerMouvement();
         }
     }
 
@@ -275,30 +233,29 @@ public class Jeu extends Observable {
     }
 
     public boolean prochaineActionSelectionPion() {
-        verifierPartieCree("Impossible de récupérer la prochaine action");
-        return !tourActuel.pionSelectionne() && tourActuel.nombreCoupsRestants() == 2;
+        return !tourActuel.pionSelectionne() && !prochaineActionChangementFocus();
     }
 
-    public boolean prochaineActionMouvement() {
-        verifierPartieCree("Impossible de récupérer la prochaine action");
-        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.MOUVEMENT;
-    }
-
-    public boolean prochaineActionPlantation() {
-        verifierPartieCree("Impossible de récupérer la prochaine action");
-        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.PLANTATION;
-    }
-
-    public boolean prochaineActionRecolte() {
-        verifierPartieCree("Impossible de récupérer la prochaine action");
-        return !prochaineActionSelectionPion() && !prochaineActionChangementFocus() && prochaineAction == Action.RECOLTE;
+    public boolean prochaineActionJouerCoup() {
+        return tourActuel.pionSelectionne() && !prochaineActionChangementFocus();
     }
 
     public boolean prochaineActionChangementFocus() {
-        verifierPartieCree("Impossible de récupérer la prochaine action");
         int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        return tourActuel.nombreCoupsRestants() == 0 ||
-                (nombrePionPlateau == 0 && (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
+        return tourActuel.nombreCoupsRestants() == 0 || (nombrePionPlateau == 0 &&
+                (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
+    }
+
+    public boolean prochainCoupMouvement() {
+        return prochainCoup == TypeCoup.MOUVEMENT;
+    }
+
+    public boolean prochainCoupPlantation() {
+        return prochainCoup == TypeCoup.PLANTATION;
+    }
+
+    public boolean prochainCoupRecolte() {
+        return prochainCoup == TypeCoup.RECOLTE;
     }
 }

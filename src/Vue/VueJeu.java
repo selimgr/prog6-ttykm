@@ -80,27 +80,21 @@ class VueJeu extends JPanel {
         menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
         menuBar.add(menu);
 
-        JComponent[] menu_items = {
+        JMenuItem[] menu_items = {
                 new JCheckBoxMenuItem("Musique"),
                 new JMenuItem("Sauvegarder"),
                 new JMenuItem("Menu principal"),
                 new JMenuItem("Quitter")
         };
 
-        for (JComponent menu_item: menu_items)
+        menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[3].addActionListener(e -> controleur.toClose());
+
+        for (JMenuItem menu_item: menu_items)
             menu.add(menu_item);
 
         JMenu regles = new JMenu();
-        regles.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent menuEvent) {
-                controleur.afficherRegles();
-            }
-            @Override
-            public void menuDeselected(MenuEvent menuEvent) {}
-            @Override
-            public void menuCanceled(MenuEvent menuEvent) {}
-        });
+        regles.addActionListener(e -> controleur.afficherRegles());
         regles.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
         menuBar.add(regles);
 
@@ -218,11 +212,11 @@ class VueJeu extends JPanel {
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
-        recolter.addActionListener((e) -> controleur.selectionnerRecolterGraine());
+//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
-        planter.addActionListener((e) -> controleur.selectionnerPlanterGraine());
+//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         seedsButtons.add(planter);
@@ -252,10 +246,10 @@ class VueJeu extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         mainPanel.add(vueNiveau, c);
 
-        j1.setName((controleur.jeu().joueur1().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur1().nom());
+        j1.setName((controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
 
-        j2.setName((controleur.jeu().joueur2().type() != TypeJoueur.HUMAIN ? "IA : " : "") + controleur.jeu().joueur2().nom());
+        j2.setName((controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
         vueNiveau.miseAJour();

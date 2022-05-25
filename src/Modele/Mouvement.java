@@ -6,7 +6,7 @@ public class Mouvement extends Coup {
     private boolean positionPionChangee;
     private boolean voyageTemporelArriere;
 
-    Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
+    public Mouvement(Plateau p, Joueur j, int pionL, int pionC, Epoque ePion) {
         super(p, j, pionL, pionC, ePion);
         departPion = pion();
     }
@@ -24,7 +24,7 @@ public class Mouvement extends Coup {
     }
 
     @Override
-    Case pion() {
+    public Case pion() {
         if (positionPionChangee) {
             return arriveePion;
         }
@@ -44,7 +44,7 @@ public class Mouvement extends Coup {
     }
 
     @Override
-    boolean creer(int destL, int destC, Epoque eDest) {
+    public boolean creer(int destL, int destC, Epoque eDest) {
         verifierAucunCoupCree();
 
         int dL = destL - pion().ligne();
@@ -192,5 +192,9 @@ public class Mouvement extends Coup {
         }
         // On change remet la position de départ du pion
         positionPionChangee = false;
+    }
+    @Override
+    public String toString() {
+        return "Depart = "+ depart() + " - Arrivee = " + arrivee() +" estvoyageTemporelArriere : " + voyageTemporelArriere;
     }
 }

@@ -15,11 +15,11 @@ public enum Epoque {
         this.indice = indice;
     }
 
-     public int indice() {
+    public int indice() {
         return indice;
     }
 
-    static Epoque depuisIndice(int indice) {
+    static public Epoque depuisIndice(int indice) {
         switch (indice) {
             case 0:
                 return PASSE;

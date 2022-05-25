@@ -30,7 +30,8 @@ class VueJeu extends JPanel {
 
     VueJeu(CollecteurEvenements c) {
         controleur = c;
-
+        setFocusable(true);
+        this.addKeyListener(new AdaptateurClavier(controleur));
         jLayeredPane1 = new JLayeredPane();
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
@@ -183,9 +184,5 @@ class VueJeu extends JPanel {
 
         vueNiveau.miseAJour();
         JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
-    }
-
-    public int getTaille(){
-        return passe.getHeight();
     }
 }

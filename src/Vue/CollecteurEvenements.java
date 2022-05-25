@@ -41,4 +41,6 @@ public interface CollecteurEvenements {
     void toucheClavier(String touche);
 
     void temps();
+
+    void jouerIA();
 }

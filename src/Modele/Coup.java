@@ -85,7 +85,7 @@ public abstract class Coup {
         }
     }
 
-    abstract boolean creer(int destL, int destC, Epoque eDest);
+    public abstract boolean creer(int destL, int destC, Epoque eDest);
 
     public void jouer() {
         if (etats.isEmpty()) {

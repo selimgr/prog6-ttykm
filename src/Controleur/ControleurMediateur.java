@@ -11,6 +11,8 @@ import Vue.Vues;
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
+    IA ia1;
+    IA ia2;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -69,6 +71,22 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
         jeu.nouvellePartie();
         vues.nouvellePartie();
+        switch (typeJ1){
+            case IA_DIFFICILE:
+                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+            case IA_MOYEN:
+                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+            case IA_FACILE:
+                ia1 = new IA_Aleatoire(jeu,jeu.joueur1(),jeu.joueur2(),this);break;
+        }
+        switch (typeJ2){
+            case IA_DIFFICILE:
+                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+            case IA_MOYEN:
+                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+            case IA_FACILE:
+                ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
+        }
     }
 
     @Override
@@ -115,11 +133,25 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void toucheClavier(String touche) {
+        switch (touche) {
+            case "IA":
+                jouerIA();
+                break;
+            default:
+                System.out.println("Touche inconnue : " + touche);
 
+        }
     }
 
     @Override
     public void temps() {
+    }
 
+    @Override
+    public void jouerIA() {
+        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.prochaineActionSelectionPion() ) {
+            if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
+            else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
+        }
     }
 }

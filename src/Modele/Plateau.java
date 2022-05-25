@@ -1,11 +1,9 @@
 package Modele;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.ArrayList;
-
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
+import static java.util.Objects.requireNonNull;
 
 public class Plateau {
     private final int[][][] contenu;
@@ -31,6 +29,15 @@ public class Plateau {
         nombrePlateauVideBlanc = 0;
         nombrePlateauVideNoir = 0;
         nombreGrainesReserve = NOMBRE_MAX_GRAINES;
+    }
+    public void fixerPlateau(Plateau p){
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
+                    contenu[i][j][k] = p.contenu(j, k, Epoque.depuisIndice(i));
+                }
+            }
+        }
     }
 
     static boolean aMur(int l, int c) {
@@ -230,9 +237,9 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
-    List<Case> chercherPions(Joueur j){
+    private List<Case> chercherPions(Joueur j, Epoque e){
         ArrayList<Case> cases = new ArrayList<>();
-        Epoque e2 = j.focus();
+        Epoque e2 = e;
         Piece p = Piece.depuisValeur(j.pions().valeur());
         for (int l2 = 0; l2 < Plateau.TAILLE;l2++) {
             for (int c2 = 0; c2 < Plateau.TAILLE; c2++) {
@@ -240,32 +247,59 @@ public class Plateau {
             }
         }
 
-        return new ArrayList<Case>();
+        return cases;
     }
     // TODO : Implémenter casesJouables
-    ArrayList<Coup> casesJouables(Joueur j, boolean sel,  int l, int c, Epoque e){
+    public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
-        if (!sel)  pions = chercherPions(j);
+        if (!sel)  {
+            pions = chercherPions(j,j.focus());
+        }
         else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
+        gestionCoupsJouables(j, jouables, pions);
+        return jouables;
+    }
+
+    public int coupJouables(Joueur j){
+        ArrayList<Coup> jouables = new ArrayList<>();
+        List<Case> pions;
+        pions = chercherPions(j,Epoque.PASSE);
+        gestionCoupsJouables(j, jouables, pions);
+        pions = chercherPions(j,Epoque.PRESENT);
+        gestionCoupsJouables(j, jouables, pions);
+        pions = chercherPions(j,Epoque.FUTUR);
+        gestionCoupsJouables(j, jouables, pions);
+        return jouables.size();
+    }
+
+    private  void gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions){
         Iterator<Case> it  = pions.iterator();
+        ArrayList<Coup> coup = new ArrayList<>();
+        int i =0;
+
         while(it.hasNext()){
             Case cas = it.next();
             Epoque eActu = cas.epoque();
             // Mouvement possible :
-            Coup coup = new Mouvement(this,j,cas.ligne(),cas.colonne(),eActu);
-            if (coup.creer(1,0,eActu)) jouables.add(coup);
-            if (coup.creer(-1,0,eActu)) jouables.add(coup);
-            if (coup.creer(0,1,eActu)) jouables.add(coup);
-            if (coup.creer(0,-1,eActu)) jouables.add(coup);
-            if (coup.creer(0,0,Epoque.FUTUR)) jouables.add(coup);
-            if (coup.creer(1,0,Epoque.PRESENT)) jouables.add(coup);
-            if (coup.creer(0,0,Epoque.PASSE)) jouables.add(coup);
+            for (int k = 0; k <7 ;k++) {
+                coup.add(new Mouvement(this, j, cas.ligne(), cas.colonne(), eActu));
+            }
+                if (coup.get(i*7).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(i*7));
+                if (coup.get(i*7+1).creer(cas.ligne()-1,cas.colonne(),eActu) ) jouables.add(coup.get(i*7+1));
+                if (coup.get(i*7+2).creer(cas.ligne(), cas.colonne()+1, eActu) ) jouables.add(coup.get(i*7+2));
+                if (coup.get(i*7+3).creer(cas.ligne(), cas.colonne()-1,eActu) ) jouables.add(coup.get(i*7+3));
+                if (coup.get(i*7+4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR) ) jouables.add(coup.get(i*7+4));
+                if (coup.get(i*7+5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(i*7+5));
+                if (coup.get(i*7+6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(i*7+6));
+                i++;
             // TODO : Ajouter action sur les graines
             // ...
         }
-        return jouables;
+
+
     }
+
 
     // Utile pour l'IA
     public Plateau copier() {
@@ -282,5 +316,17 @@ public class Plateau {
         retour.nombrePlateauVideNoir = nombrePlateauVideNoir;
         retour.nombreGrainesReserve = nombreGrainesReserve;
         return retour;
+    }
+
+    public String hash() {
+        String plateauStr = "";
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
+                    plateauStr += this.contenu(j, k, Epoque.depuisIndice(i)) + " ";
+                }
+            }
+        }
+        return plateauStr;
     }
 }

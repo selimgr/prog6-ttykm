@@ -107,7 +107,6 @@ public class Jeu extends Observable {
 
     public Joueur joueurSuivant() {
         verifierPartieEnCours("Impossible de récupérer le joueur suivant");
-
         if (joueurActuel == 0) {
             return joueur2();
         }
@@ -147,6 +146,7 @@ public class Jeu extends Observable {
                 (joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) ||
                 (joueurActuel().aPionsNoirs() && plateau.aNoir(l, c, e)))) {
             tourActuel.selectionnerPion(l, c, e);
+            this.plateau.briller(l,c,e);
         }
     }
 
@@ -158,6 +158,7 @@ public class Jeu extends Observable {
 
         if (prochaineActionChangementFocus()) {
             changerFocus(e);
+            plateau.resetBrillance();
             return;
         }
 
@@ -191,6 +192,7 @@ public class Jeu extends Observable {
                 plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(), tourActuel.epoquePion()
         );
         if (tourActuel.jouerCoup(coup, l, c, e)) {
+            this.plateau.briller(l,c,e);
             metAJour();
         }
     }

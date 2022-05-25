@@ -140,18 +140,21 @@ public class Jeu extends Observable {
         }
         else {
             changerFocus(e);
+            plateau.resetBrillance();
         }
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
+            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }
 
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
+            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }

@@ -1,13 +1,10 @@
 package Vue;
 
-import Modele.TypeJoueur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
 
 import  javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.util.Objects;
 
@@ -182,9 +179,16 @@ class VueJeu extends JPanel {
         JPanel controlsPanel = new JPanel();
         controlsPanel.setOpaque(false);
 
-        controlsPanel.add(new JButton("<"));
-        controlsPanel.add(new JButton(">"));
-        controlsPanel.add(new JButton("Fin tour"));
+        JButton[] controls = {
+            new JButton("<"),
+            new JButton(">"),
+            new JButton("Fin tour")
+        };
+
+        controls[0].addActionListener(e -> controleur.annuler());
+        controls[1].addActionListener(e -> controleur.refaire());
+
+        for (JButton button: controls) controlsPanel.add(button);
 
         c.fill = GridBagConstraints.VERTICAL;
         c.anchor = GridBagConstraints.LINE_END;

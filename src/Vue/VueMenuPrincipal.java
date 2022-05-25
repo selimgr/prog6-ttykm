@@ -41,7 +41,9 @@ class VueMenuPrincipal extends JPanel {
         add(regles);
 
         add(Box.createRigidArea(new Dimension(10, 30)));
-        add(new JButton("Paramètres"));
+
+        JButton didacticiel = new JButton("Didacticiel");
+        add(didacticiel);
 
         JButton quitter = new JButton("Quitter");
         quitter.addActionListener((e) -> {
@@ -62,7 +64,6 @@ class VueMenuPrincipal extends JPanel {
             }
         });
 
-        JButton didacticiel, parametres;
     }
 
     @Override

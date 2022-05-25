@@ -24,6 +24,8 @@ public class VueMenuSaisies extends JPanel {
     private JComboBox typeJ2;
     private JComboBox niveauJ2;
     private JComboBox niveauJ1;
+    private JLabel JoueurCommence;
+    private JComboBox comboBox1;
 
     public VueMenuSaisies(CollecteurEvenements c) {
         controleur = c;
@@ -32,6 +34,8 @@ public class VueMenuSaisies extends JPanel {
         typeJ2 = new JComboBox();
         niveauJ1 = new JComboBox();
         niveauJ2 = new JComboBox();
+
+        comboBox1 = new JComboBox();
 
         MenuSaisies = this;
         $$$setupUI$$$();
@@ -46,12 +50,12 @@ public class VueMenuSaisies extends JPanel {
                     nomJ1.getText(),
                     TypeJoueur.values()[typeJ1.getSelectedIndex()],
                     Pion.NOIR,
-                    0,
+                    niveauJ1.getSelectedIndex(),
                     // --
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],
                     Pion.BLANC,
-                    3
+                    niveauJ2.getSelectedIndex()
             );
             c.afficherJeu();
         });
@@ -109,7 +113,7 @@ public class VueMenuSaisies extends JPanel {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        MenuSaisies.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        MenuSaisies.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuSaisies.setMaximumSize(new Dimension(441, 110));
         MenuSaisies.setMinimumSize(new Dimension(441, 110));
         MenuSaisies.setPreferredSize(new Dimension(441, 110));
@@ -166,13 +170,26 @@ public class VueMenuSaisies extends JPanel {
         Joueur2.add(niveauJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Boutons = new JPanel();
         Boutons.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        MenuSaisies.add(Boutons, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(600, 50), 0, false));
+        MenuSaisies.add(Boutons, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(600, 50), 0, false));
         jouerButton = new JButton();
         jouerButton.setText("Jouer");
         Boutons.add(jouerButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         menuPrincipalButton = new JButton();
         menuPrincipalButton.setText("Menu Principal");
         Boutons.add(menuPrincipalButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        MenuSaisies.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        JoueurCommence = new JLabel();
+        JoueurCommence.setText("Qui commence ?");
+        panel1.add(JoueurCommence, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        comboBox1 = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel5 = new DefaultComboBoxModel();
+        defaultComboBoxModel5.addElement("Joueur 1");
+        defaultComboBoxModel5.addElement("Joueur 2");
+        defaultComboBoxModel5.addElement("Aléatoire");
+        comboBox1.setModel(defaultComboBoxModel5);
+        panel1.add(comboBox1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         label1.setLabelFor(nomJ1);
     }
 

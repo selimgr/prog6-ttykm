@@ -17,11 +17,15 @@ public class CPlateau extends JPanel implements Observateur {
     Image current;
     CollecteurEvenements c;
     int num;
+    Image pionB = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionB.png"))).getImage();
+    Image pionN = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionN.png"))).getImage();
 
     public CPlateau(int numero, CollecteurEvenements c){
         Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();
         Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
         Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();
+
+
         this.c = c;
 
         num = numero;
@@ -69,14 +73,10 @@ public class CPlateau extends JPanel implements Observateur {
         for (int l = 0; l < Plateau.TAILLE; l++) {
             for (int c = 0; c < Plateau.TAILLE; c++) {
                 if (this.c.jeu().plateau().aBlanc(l, c, e)) {
-                    //System.out.println("A blanc offsetX = "+ offX+  "offset y = " + offY);
-                    g.setColor(Color.green);
-                    g.fillOval(c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2);
+                    g.drawImage(pionB, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
                 }
                 if (this.c.jeu().plateau().aNoir(l, c, e)) {
-                    //System.out.println("A noir offsetX = "+ offX+  "offset y = " + offY);
-                    g.setColor(Color.black);
-                    g.fillOval(c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2);
+                    g.drawImage(pionN, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
                 }
             }
         }

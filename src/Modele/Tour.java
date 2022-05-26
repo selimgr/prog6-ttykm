@@ -9,6 +9,11 @@ class Tour {
         nombreCoupsRestants = 2;
     }
 
+    // Temporaire
+    public int getNombreCoupsRestants(){
+        return  nombreCoupsRestants;
+    }
+
     int lignePion() {
         if (pion == null) {
             throw new IllegalStateException("Impossible de renvoyer la ligne du pion : pion non sélectionné");

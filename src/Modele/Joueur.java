@@ -95,7 +95,7 @@ public class Joueur {
         return focus == Epoque.FUTUR;
     }
 
-    void fixerFocus(Epoque e) {
+    public void fixerFocus(Epoque e) {
         requireNonNull(e, "L'époque du focus du joueur ne doit pas être null");
         focus = e;
     }

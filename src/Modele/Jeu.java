@@ -15,7 +15,7 @@ public class Jeu extends Observable {
     private Joueur joueur1;
     private Joueur joueur2;
     private int joueurActuel;
-    private Tour tourActuel;
+    public Tour tourActuel;
     private Action prochaineAction;
     private boolean partieTerminee;
     private final Random rand;
@@ -24,6 +24,11 @@ public class Jeu extends Observable {
         rand = new Random();
         joueurActuel = -1;
         partieTerminee = true;
+    }
+
+    //Temporaire
+    public int getNombreCoupsRestants(){
+        return  tourActuel.getNombreCoupsRestants();
     }
 
     public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
@@ -299,4 +304,6 @@ public class Jeu extends Observable {
         return tourActuel.nombreCoupsRestants() == 0 ||
                 (nombrePionPlateau == 0 && (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
     }
+
+
 }

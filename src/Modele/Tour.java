@@ -69,6 +69,9 @@ class Tour {
         if (e == focus) {
             pion = new Case(l, c, e);
             pionSelectionne = true;
+            coup1 = null;
+            coup2 = null;
+            focusChange = false;
         }
         return pionSelectionne;
     }
@@ -94,12 +97,14 @@ class Tour {
 
         if (nombreCoupsRestants == 2) {
             coup1 = coup;
+            coup2 = null;
         } else {
             coup2 = coup;
         }
         coup.jouer();
         pion = coup.pion();
         nombreCoupsRestants--;
+        prochainFocus = null;
         return true;
     }
 

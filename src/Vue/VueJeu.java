@@ -20,6 +20,7 @@ class VueJeu extends JPanel {
     private final CGraines seeds;
     private JLabel texteJeu;
     private final JPanel backgroundTop, backgroundBottom;
+    private JFrame topFrame;
 
     private JPanel mainPanel;
 
@@ -190,7 +191,10 @@ class VueJeu extends JPanel {
         controls[0].addActionListener(e -> controleur.annuler());
         controls[1].addActionListener(e -> controleur.refaire());
 
-        for (JButton button: controls) controlsPanel.add(button);
+        for (JButton button: controls) {
+            button.setFocusable(false);
+            controlsPanel.add(button);
+        }
 
         c.fill = GridBagConstraints.VERTICAL;
         c.anchor = GridBagConstraints.LINE_END;
@@ -259,9 +263,11 @@ class VueJeu extends JPanel {
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
 
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.addKeyListener(new AdaptateurClavier(controleur));
+        topFrame.setFocusable(true);
         topFrame.requestFocus();
+
         vueNiveau.miseAJour();
         texteJeu.setText("C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
 //        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");

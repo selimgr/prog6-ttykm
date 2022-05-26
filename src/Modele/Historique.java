@@ -26,12 +26,15 @@ public class Historique {
         return actuel.peutRefaire() || !suivants.isEmpty();
     }
 
+    void reinitialiserToursSuivants() {
+        suivants = new ArrayDeque<>();
+    }
+
     Tour nouveauTour(Epoque focus) {
         if (actuel != null) {
             precedents.push(actuel);
         }
         actuel = new Tour(focus);
-        suivants = new ArrayDeque<>();
         return actuel;
     }
 

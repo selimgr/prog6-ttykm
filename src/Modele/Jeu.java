@@ -146,12 +146,14 @@ public class Jeu extends Observable {
     private void selectionnerPion(int l, int c, Epoque e) {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
+            historique.reinitialiserToursSuivants();
             selectionnerMouvement();
         }
     }
 
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
+            historique.reinitialiserToursSuivants();
             selectionnerMouvement();
         }
     }
@@ -169,6 +171,7 @@ public class Jeu extends Observable {
         } else {
             tourActuel = historique.nouveauTour(joueurActuel().focus());
         }
+        historique.reinitialiserToursSuivants();
         metAJour();
     }
 

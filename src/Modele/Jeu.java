@@ -121,6 +121,7 @@ public class Jeu extends Observable {
             switch (prochainCoup) {
                 case MOUVEMENT:
                     if (tourActuel.deselectionnerPion(l, c, e)) {
+                        plateau.resetBrillance();
                         metAJour();
                         return;
                     }

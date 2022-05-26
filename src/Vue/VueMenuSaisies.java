@@ -52,7 +52,9 @@ public class VueMenuSaisies extends JPanel {
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],
                     Pion.BLANC,
-                    niveauJ2.getSelectedIndex()
+                    niveauJ2.getSelectedIndex(),
+                    // --
+                    comboBox1.getSelectedIndex()
             );
             c.afficherJeu();
         });

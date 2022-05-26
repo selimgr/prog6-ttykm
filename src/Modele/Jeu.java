@@ -18,6 +18,7 @@ public class Jeu extends Observable {
     private boolean partieTerminee;
     private Historique historique;
     private final Random rand;
+    private int choixJoueurDebut = -1;
 
     public Jeu() {
         rand = new Random();
@@ -52,7 +53,7 @@ public class Jeu extends Observable {
         // On choisit le joueur commençant la partie aléatoirement lorsqu'il s'agit de la première
         // Sinon le perdant de la partie précédente commence
         if (joueurActuel == -1) {
-            joueurActuel = rand.nextInt(2);
+            joueurActuel = choixJoueurDebut == -1 ? rand.nextInt(2) : choixJoueurDebut;
         } else if (vainqueur() == joueur1) {
             joueurActuel = 1;
         } else {
@@ -268,5 +269,9 @@ public class Jeu extends Observable {
 
     public boolean prochainCoupRecolte() {
         return prochainCoup == TypeCoup.RECOLTE;
+    }
+
+    public void choixJoueurDebut(int numeroJoueur) {
+        choixJoueurDebut = numeroJoueur % 2;
     }
 }

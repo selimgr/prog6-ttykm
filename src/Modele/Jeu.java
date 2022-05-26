@@ -15,14 +15,12 @@ public class Jeu extends Observable {
     private int joueurActuel;
     private Tour tourActuel;
     private TypeCoup prochainCoup;
-    private boolean partieTerminee;
     private Historique historique;
     private final Random rand;
 
     public Jeu() {
         rand = new Random();
         joueurActuel = -1;
-        partieTerminee = true;
     }
 
     public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
@@ -45,7 +43,7 @@ public class Jeu extends Observable {
             throw new IllegalStateException("Impossible de lancer une nouvelle partie : joueurs manquants");
         }
         // Si une partie est en cours mais n'est pas terminée, on choisit le joueur qui commence la nouvelle aléatoirement
-        if (!partieTerminee()) {
+        if (plateau != null && !partieTerminee()) {
             joueurActuel = -1;
         }
 
@@ -61,7 +59,6 @@ public class Jeu extends Observable {
         joueur1.initialiserJoueur();
         joueur2.initialiserJoueur();
         plateau = new Plateau();
-        partieTerminee = false;
         historique = new Historique();
         tourActuel = historique.nouveauTour(joueurActuel().focus());
         metAJour();
@@ -112,6 +109,10 @@ public class Jeu extends Observable {
     }
 
     public void jouer(int l, int c, Epoque e) {
+        if (partieTerminee()) {
+            return;
+        }
+
         if (prochaineActionSelectionPion()) {
             selectionnerPion(l, c, e);
         }
@@ -163,12 +164,11 @@ public class Jeu extends Observable {
             return;
         }
         joueurActuel().fixerFocus(e);
-        joueurActuel = (joueurActuel + 1) % 2;
 
-        if (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2) {
-            partieTerminee = true;
+        if (partieTerminee()) {
             ajouterVictoire();
         } else {
+            joueurActuel = (joueurActuel + 1) % 2;
             tourActuel = historique.nouveauTour(joueurActuel().focus());
         }
         historique.reinitialiserToursSuivants();
@@ -191,10 +191,27 @@ public class Jeu extends Observable {
         }
     }
 
+    private void annulerAjoutVictoire() {
+        if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
+            if (joueur1.pions() == Pion.BLANC) {
+                joueur2.enleverVictoire();
+            } else {
+                joueur1.enleverVictoire();
+            }
+        } else {
+            if (joueur1.pions() == Pion.BLANC) {
+                joueur1.enleverVictoire();
+            } else {
+                joueur2.enleverVictoire();
+            }
+        }
+    }
+
     public void annuler() {
         if (!historique.peutAnnuler()) {
             return;
         }
+        boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {
             tourActuel = historique.tourPrecedent();
@@ -202,6 +219,10 @@ public class Jeu extends Observable {
             joueurActuel().fixerFocus(tourActuel.focus());
         }
         if (tourActuel.annuler()) {
+            if (partieTerminee) {
+                joueurActuel().fixerFocus(tourActuel.focus());
+                annulerAjoutVictoire();
+            }
             selectionnerMouvement();
         }
     }
@@ -212,7 +233,10 @@ public class Jeu extends Observable {
         }
 
         if (tourActuel.refaire()) {
-            if (tourActuel.termine()) {
+            if (partieTerminee()) {
+                joueurActuel().fixerFocus(tourActuel.prochainFocus());
+                ajouterVictoire();
+            } else if (tourActuel.termine()) {
                 joueurActuel().fixerFocus(tourActuel.prochainFocus());
                 joueurActuel = (joueurActuel + 1) % 2;
                 tourActuel = historique.tourSuivant();
@@ -222,7 +246,7 @@ public class Jeu extends Observable {
     }
 
     public boolean partieTerminee() {
-        return partieTerminee;
+        return tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2);
     }
 
     public Joueur vainqueur() {
@@ -232,10 +256,8 @@ public class Jeu extends Observable {
 
         if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
             return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
-        } else if (plateau.nombrePlateauVide(Pion.NOIR) >= 2) {
-            return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
         } else {
-            throw new IllegalStateException("Impossible de renvoyer le vainqueur : aucun vainqueur");
+            return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
         }
     }
 

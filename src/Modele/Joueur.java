@@ -145,4 +145,9 @@ public class Joueur {
                 ", nombreVictoires=" + nombreVictoires +
                 "}";
     }
+
+    //temporaire
+    public void setNombrePionsReserve(int nbP){
+        nombrePionsReserve =nbP;
+    }
 }

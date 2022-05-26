@@ -25,11 +25,6 @@ public class Jeu extends Observable {
         partieTerminee = true;
     }
 
-    //Temporaire
-    public int getNombreCoupsRestants(){
-        return  tourActuel.getNombreCoupsRestants();
-    }
-
     public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
         if (joueur1 == null) {
             joueur1 = new Joueur(nom, type, p, handicap);

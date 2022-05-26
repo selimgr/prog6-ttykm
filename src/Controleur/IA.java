@@ -82,8 +82,6 @@ public abstract class IA {
         while (it.hasNext()) {
             Coup c = it.next();
             // Selectionner pion
-            if (!ctrl.jeu().prochaineActionSelectionPion())
-                System.out.println("hdsj  " + ctrl.jeu().getNombreCoupsRestants());
             ctrl.jouer(c.depart().ligne(), c.depart().colonne(), c.depart().epoque());
             Case arr = c.arrivee();
             if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
@@ -92,8 +90,10 @@ public abstract class IA {
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             System.out.println("Coup 1 joué : " + p.hash());
             valeur = coup2(arr, j,c,minmax,horizon);
+            ctrl.annuler();
+            ctrl.annuler();
         }
-        ctrl.annuler();
+
         return valeur;
     }
     int coup2(Case arr, Joueur j, Coup c,int minmax,int horizon) {
@@ -111,33 +111,36 @@ public abstract class IA {
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             System.out.println("Coup 2 joué : " + p.hash());
             valeur = choixFocus(arr, j,c,c2,minmax,horizon);
+            ctrl.annuler();
         }
-        ctrl.annuler();
+
         return valeur;
     }
 
     int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int minmax,int horizon){
         Plateau p = ctrl.jeu().plateau();
         Epoque focusJ = j.focus();
-        int valeur = -1000000000*minmax;
+        int nbP = j.nombrePionsReserve();
+        int valeur = -1000000000;
         int valeur2;
         for (int foc = 0; foc < 3; foc++) {
             if (j.focus().indice() != foc){
-                //ctrl.jeu().plateau().fixerPlateau(copie3);
                 ctrl.jouer(0,0,Epoque.depuisIndice(foc));
                 System.out.println("Coup 3 joué : " + p.hash());
                 System.out.println("Focus Actuel : " + focusJ);
                 System.out.println("Focus changé : " + Epoque.depuisIndice(foc));
                 valeur2 = valeur;
-                valeur = Math.max(valeur * minmax, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1) * minmax);
-                if (valeur2 < valeur || horizon == this.horizon && valeur2 == -10000) {
+                valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1) * minmax);
+                if ((valeur2 < valeur || horizon == this.horizon && valeur2 == -10000) && j == ia) {
                     // TODO : Ajout d'aléatoire possible dans une certaine mesure
                     premierCoup = c;
                     secondCoup = c2;
                     coupFocus = Epoque.depuisIndice(foc);
                     System.out.println(((Mouvement) premierCoup).toString() + "  :: " + ((Mouvement) secondCoup).toString() + " approx =" + valeur);
                 }
-                j.fixerFocus(focusJ);
+                ctrl.annuler();
+                // Temporaire
+                j.fixerFocus(focusJ); j.setNombrePionsReserve(nbP);
             }
         }
         return valeur;
@@ -151,21 +154,25 @@ public abstract class IA {
         // On remet le plateau tel qu'il était ( assurance d'un plateau identique)
         //ctrl.jeu().plateau().fixerPlateau(p);
         //DEBUG
-        System.out.println("coup1 = " + this.c1.toString());
-        System.out.println("coup2 = " + this.c2.toString());
-        System.out.println("Epoque changment  " + focusChangement);
+        System.out.println("coup1 = " + c1.toString());
+        System.out.println("coup2 = " + c2.toString());
+        System.out.println("Epoque changement  " + focusChangement);
         // Calcul du déplacement de c2
         int lA = c2.arrivee().ligne();
         int cA = c2.arrivee().colonne();
         Epoque eA = c2.arrivee().epoque();
         //On joue les 2 coups
         //Selection
+        System.out.println(ia.toString());
+        if (!ctrl.jeu().prochaineActionSelectionPion())
+            System.out.println("hdsj");
         ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(),c1.depart().epoque());
         // Coup 1
-        ctrl.jouer(this.c2.depart().ligne(), this.c2.depart().colonne(), this.c2.depart().epoque());
+        ctrl.jouer(c2.depart().ligne(), c2.depart().colonne(), c2.depart().epoque());
         // Coup 2
         ctrl.jouer(lA,cA,eA);
         //focus
         ctrl.jouer(0,0,focusChangement);
+        System.out.println(ia.toString());
     }
 }

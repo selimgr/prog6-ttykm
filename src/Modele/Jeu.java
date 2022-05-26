@@ -147,6 +147,7 @@ public class Jeu extends Observable {
     private void selectionnerPion(int l, int c, Epoque e) {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
+            historique.reinitialiserToursSuivants();
             plateau.briller(l, c, e);
             selectionnerMouvement();
         }
@@ -154,6 +155,7 @@ public class Jeu extends Observable {
 
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
+            historique.reinitialiserToursSuivants();
             plateau.briller(l, c, e);
             selectionnerMouvement();
         }
@@ -172,6 +174,7 @@ public class Jeu extends Observable {
         } else {
             tourActuel = historique.nouveauTour(joueurActuel().focus());
         }
+        historique.reinitialiserToursSuivants();
         metAJour();
     }
 
@@ -198,6 +201,8 @@ public class Jeu extends Observable {
 
         if (!tourActuel.pionSelectionne()) {
             tourActuel = historique.tourPrecedent();
+            joueurActuel = (joueurActuel + 1) % 2;
+            joueurActuel().fixerFocus(tourActuel.focus());
         }
         if (tourActuel.annuler()) {
             selectionnerMouvement();
@@ -209,10 +214,12 @@ public class Jeu extends Observable {
             return;
         }
 
-        if (tourActuel.termine()) {
-            tourActuel = historique.tourSuivant();
-        }
         if (tourActuel.refaire()) {
+            if (tourActuel.termine()) {
+                joueurActuel().fixerFocus(tourActuel.prochainFocus());
+                joueurActuel = (joueurActuel + 1) % 2;
+                tourActuel = historique.tourSuivant();
+            }
             selectionnerMouvement();
         }
     }

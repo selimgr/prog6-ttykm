@@ -199,7 +199,7 @@ public class Jeu extends Observable {
         if (!historique.peutAnnuler()) {
             return;
         }
-
+        plateau.resetBrillance();
         if (!tourActuel.pionSelectionne()) {
             tourActuel = historique.tourPrecedent();
             joueurActuel = (joueurActuel + 1) % 2;

@@ -2,11 +2,11 @@ package Modele;
 
 import static java.util.Objects.requireNonNull;
 
-public class Etat {
+public class Effet {
     private final Piece piece;
     private final Case depart, arrivee;
 
-    Etat(Piece piece, Case depart, Case arrivee) {
+    Effet(Piece piece, Case depart, Case arrivee) {
         requireNonNull(piece, "La pièce ne doit pas être null");
 
         if (depart == null && arrivee == null) {

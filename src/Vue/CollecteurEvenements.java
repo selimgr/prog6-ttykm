@@ -1,6 +1,5 @@
 package Vue;
 
-import Modele.Action;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
@@ -33,6 +32,8 @@ public interface CollecteurEvenements {
     void jouer(int l, int c, Epoque e);
 
     void annuler();
+
+    void refaire();
 
     void selectionnerPlanterGraine();
 

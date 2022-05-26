@@ -195,6 +195,8 @@ public class Jeu extends Observable {
 
         if (!tourActuel.pionSelectionne()) {
             tourActuel = historique.tourPrecedent();
+            joueurActuel = (joueurActuel + 1) % 2;
+            joueurActuel().fixerFocus(tourActuel.focus());
         }
         if (tourActuel.annuler()) {
             selectionnerMouvement();
@@ -206,10 +208,12 @@ public class Jeu extends Observable {
             return;
         }
 
-        if (tourActuel.termine()) {
-            tourActuel = historique.tourSuivant();
-        }
         if (tourActuel.refaire()) {
+            if (tourActuel.termine()) {
+                joueurActuel().fixerFocus(tourActuel.prochainFocus());
+                joueurActuel = (joueurActuel + 1) % 2;
+                tourActuel = historique.tourSuivant();
+            }
             selectionnerMouvement();
         }
     }

@@ -170,7 +170,7 @@ public class Plateau {
         return false;
     }
 
-    int nombrePlateauVide(Pion p) {
+    public int nombrePlateauVide(Pion p) {
         requireNonNull(p, "Le pion p ne doit pas être null");
 
         if (p == Pion.BLANC) {
@@ -249,7 +249,6 @@ public class Plateau {
 
         return cases;
     }
-    // TODO : Implémenter casesJouables
     public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;

@@ -96,9 +96,12 @@ class Tour {
         }
 
         if (nombreCoupsRestants == 2) {
+            System.out.println("jouer coup 1  ");
             coup1 = coup;
             coup2 = null;
         } else {
+            System.out.println("jouer coup 2  ");
+
             coup2 = coup;
         }
         coup.jouer();
@@ -130,11 +133,13 @@ class Tour {
 
         switch (nombreCoupsRestants) {
             case 0:
+                //System.out.println("annuler coup 2  ");
                 coup2.annuler();
                 pion = coup2.pion();
                 nombreCoupsRestants++;
                 break;
             case 1:
+                //System.out.println("annuler coup 1  ");
                 coup1.annuler();
                 pion = coup1.pion();
                 nombreCoupsRestants++;
@@ -143,6 +148,7 @@ class Tour {
                 if (!pionSelectionne()) {
                     return false;
                 }
+                //System.out.print("annuler Selection  ");
                 pionSelectionne = false;
                 break;
             default:

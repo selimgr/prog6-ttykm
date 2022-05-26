@@ -113,6 +113,7 @@ public class Jeu extends Observable {
 
     public void jouer(int l, int c, Epoque e) {
         if (prochaineActionSelectionPion()) {
+            System.out.println("jouer Selection   ");
             selectionnerPion(l, c, e);
         }
         else if (prochaineActionJouerCoup()) {
@@ -139,6 +140,7 @@ public class Jeu extends Observable {
             jouerCoup(coup, l, c, e);
         }
         else {
+            System.out.println("jouer Focus  ");
             changerFocus(e);
         }
     }
@@ -197,6 +199,7 @@ public class Jeu extends Observable {
         }
 
         if (!tourActuel.pionSelectionne()) {
+            System.out.println(" annuler Focus  ");
             tourActuel = historique.tourPrecedent();
             joueurActuel = (joueurActuel + 1) % 2;
             joueurActuel().fixerFocus(tourActuel.focus());

@@ -124,12 +124,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouer(int l, int c, Epoque e) {
+        //System.out.print("Jouer   :" + jeu.joueurActuel().nom() + " (l,c,e)=("+l+","+c+","+e+") ");
         jeu().jouer(l, c, e);
-        System.out.println(jeu.joueurActuel().toString());
     }
 
     @Override
     public void annuler() {
+        //System.out.print("Annuler : " + jeu().joueurActuel().nom() + " ");
         jeu().annuler();
     }
 

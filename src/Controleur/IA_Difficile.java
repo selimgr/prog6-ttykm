@@ -12,7 +12,7 @@ public class IA_Difficile extends IA {
 
     IA_Difficile(Jeu jeu, Joueur ia, Joueur adversaire, ControleurMediateur ctrl) {
         super(jeu,ia,adversaire,ctrl);
-        horizon = 300;
+        horizon = 3;
         antiCycle = new HashMap<>();
         alphaBeta = new int[horizon];
     }

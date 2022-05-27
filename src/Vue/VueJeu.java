@@ -1,188 +1,276 @@
 package Vue;
 
+import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
-import Vue.JComposants.CPlateau;
 
 import  javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
+
+import static java.awt.GridBagConstraints.*;
 
 class VueJeu extends JPanel {
     CollecteurEvenements controleur;
     VueNiveau vueNiveau;
-    private  JPanel bottom;
-    private CPlateau futur;
-    private  JLayeredPane jLayeredPane1;
-    private  JPanel fond;
-    private  JButton menu;
-    private CPlateau passe;
-    private  JPanel plateaux;
-    private CPlateau present;
-    private  JPanel top;
-    private CInfoJoueur j1;
-    private CInfoJoueur j2;
+    private final CInfoJoueur j1;
+    private final CInfoJoueur j2;
+    private final CGraines seeds;
+    private JLabel texteJeu;
+    private final JPanel backgroundTop, backgroundBottom;
+    private JFrame topFrame;
+
+    private JPanel mainPanel;
 
     VueJeu(CollecteurEvenements c) {
         controleur = c;
-        setFocusable(true);
-        this.addKeyListener(new AdaptateurClavier(controleur));
-        jLayeredPane1 = new JLayeredPane();
-        passe = new CPlateau(1, controleur);
-        present = new CPlateau(2, controleur);
-        futur = new CPlateau(3, controleur);
-        fond = new  JPanel();
-        top = new  JPanel();
-        menu = new  JButton();
-        bottom = new  JPanel();
+
+        j1 = new CInfoJoueur(0);
+        j2 = new CInfoJoueur(1);
+        seeds = new CGraines();
 
         setLayout(new OverlayLayout(this));
 
-        // -- DESSIN DERRIÈRE LES PLATEAUX
-        fond.setLayout(new GridLayout(2, 0));
-
-        // DESSIN DE LA PARTIE DU HAUT (bouton menu + info joueur 1)
-        top.setBackground(new Color(23, 23, 23));
-        top.setLayout(new BorderLayout());
-
-        //--
-        JPanel boutons = new JPanel();
-        boutons.setOpaque(false);
-        boutons.setLayout(new FlowLayout(FlowLayout.LEFT));
-        menu.setBackground(new Color(0, 0, 0));
-        menu.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        menu.setMargin(new Insets(10, 10, 2, 14));
-
-        // Menu Paramètres
-        JMenuBar jBar = new JMenuBar();
-        jBar.setBackground(new Color(0, 0, 0));
-        jBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jBar.setMargin(new Insets(10, 10, 2, 14));
-        JMenu jm = new JMenu();
-        jm.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
-        JCheckBoxMenuItem itemMusique = new JCheckBoxMenuItem();
-        itemMusique.setText("Musique");
-        itemMusique.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Musique.png"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
-        JMenuItem item2 = new JMenuItem();
-        item2.setText("Sauvegarder");
-        JMenuItem item3 = new JMenuItem();
-        item3.setText("Menu Principal");
-        item3.addActionListener((e) -> {
-            c.afficherMenuPrincipal();
-        });
-        JMenuItem item4 = new JMenuItem();
-        item4.setText("Quitter");
-        item4.addActionListener((e) -> {
-            c.close();
-        });
-        jm.add(itemMusique); jm.add(item2);
-        jm.add(item3); jm.add(item4);
-        jBar.add(jm);
-
-        JMenu tutoriel = new JMenu();
-        //Affichage des règles pendant le jeu
-        tutoriel.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent menuEvent) {
-                c.afficherRegles();
-            }
-            @Override
-            public void menuDeselected(MenuEvent menuEvent) {}
-            @Override
-            public void menuCanceled(MenuEvent menuEvent) {}
-        });
-        tutoriel.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
-        jBar.add(tutoriel);
-
-        menu.add(jBar);
-
-        boutons.add(menu);
-
-        //--
-        JPanel joueur1infos = new JPanel();
-        joueur1infos.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        joueur1infos.setOpaque(false);
-        joueur1infos.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-
-        j1 = new CInfoJoueur(0);
-        joueur1infos.add(j1);
-        //----
-        top.add(boutons, BorderLayout.PAGE_START);
-        top.add(joueur1infos, BorderLayout.CENTER);
-
-        fond.add(top);
-
-        // TODO : Ajout du stock de graine
-        // Sachant qu'il y a le focus entre les plateaux et les boutons graines
-        JPanel grainesButtons = new JPanel();
-        grainesButtons.setLayout(new GridBagLayout());
-        grainesButtons.setBackground(new Color(254, 125, 97));
+        // Pour les moitiés de couleurs uniquement
+        JPanel background = new JPanel(new GridLayout(2, 0));
+        backgroundTop = new JPanel(new BorderLayout());
+        backgroundTop.setBackground(new Color(23, 23, 23));
+        backgroundBottom = new JPanel(new BorderLayout());
+        backgroundBottom.setBackground(new Color(254, 125, 97));
+        background.add(backgroundTop);
+        background.add(backgroundBottom);
         // --
-        //setEnabled à modifer à l'avenir en fonction de l'action possible par le joueur courant
-        JButton recolter = new JButton("Recolter une graine");
-        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
+
+        JPanel contenu = new JPanel(new GridBagLayout());
+        contenu.setOpaque(false);
+
+        addTop(contenu);
+        addMain(contenu);
+        addBottom(contenu);
+
+        add(contenu);
+        add(background);
+    }
+
+    private void addTop(JPanel contenu) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.PAGE_START;
+        c.insets = new Insets(5, 5, 5, 5);
+
+        JPanel topPanel = new JPanel();
+        topPanel.setOpaque(false);
+        topPanel.setLayout(new GridBagLayout());
+        contenu.add(topPanel, c);
+        // -----------
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setOpaque(false);
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.setOpaque(false);
+        menuBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        menuBar.setMargin(new Insets(10, 10, 2, 14));
+        buttonsPanel.add(menuBar);
+
+        JMenu menu = new JMenu();
+        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        menuBar.add(menu);
+
+        JMenuItem[] menu_items = {
+                new JCheckBoxMenuItem("Musique"),
+                new JMenuItem("Sauvegarder"),
+                new JMenuItem("Menu principal"),
+                new JMenuItem("Quitter")
+        };
+
+        menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[3].addActionListener(e -> controleur.toClose());
+
+        for (JMenuItem menu_item: menu_items)
+            menu.add(menu_item);
+
+        JMenu regles = new JMenu();
+        regles.addActionListener(e -> controleur.afficherRegles());
+        regles.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        menuBar.add(regles);
+
+        c.fill = GridBagConstraints.VERTICAL;
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        topPanel.add(buttonsPanel, c);
+
+        // --
+        JPanel textPanel = new JPanel();
+        textPanel.setOpaque(false);
+        texteJeu = new JLabel("");
+        texteJeu.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+        texteJeu.setForeground(Color.white);
+        texteJeu.setBorder(new EmptyBorder(10,0,0,0));
+        textPanel.add(texteJeu);
+        c.fill = GridBagConstraints.BOTH;
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridx = 0;
+        c.gridy = 0;
+        topPanel.add(textPanel, c);
+    }
+
+    private void addMain(JPanel contenu) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+
+        c.insets = new Insets(0,60,0,60);
+        c.anchor = GridBagConstraints.CENTER;
+
+        mainPanel = new JPanel();
+        mainPanel.setOpaque(false);
+        mainPanel.setLayout(new GridBagLayout());
+        contenu.add(mainPanel, c);
+        // -----------
+
+        c.fill = GridBagConstraints.NONE;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = FIRST_LINE_END;
+        mainPanel.add(j1, c);
+
+        // --
+        c.fill = BOTH;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = LAST_LINE_START;
+
+        mainPanel.add(addUserActions(), c);
+//
+//        // --
+//        c.fill = NONE;
+//        c.gridx = 0;
+//        c.gridy = 3;
+//        c.weightx = 1;
+//        c.weighty = 1;
+//        c.anchor = LAST_LINE_START;
+//        mainPanel.add(j2, c);
+    }
+
+    private void addBottom(JPanel contenu) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.anchor = GridBagConstraints.PAGE_END;
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setOpaque(false);
+        bottomPanel.setLayout(new GridBagLayout());
+        contenu.add(bottomPanel, c);
+        // -----------
+
+        JPanel controlsPanel = new JPanel();
+        controlsPanel.setOpaque(false);
+
+        JButton[] controls = {
+            new JButton("<"),
+            new JButton(">"),
+            new JButton("Fin tour")
+        };
+
+        controls[0].addActionListener(e -> controleur.annuler());
+        controls[1].addActionListener(e -> controleur.refaire());
+
+        for (JButton button: controls) {
+            button.setFocusable(false);
+            controlsPanel.add(button);
+        }
+
+        c.fill = GridBagConstraints.VERTICAL;
+        c.anchor = GridBagConstraints.LINE_END;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.insets = new Insets(10,10,10,10);
+        bottomPanel.add(controlsPanel, c);
+    }
+
+    private JPanel addUserActions() {
+        JPanel userActions = new JPanel(new GridBagLayout());
+        userActions.setOpaque(false);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+
+        seeds.setSeeds(4);
+
+        JPanel seedsButtons = new JPanel();
+        seedsButtons.setOpaque(false);
+        JButton recolter = new JButton("Récolter une graine");
+//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
-        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
+//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
-        grainesButtons.add(planter);
-        grainesButtons.add(recolter);
+        seedsButtons.add(planter);
+        seedsButtons.add(recolter);
+        seeds.add(seedsButtons);
 
-        //-----
-        // DESSIN DE LA PARTIE DU BAS (boutons + infos joueur 2)
-        bottom.setBackground(new Color(254, 125, 97));
-        bottom.setLayout(new BorderLayout());
-        bottom.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
-
-        JPanel bas = new JPanel();
-        bas.setOpaque(false);
-        bas.setLayout(new BorderLayout());
+        userActions.add(seeds, c);
         // --
-        JPanel joueur2infos = new JPanel();
-        joueur2infos.setLayout(new FlowLayout(FlowLayout.LEFT));
-        joueur2infos.setOpaque(false);
 
-        j2 = new CInfoJoueur(1);
-        joueur2infos.add(j2);
-        // -
-        JPanel controles = new JPanel();
-        controles.setLayout(new FlowLayout(FlowLayout.RIGHT, -6, 0));
-        controles.setOpaque(false);
-
-        JButton boutonAnnuler = new JButton("<");
-        JButton boutonRefaire = new JButton(">");
-        boutonAnnuler.addActionListener((e) -> c.annuler());
-        boutonRefaire.addActionListener((e) -> c.refaire());
-        controles.add(boutonAnnuler);
-        controles.add(boutonRefaire);
-        controles.add(new JButton("Fin tour"));
-
-        bas.add(grainesButtons, BorderLayout.PAGE_START);
-        bas.add(joueur2infos);
-        bas.add(controles, BorderLayout.PAGE_END);
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.LAST_LINE_START;
+        userActions.add(j2, c);
         // --
-        bottom.add(bas, BorderLayout.PAGE_END);
-        // --
-        fond.add(bottom);
+        return userActions;
     }
 
     void nouvellePartie() {
         vueNiveau = new VueNiveau(controleur);
         controleur.jeu().ajouteObservateur(vueNiveau);
 
-        add(vueNiveau);
-        add(fond);
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(vueNiveau, c);
 
-        j1.setName((controleur.jeu().joueur1().estHumain() ? "" : "IA : ") + controleur.jeu().joueur1().nom());
+        j1.setName((!controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
 
-        j2.setName((controleur.jeu().joueur2().estHumain() ? "" : "IA : ") + controleur.jeu().joueur2().nom());
+        j2.setName((!controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
+
+        topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.addKeyListener(new AdaptateurClavier(controleur));
+        topFrame.setFocusable(true);
+        topFrame.requestFocus();
+
         vueNiveau.miseAJour();
-        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
+        texteJeu.setText("C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
+//        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
+
 }

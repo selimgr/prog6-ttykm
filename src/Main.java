@@ -6,11 +6,11 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        /*try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }*/
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (Exception ignored) {
+        }
+
         CollecteurEvenements controleur = new ControleurMediateur();
         InterfaceGraphique.demarrer(controleur);
     }

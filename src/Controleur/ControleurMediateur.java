@@ -64,29 +64,15 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
-                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
+                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2, int choixJoueurDebut) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
+        if (choixJoueurDebut <= 1) jeu.choixJoueurDebut(choixJoueurDebut);
         jeu.nouvellePartie();
         vues.nouvellePartie();
-        switch (typeJ1){
-            case IA_DIFFICILE:
-                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
-            case IA_MOYEN:
-                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
-            case IA_FACILE:
-                ia1 = new IA_Aleatoire(jeu,jeu.joueur1(),jeu.joueur2(),this);break;
-        }
-        switch (typeJ2){
-            case IA_DIFFICILE:
-                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
-            case IA_MOYEN:
-                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
-            case IA_FACILE:
-                ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
-        }
+        initIA(typeJ1,typeJ2);
     }
 
     @Override
@@ -140,11 +126,13 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouer(int l, int c, Epoque e) {
+        //System.out.print("Jouer   :" + jeu.joueurActuel().nom() + " (l,c,e)=("+l+","+c+","+e+") ");
         jeu().jouer(l, c, e);
     }
 
     @Override
     public void annuler() {
+        //System.out.print("Annuler : " + jeu().joueurActuel().nom() + " ");
         jeu().annuler();
     }
 
@@ -161,7 +149,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             default:
                 System.out.println("Touche inconnue : " + touche);
-
         }
     }
 
@@ -174,6 +161,25 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.prochaineActionSelectionPion() ) {
             if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
             else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
+        }
+    }
+
+    private void initIA(TypeJoueur typeJ1,TypeJoueur typeJ2){
+        switch (typeJ1){
+            case IA_DIFFICILE:
+                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+            case IA_MOYEN:
+                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+            case IA_FACILE:
+                ia1 = new IA_Aleatoire(jeu,jeu.joueur1(),jeu.joueur2(),this);break;
+        }
+        switch (typeJ2){
+            case IA_DIFFICILE:
+                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+            case IA_MOYEN:
+                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+            case IA_FACILE:
+                ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
         }
     }
 }

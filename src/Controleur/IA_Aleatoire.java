@@ -17,7 +17,7 @@ public class IA_Aleatoire extends IA {
     public int calcul(Plateau p, int horizon,int minmax){
         // Recherche des coups jouables
         int lA,cA,eA,alea;
-        coups = jeu.plateau().casesJouablesEpoque(ia,false,0,0, null);
+        coups = ctrl.jeu().plateau().casesJouablesEpoque(ia,false,0,0, null);
         Random r = new Random();
         if (coups.size() == 0) {
             alea = r.nextInt(3);
@@ -28,7 +28,7 @@ public class IA_Aleatoire extends IA {
         System.out.println(coups.size() + " !1! " + alea);
         c1 = coups.get(alea);
         System.out.println(( (Mouvement) c1).toString());
-        if (jeu.prochaineActionSelectionPion()) {
+        if (ctrl.jeu().prochaineActionSelectionPion()) {
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
         }
         else {
@@ -36,8 +36,8 @@ public class IA_Aleatoire extends IA {
         }
         ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
         // Second coup avec pion déjà choisi
-        if (jeu.plateau().aPion(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque())) {
-            coups = jeu.plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
+        if (ctrl.jeu().plateau().aPion(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque())) {
+            coups = ctrl.jeu().plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
             if (coups.size() ==0 ) throw new IllegalStateException("coups est vide");
             alea = r.nextInt(coups.size());
             System.out.println(coups.size() + " !2! " + alea);
@@ -72,7 +72,7 @@ public class IA_Aleatoire extends IA {
 
     @Override
     void jouer()  {
-        calcul(jeu.plateau(),0,1);
+        calcul(ctrl.jeu().plateau(),0,1);
     }
 
 

@@ -10,6 +10,7 @@ import Vue.CollecteurEvenements;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
+import java.awt.AlphaComposite;
 
 // 1 =
 
@@ -19,6 +20,7 @@ public class CPlateau extends JPanel implements Observateur {
     int num;
     Image pionB = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionB.png"))).getImage();
     Image pionN = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionN.png"))).getImage();
+    Image brillance = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Brillance.png"))).getImage();
 
     public CPlateau(int numero, CollecteurEvenements c){
         Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/passe_inactif.png"))).getImage();
@@ -53,12 +55,15 @@ public class CPlateau extends JPanel implements Observateur {
         g.drawImage(current, 0, 0, getWidth(), getHeight(), null);
         switch (num){
             case 1:
+                drawBrillance(g,Epoque.PASSE);
                 drawPion(g,Epoque.PASSE);
                 break;
             case 2:
+                drawBrillance(g,Epoque.PRESENT);
                 drawPion(g,Epoque.PRESENT);
                 break;
             case 3:
+                drawBrillance(g,Epoque.FUTUR);
                 drawPion(g,Epoque.FUTUR);
                 break;
         }
@@ -80,6 +85,23 @@ public class CPlateau extends JPanel implements Observateur {
                 }
             }
         }
+    }
+
+    public void drawBrillance(Graphics g, Epoque e){
+        int offX = getOffsetX();
+        int offY = getOffsetY();
+        int multX = (this.getWidth() - 2*offX)/4;
+        int multY = (this.getHeight() - 2*offY)/4;
+        for(int i=0; i<3 ; i++){
+            for(int j=0; j<Plateau.TAILLE ; j++ ){
+                for(int k=0; k<Plateau.TAILLE ; k++){
+                    if(this.c.jeu().plateau().aBrillance(j,k,e)){
+                        g.drawImage(brillance,k*multX+offX, j*multY+offY, multX, multY, this);
+                    }
+                }
+            }
+        }
+
     }
 
     private int getOffsetX(){

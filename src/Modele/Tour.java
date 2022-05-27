@@ -69,6 +69,9 @@ class Tour {
         if (e == focus) {
             pion = new Case(l, c, e);
             pionSelectionne = true;
+            coup1 = null;
+            coup2 = null;
+            focusChange = false;
         }
         return pionSelectionne;
     }
@@ -93,13 +96,18 @@ class Tour {
         }
 
         if (nombreCoupsRestants == 2) {
+            System.out.println("Jouer coup 1  ");
             coup1 = coup;
+            coup2 = null;
         } else {
+            System.out.println("    Jouer coup 2  ");
+
             coup2 = coup;
         }
         coup.jouer();
         pion = coup.pion();
         nombreCoupsRestants--;
+        prochainFocus = null;
         return true;
     }
 
@@ -125,11 +133,13 @@ class Tour {
 
         switch (nombreCoupsRestants) {
             case 0:
+                System.out.println("    Annuler coup 2  ");
                 coup2.annuler();
                 pion = coup2.pion();
                 nombreCoupsRestants++;
                 break;
             case 1:
+                System.out.println("Annuler coup 1  ");
                 coup1.annuler();
                 pion = coup1.pion();
                 nombreCoupsRestants++;
@@ -138,6 +148,7 @@ class Tour {
                 if (!pionSelectionne()) {
                     return false;
                 }
+                System.out.println("Annuler Selection");
                 pionSelectionne = false;
                 break;
             default:

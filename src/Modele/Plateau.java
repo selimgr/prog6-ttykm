@@ -12,12 +12,15 @@ public class Plateau {
     private int nombrePlateauVideBlanc;
     private int nombrePlateauVideNoir;
     private int nombreGrainesReserve;
+    private final int[][][] brillance;
 
     public static final int TAILLE = 4;
     public static final int NOMBRE_MAX_GRAINES = 5;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
+        brillance = new int[Epoque.NOMBRE][TAILLE][TAILLE];
+
         nbBlancParPlateau = new int[Epoque.NOMBRE];
         nbNoirParPlateau = new int[Epoque.NOMBRE];
 
@@ -170,7 +173,7 @@ public class Plateau {
         return false;
     }
 
-    int nombrePlateauVide(Pion p) {
+    public int nombrePlateauVide(Pion p) {
         requireNonNull(p, "Le pion p ne doit pas être null");
 
         if (p == Pion.BLANC) {
@@ -249,7 +252,6 @@ public class Plateau {
 
         return cases;
     }
-    // TODO : Implémenter casesJouables
     public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
@@ -329,4 +331,21 @@ public class Plateau {
         }
         return plateauStr;
     }
+
+    public void briller(int l, int c, Epoque e) {
+        this.brillance[e.indice()][l][c]=1;
+    }
+    public void resetBrillance(){
+        for(int i=0; i<3 ; i++){
+            for(int j=0; j<TAILLE ; j++ ){
+                for(int k=0; k<TAILLE ; k++){
+                    brillance[i][j][k]=0;
+                }
+            }
+        }
+    }
+    public boolean aBrillance(int l, int c, Epoque e){
+        return brillance[e.indice()][l][c]==1;
+    }
+
 }

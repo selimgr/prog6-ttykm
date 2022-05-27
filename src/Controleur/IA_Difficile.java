@@ -17,7 +17,8 @@ public class IA_Difficile extends IA {
         alphaBeta = new int[horizon];
     }
     public int fonctionApproximation(Plateau p){
-        return p.coupJouables(ia) - p.coupJouables(adversaire);
+        //return p.coupJouables(ia) - p.coupJouables(adversaire);
+        return 12;
     }
 
 

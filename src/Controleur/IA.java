@@ -5,6 +5,7 @@ import Modele.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public abstract class IA {
     Joueur ia;
@@ -32,7 +33,7 @@ public abstract class IA {
 
         /* --------- Initialisation --------- */
         ArrayList<Coup> C2;
-        Joueur j = adversaire; if (minmax == 1){j = ia;}
+        Joueur j = ctrl.jeu().joueurActuel();
         //System.out.println(j.toString());
         int valeur;
 
@@ -77,25 +78,29 @@ public abstract class IA {
 
     int coup1(Joueur j,int minmax,int horizon) {
         Plateau p = ctrl.jeu().plateau();
-        ArrayList<Coup> C = p.casesJouablesEpoque(j, false, 0, 0, null);
+        // Mauvais focus de départ ?
+        ArrayList<Coup> C = ctrl.jeu().plateau().casesJouablesEpoque(j, false, 0, 0, null);
         Iterator<Coup> it = C.iterator();
+        System.out.println("=========================== "+j.toString()+"==========================");
         int valeur = -1000000000;
         if (!it.hasNext()) choixFocus(null,j,null,null,minmax,horizon);
         while (it.hasNext()) {
             Coup c = it.next();
-            // Selectionner pion
-            ctrl.jouer(c.depart().ligne(), c.depart().colonne(), c.depart().epoque());
+            System.out.println("it coup 1 : "+c.depart().toString());
+            // Selectionner pio*
+            System.out.print("JOUER SEL:");ctrl.jouer(c.depart().ligne(), c.depart().colonne(), c.depart().epoque());
             Case arr = c.arrivee();
             if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Premier coup
-            ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
+            List<Case> pions = ctrl.jeu().plateau().chercherPions(j,j.focus());
+            System.out.print("JOUER C1 :");ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 1 joué : " + p.hash());
             valeur = coup2(arr, j,c,minmax,horizon);
-            ctrl.annuler(); // Annuler coup 1
-            ctrl.annuler(); // Deselection pion
+            System.out.print("Annuler C1 : "); ctrl.annuler(); // Annuler coup 1
+            System.out.print("Annuler Selection : "); ctrl.annuler(); // Deselection pion
         }
-
+        C = null;
         return valeur;
     }
     int coup2(Case arr, Joueur j, Coup c,int minmax,int horizon) {
@@ -111,24 +116,24 @@ public abstract class IA {
             if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Second coup
-            ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
+            System.out.print("JOUER C2 :"); ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 2 joué : " + p.hash());
             valeur = choixFocus(arr, j,c,c2,minmax,horizon);
-            ctrl.annuler();
+            System.out.print("Annuler C2 :"); ctrl.annuler();
         }
 
         return valeur;
     }
 
     int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int minmax,int horizon){
-        if (c1 == null || c2 == null) System.out.println("FOCUS COUP MANQUANT");
+        if (c2 == null) System.out.print("FOCUS COUP MANQUANT --- ");
         Plateau p = ctrl.jeu().plateau();
         Epoque focusJ = j.focus();
         int valeur = -1000000000;
         int valeur2;
         for (int foc = 0; foc < 3; foc++) {
             if (j.focus().indice() != foc){
-                ctrl.jouer(0,0,Epoque.depuisIndice(foc));
+                System.out.print("JOUER FOC :"); ctrl.jouer(0,0,Epoque.depuisIndice(foc));
                 //System.out.println("Coup 3 joué : " + p.hash());
                 //System.out.println("Focus Actuel : " + focusJ);
                 //System.out.println("Focus changé : " + Epoque.depuisIndice(foc));
@@ -141,7 +146,7 @@ public abstract class IA {
                     coupFocus = Epoque.depuisIndice(foc);
                     //System.out.println(((Mouvement) premierCoup).toString() + "  :: " + ((Mouvement) secondCoup).toString() + " approx =" + valeur);
                 }
-                ctrl.annuler();
+                System.out.print("Annuler Foc :"); ctrl.annuler();
             }
         }
         return valeur;

@@ -82,13 +82,6 @@ public class CPlateau extends JPanel implements Observateur {
 
         for (int l = 0; l < Plateau.TAILLE; l++) {
             for (int c = 0; c < Plateau.TAILLE; c++) {
-                if (this.c.jeu().plateau().aBlanc(l, c, e)) {
-                    g.drawImage(pionB, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
-                }
-                if (this.c.jeu().plateau().aNoir(l, c, e)) {
-                    g.drawImage(pionN, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
-                }
-
                 if (this.c.jeu().plateau().aGraine(l, c, e)) {
                     g.drawImage(graine, (c*multX+offX+multX/4)-5, (l*multY+offY+multY/4)-6, (int) (multX*0.7), (int) (multY*0.7),this );
                 }
@@ -99,6 +92,14 @@ public class CPlateau extends JPanel implements Observateur {
 
                 if (this.c.jeu().plateau().aArbre(l, c, e)) {
                     g.drawImage(arbre, (c*multX+offX+multX/4)-7, (l*multY+offY+multY/4)-8, (int) (multX*0.7), (int) (multY*0.7),this );
+                }
+
+                if (this.c.jeu().plateau().aBlanc(l, c, e)) {
+                    g.drawImage(pionB, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
+                }
+
+                if (this.c.jeu().plateau().aNoir(l, c, e)) {
+                    g.drawImage(pionN, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
                 }
             }
         }

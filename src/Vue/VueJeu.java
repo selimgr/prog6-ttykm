@@ -27,8 +27,8 @@ class VueJeu extends JPanel {
     VueJeu(CollecteurEvenements c) {
         controleur = c;
 
-        j1 = new CInfoJoueur(0);
-        j2 = new CInfoJoueur(1);
+        j1 = new CInfoJoueur(false);
+        j2 = new CInfoJoueur(true);
         seeds = new CGraines();
 
         setLayout(new OverlayLayout(this));
@@ -256,11 +256,11 @@ class VueJeu extends JPanel {
         mainPanel.add(vueNiveau, c);
 
         // Initialisation du niveau
-        j1.setName((!controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
-        j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
+        j1.setName((!controleur.jeu().joueurSuivant().estHumain() ? "IA : " : "") + controleur.jeu().joueurSuivant().nom());
+        j1.setPions(controleur.jeu().joueurSuivant().nombrePionsReserve());
 
-        j2.setName((!controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
-        j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
+        j2.setName((!controleur.jeu().joueurActuel().estHumain() ? "IA : " : "") + controleur.jeu().joueurActuel().nom());
+        j2.setPions(controleur.jeu().joueurActuel().nombrePionsReserve());
 
         seeds.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
 

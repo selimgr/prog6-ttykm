@@ -47,7 +47,7 @@ class VueMenuPrincipal extends JPanel {
 
         JButton quitter = new JButton("Quitter");
         quitter.addActionListener((e) -> {
-            c.close();
+            c.toClose();
         });
         add(quitter);
 

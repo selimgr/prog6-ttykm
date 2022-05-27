@@ -21,9 +21,9 @@ public class CPlateau extends JPanel implements Observateur {
     Image pionN = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionN.png"))).getImage();
 
     public CPlateau(int numero, CollecteurEvenements c){
-        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();
-        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
-        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();
+        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/futur_inactif.png"))).getImage();
+        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/present_inactif.png"))).getImage();
+        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/futur_inactif.png"))).getImage();
 
 
         this.c = c;

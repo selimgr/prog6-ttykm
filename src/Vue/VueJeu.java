@@ -1,6 +1,5 @@
 package Vue;
 
-import Modele.TypeJoueur;
 import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
 
@@ -8,10 +7,7 @@ import  javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.Objects;
-
-import static java.awt.GridBagConstraints.*;
 
 class VueJeu extends JPanel {
     CollecteurEvenements controleur;
@@ -78,7 +74,7 @@ class VueJeu extends JPanel {
         JMenuItem item4 = new JMenuItem();
         item4.setText("Quitter");
         item4.addActionListener((e) -> {
-            c.toClose();
+            c.close();
         });
         jm.add(itemMusique); jm.add(item2);
         jm.add(item3); jm.add(item4);

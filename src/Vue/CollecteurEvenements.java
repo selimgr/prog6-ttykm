@@ -25,7 +25,7 @@ public interface CollecteurEvenements {
 
     Jeu jeu();
 
-    void toClose();
+    void close();
 
     void afficherRegles();
 

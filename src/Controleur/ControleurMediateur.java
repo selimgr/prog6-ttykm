@@ -102,8 +102,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void toClose() {
+    public void close() {
         vues.close();
+        System.exit(0);
     }
 
     @Override

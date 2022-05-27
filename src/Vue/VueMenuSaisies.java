@@ -41,17 +41,17 @@ public class VueMenuSaisies extends JPanel {
         $$$setupUI$$$();
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
-
+        
         jouerButton.addActionListener((e) -> {
             c.nouvellePartie(
                     nomJ1.getText(),
                     TypeJoueur.values()[typeJ1.getSelectedIndex()],
-                    Pion.NOIR,
+                    comboBox1.getSelectedIndex() == 0 ? Pion.BLANC : (comboBox1.getSelectedIndex() > 1 ? Pion.BLANC : Pion.NOIR),
                     niveauJ1.getSelectedIndex(),
                     // --
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],
-                    Pion.BLANC,
+                    comboBox1.getSelectedIndex() == 1 ? Pion.BLANC : Pion.NOIR,
                     niveauJ2.getSelectedIndex(),
                     // --
                     comboBox1.getSelectedIndex()

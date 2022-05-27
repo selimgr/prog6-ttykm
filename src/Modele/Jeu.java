@@ -290,4 +290,8 @@ public class Jeu extends Observable {
     public boolean prochainCoupRecolte() {
         return prochainCoup == TypeCoup.RECOLTE;
     }
+
+    public int nombreCoupsRestantTour(){
+        return tourActuel.nombreCoupsRestants();
+    }
 }

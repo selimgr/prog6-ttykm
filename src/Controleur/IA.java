@@ -80,6 +80,7 @@ public abstract class IA {
         ArrayList<Coup> C = p.casesJouablesEpoque(j, false, 0, 0, null);
         Iterator<Coup> it = C.iterator();
         int valeur = -1000000000;
+        if (!it.hasNext())choixFocus(null,j,null,null,minmax,horizon);
         while (it.hasNext()) {
             Coup c = it.next();
             // Selectionner pion
@@ -102,6 +103,7 @@ public abstract class IA {
         ArrayList<Coup> C2 = p.casesJouablesEpoque(j, true, arr.ligne(), arr.colonne(), arr.epoque());
         Iterator<Coup> it2 = C2.iterator();
         int valeur = -1000000000;
+        if (!it2.hasNext())choixFocus(null,j,c,null,minmax,horizon);
         while (it2.hasNext()) {
             Coup c2 = it2.next();
             arr = c2.arrivee();
@@ -119,6 +121,7 @@ public abstract class IA {
     }
 
     int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int minmax,int horizon){
+        if (c1 == null || c2 == null) System.out.println("FOCUS COUP MANQUANT");
         Plateau p = ctrl.jeu().plateau();
         Epoque focusJ = j.focus();
         int valeur = -1000000000;
@@ -131,7 +134,7 @@ public abstract class IA {
                 //System.out.println("Focus changé : " + Epoque.depuisIndice(foc));
                 valeur2 = valeur;
                 valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1) * minmax);
-                if ((valeur2 < valeur || horizon == this.horizon && valeur2 == -10000) && j == ia) {
+                if ((valeur2 < valeur || premierCoup == null) && j == ia) {
                     // TODO : Ajout d'aléatoire possible dans une certaine mesure
                     premierCoup = c;
                     secondCoup = c2;
@@ -146,33 +149,29 @@ public abstract class IA {
     void jouer() {
         // Copie d'un plateau pour eviter les modifications
         Plateau p = ctrl.jeu().plateau().copier();
-
         // Calcul du meilleur coup est stockage dans c1 et c2
         this.calcul(ctrl.jeu().plateau(),horizon,1);
-        // On remet le plateau tel qu'il était ( assurance d'un plateau identique)
-        //ctrl.jeu().plateau().fixerPlateau(p);
         //DEBUG
         System.out.println();
-        System.out.println("coup1 = " + c1.toString());
-        System.out.println("coup2 = " + c2.toString());
-        System.out.println("Epoque changement  " + focusChangement);
-        // Calcul du déplacement de c2
-        int lA = c2.arrivee().ligne();
-        int cA = c2.arrivee().colonne();
-        Epoque eA = c2.arrivee().epoque();
         //On joue les 2 coups
         //Selection
         System.out.println(ia.toString());
         System.out.println(ctrl.jeu().joueurActuel().toString());
-        if (!ctrl.jeu().prochaineActionSelectionPion())
-            System.out.println("hdsj");
-        ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(),c1.depart().epoque());
-        // Coup 1
-        ctrl.jouer(c2.depart().ligne(), c2.depart().colonne(), c2.depart().epoque());
+        if(c1 != null) {
+            System.out.printf("coup1 = %s%n", c1);
+            ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
+            // Coup 1
+            ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
+        }
         // Coup 2
-        ctrl.jouer(lA,cA,eA);
+        if(c2 != null) {
+            ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
+            System.out.println("coup2 = " + c2.toString());
+        }
+
         //focus
         ctrl.jouer(0,0,focusChangement);
+        System.out.println("Epoque changement  " + focusChangement);
         System.out.println(ctrl.jeu().joueurActuel().toString());
     }
 }

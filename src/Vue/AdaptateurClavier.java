@@ -16,6 +16,7 @@ class AdaptateurClavier extends KeyAdapter {
         //if(controleur.jeu().partieTerminee()){
         //  return;
         //}
+
         switch (event.getKeyCode()) {
             case KeyEvent.VK_I:
                 controleur.toucheClavier("IA");

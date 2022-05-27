@@ -141,7 +141,7 @@ public class Jeu extends Observable {
             jouerCoup(coup, l, c, e);
         }
         else {
-            System.out.println("jouer Focus  ");
+            System.out.println("        Jouer Focus  ");
             changerFocus(e);
         }
     }
@@ -216,7 +216,7 @@ public class Jeu extends Observable {
         boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {
-            System.out.println(" annuler Focus  ");
+            System.out.println("        Annuler Focus  ");
             tourActuel = historique.tourPrecedent();
             joueurActuel = (joueurActuel + 1) % 2;
             joueurActuel().fixerFocus(tourActuel.focus());

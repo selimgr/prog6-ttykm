@@ -28,12 +28,12 @@ public abstract class IA {
 
     int calcul(Plateau p, int horizon,int minmax) {
         //System.out.println(" --- Calcul IA ---");
-        System.out.println(" --- {" + horizon +"} ---");
+        //System.out.println(" --- {" + horizon +"} ---");
 
         /* --------- Initialisation --------- */
         ArrayList<Coup> C2;
         Joueur j = adversaire; if (minmax == 1){j = ia;}
-        System.out.println(j.toString());
+        //System.out.println(j.toString());
         int valeur;
 
         /* --------- Feuille --------- */
@@ -64,7 +64,7 @@ public abstract class IA {
             return -1000;
         }
         if (horizon <= 0 ){
-            System.out.println("Horizon atteint");
+            //System.out.println("Horizon atteint");
             return fonctionApproximation(p);
         }
         // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
@@ -80,7 +80,7 @@ public abstract class IA {
         ArrayList<Coup> C = p.casesJouablesEpoque(j, false, 0, 0, null);
         Iterator<Coup> it = C.iterator();
         int valeur = -1000000000;
-        if (!it.hasNext())choixFocus(null,j,null,null,minmax,horizon);
+        if (!it.hasNext()) choixFocus(null,j,null,null,minmax,horizon);
         while (it.hasNext()) {
             Coup c = it.next();
             // Selectionner pion
@@ -103,7 +103,7 @@ public abstract class IA {
         ArrayList<Coup> C2 = p.casesJouablesEpoque(j, true, arr.ligne(), arr.colonne(), arr.epoque());
         Iterator<Coup> it2 = C2.iterator();
         int valeur = -1000000000;
-        if (!it2.hasNext())choixFocus(null,j,c,null,minmax,horizon);
+        if (!it2.hasNext()) choixFocus(null,j,c,null,minmax,horizon);
         while (it2.hasNext()) {
             Coup c2 = it2.next();
             arr = c2.arrivee();
@@ -134,7 +134,7 @@ public abstract class IA {
                 //System.out.println("Focus changé : " + Epoque.depuisIndice(foc));
                 valeur2 = valeur;
                 valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1) * minmax);
-                if ((valeur2 < valeur || premierCoup == null) && j == ia) {
+                if (valeur2 < valeur) {
                     // TODO : Ajout d'aléatoire possible dans une certaine mesure
                     premierCoup = c;
                     secondCoup = c2;
@@ -168,7 +168,6 @@ public abstract class IA {
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
             System.out.println("coup2 = " + c2.toString());
         }
-
         //focus
         ctrl.jouer(0,0,focusChangement);
         System.out.println("Epoque changement  " + focusChangement);

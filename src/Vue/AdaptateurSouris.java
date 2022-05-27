@@ -25,6 +25,7 @@ class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (!controleur.jeu().joueurActuel().estHumain()) return;
         int l;
         int c;
         Epoque epoque = resolution_nom(Objet);

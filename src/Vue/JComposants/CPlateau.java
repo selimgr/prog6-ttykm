@@ -20,7 +20,7 @@ public class CPlateau extends JPanel implements Observateur {
     int num;
     Image pionB = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionB.png"))).getImage();
     Image pionN = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionN.png"))).getImage();
-    Image brillance = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/brillance.png"))).getImage();
+    Image brillance = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Brillance.png"))).getImage();
 
     public CPlateau(int numero, CollecteurEvenements c){
         Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();

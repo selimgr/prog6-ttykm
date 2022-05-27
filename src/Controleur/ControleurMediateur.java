@@ -64,11 +64,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
-                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2) {
+                               String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2, int choixJoueurDebut) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
+        if (choixJoueurDebut <= 1) jeu.choixJoueurDebut(choixJoueurDebut);
         jeu.nouvellePartie();
         vues.nouvellePartie();
         initIA(typeJ1,typeJ2);
@@ -147,7 +148,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             default:
                 System.out.println("Touche inconnue : " + touche);
-
         }
     }
 

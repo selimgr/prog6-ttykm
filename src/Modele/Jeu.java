@@ -17,6 +17,7 @@ public class Jeu extends Observable {
     private TypeCoup prochainCoup;
     private Historique historique;
     private final Random rand;
+    private int choixJoueurDebut = -1;
 
     public Jeu() {
         rand = new Random();
@@ -50,7 +51,7 @@ public class Jeu extends Observable {
         // On choisit le joueur commençant la partie aléatoirement lorsqu'il s'agit de la première
         // Sinon le perdant de la partie précédente commence
         if (joueurActuel == -1) {
-            joueurActuel = rand.nextInt(2);
+            joueurActuel = choixJoueurDebut == -1 ? rand.nextInt(2) : choixJoueurDebut;
         } else if (vainqueur() == joueur1) {
             joueurActuel = 1;
         } else {
@@ -123,6 +124,7 @@ public class Jeu extends Observable {
             switch (prochainCoup) {
                 case MOUVEMENT:
                     if (tourActuel.deselectionnerPion(l, c, e)) {
+                        plateau.resetBrillance();
                         metAJour();
                         return;
                     }
@@ -143,6 +145,7 @@ public class Jeu extends Observable {
         else {
             System.out.println("        Jouer Focus  ");
             changerFocus(e);
+            plateau.resetBrillance();
         }
     }
 
@@ -150,6 +153,7 @@ public class Jeu extends Observable {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
             historique.reinitialiserToursSuivants();
+            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }
@@ -157,6 +161,7 @@ public class Jeu extends Observable {
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
             historique.reinitialiserToursSuivants();
+            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }
@@ -213,6 +218,7 @@ public class Jeu extends Observable {
         if (!historique.peutAnnuler()) {
             return;
         }
+        plateau.resetBrillance();
         boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {
@@ -293,5 +299,9 @@ public class Jeu extends Observable {
 
     public int nombreCoupsRestantTour(){
         return tourActuel.nombreCoupsRestants();
+    }
+
+    public void choixJoueurDebut(int numeroJoueur) {
+        choixJoueurDebut = numeroJoueur % 2;
     }
 }

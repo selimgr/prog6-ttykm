@@ -21,7 +21,7 @@ class AdaptateurClavier extends KeyAdapter {
                 controleur.toucheClavier("IA");
                 break;
             default:
-                System.out.println("Touche non supporter");
+                System.out.println("Touche non supportée");
         }
     }
 }

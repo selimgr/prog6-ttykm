@@ -23,6 +23,8 @@ public class CPlateau extends JPanel implements Observateur {
     Image pionN = Imager.getImageBuffer("/assets/pionN.png");
     Image brillance = Imager.getImageBuffer("/assets/Brillance.png");
     Image graine = Imager.getImageBuffer("/assets/seed_.png");
+    Image arbuste = Imager.getImageBuffer("/assets/shrub.png");
+    Image arbre = Imager.getImageBuffer("/assets/tree.png");
 
     public CPlateau(int numero, CollecteurEvenements c){
         Image plateauPasse = Imager.getImageBuffer("/assets/Passé.png");
@@ -92,11 +94,11 @@ public class CPlateau extends JPanel implements Observateur {
                 }
 
                 if (this.c.jeu().plateau().aArbuste(l, c, e)) {
-//                    g.drawImage(arbuste, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
+                    g.drawImage(arbuste, (c*multX+offX+multX/4)-5, (l*multY+offY+multY/4)-8, (int) (multX*0.7), (int) (multY*0.7),this );
                 }
 
                 if (this.c.jeu().plateau().aArbre(l, c, e)) {
-                    g.drawOval(c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2);
+                    g.drawImage(arbre, (c*multX+offX+multX/4)-7, (l*multY+offY+multY/4)-8, (int) (multX*0.7), (int) (multY*0.7),this );
                 }
             }
         }

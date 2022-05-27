@@ -39,6 +39,8 @@ public interface CollecteurEvenements {
 
     void selectionnerRecolterGraine();
 
+    void clicSouris(int l, int c, Epoque e);
+
     void toucheClavier(String touche);
 
     void temps();

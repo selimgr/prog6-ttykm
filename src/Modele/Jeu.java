@@ -300,6 +300,10 @@ public class Jeu extends Observable {
         return prochainCoup == TypeCoup.RECOLTE;
     }
 
+    public boolean pionSelectionne() {
+        return tourActuel.pionSelectionne();
+    }
+
     public int nombreCoupsRestantTour(){
         return tourActuel.nombreCoupsRestants();
     }

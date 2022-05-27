@@ -124,7 +124,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
-    @Override
     public void jouer(int l, int c, Epoque e) {
         //System.out.print("Jouer   :" + jeu.joueurActuel().nom() + " (l,c,e)=("+l+","+c+","+e+") ");
         jeu().jouer(l, c, e);
@@ -139,6 +138,13 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void refaire() {
         jeu().refaire();
+    }
+
+    @Override
+    public void clicSouris(int l, int c, Epoque e) {
+        if (jeu().joueurActuel().estHumain()) {
+            jouer(l, c, e);
+        }
     }
 
     @Override
@@ -158,28 +164,28 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void jouerIA() {
-        if (jeu.joueurActuel().type() != TypeJoueur.HUMAIN && jeu.prochaineActionSelectionPion() ) {
-            if (jeu.joueurActuel() == jeu.joueur1()) ia1.jouer();
-            else if (jeu.joueurActuel() == jeu.joueur2()) ia2.jouer();
+        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN && !jeu().pionSelectionne()) {
+            if (jeu().joueurActuel() == jeu().joueur1()) ia1.jouer();
+            else if (jeu().joueurActuel() == jeu().joueur2()) ia2.jouer();
         }
     }
 
     private void initIA(TypeJoueur typeJ1,TypeJoueur typeJ2){
         switch (typeJ1){
             case IA_DIFFICILE:
-                ia1 = new IA_Difficile(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+                ia1 = new IA_Difficile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
             case IA_MOYEN:
-                ia1 = new IA_Moyen(jeu,jeu.joueur1(), jeu().joueur2(),this);break;
+                ia1 = new IA_Moyen(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
             case IA_FACILE:
-                ia1 = new IA_Aleatoire(jeu,jeu.joueur1(),jeu.joueur2(),this);break;
+                ia1 = new IA_Aleatoire(jeu(),jeu().joueur1(),jeu().joueur2(),this);break;
         }
         switch (typeJ2){
             case IA_DIFFICILE:
-                ia2 = new IA_Difficile(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+                ia2 = new IA_Difficile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
             case IA_MOYEN:
-                ia2 = new IA_Moyen(jeu,jeu.joueur2(), jeu().joueur1(),this);break;
+                ia2 = new IA_Moyen(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
             case IA_FACILE:
-                ia2 = new IA_Aleatoire(jeu,jeu.joueur2(), jeu().joueur1(), this);break;
+                ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);break;
         }
     }
 }

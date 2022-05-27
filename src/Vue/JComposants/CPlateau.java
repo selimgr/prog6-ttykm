@@ -1,16 +1,14 @@
 package Vue.JComposants;
 
-import Controleur.ControleurMediateur;
 import Modele.Epoque;
-import Modele.Jeu;
 import Modele.Plateau;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
+import Vue.Theme;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
-import java.awt.AlphaComposite;
 
 // 1 =
 
@@ -23,24 +21,19 @@ public class CPlateau extends JPanel implements Observateur {
     Image brillance = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Brillance.png"))).getImage();
 
     public CPlateau(int numero, CollecteurEvenements c){
-        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/passe_inactif.png"))).getImage();
-        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/present_inactif.png"))).getImage();
-        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/themes/original/plateaux/futur_inactif.png"))).getImage();
-
-
         this.c = c;
 
         num = numero;
 
         switch(numero) {
             case 1:
-                current = plateauPasse;
+                current = Theme.instance().plateau_passe_inactif();
                 break;
             case 2:
-                current = plateauPresent;
+                current = Theme.instance().plateau_present_inactif();
                 break;
             case 3:
-                current = plateauFutur;
+                current = Theme.instance().plateau_futur_inactif();
                 break;
             default:
                 System.err.println("Mauvais numéro de boutons");

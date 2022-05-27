@@ -16,7 +16,7 @@ public class Configuration {
     public static InputStream chargerFichier(String nomFichier) {
         InputStream in = ClassLoader.getSystemResourceAsStream(nomFichier);
 
-        if (in == null || nomFichier.compareTo("") == 0) {
+        if (in == null || "".equals(nomFichier)) {
             throw new UncheckedIOException(new IOException("Impossible de charger le fichier " + nomFichier));
         }
         return in;
@@ -51,7 +51,7 @@ public class Configuration {
     }
 
     public void ecrirePropriete(String nomPropriete, String valeurPropriete) {
-
+        p.setProperty(nomPropriete, valeurPropriete);
     }
 
     public Logger logger() {
@@ -61,9 +61,5 @@ public class Configuration {
             l.setLevel(Level.parse(lirePropriete("LogLevel")));
         }
         return l;
-    }
-
-    public void sauvegarder() {
-
     }
 }

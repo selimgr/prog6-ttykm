@@ -18,8 +18,8 @@ class VueDemarrage extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
 
         // Chargement des assets
-        t = new ImageIcon(getClass().getResource("/assets/topbanner.png")).getImage();
-        logo = new ImageIcon(getClass().getResource("/assets/logo.png")).getImage();
+        t = Imager.getImageBuffer("/assets/topbanner.png");
+        logo = Imager.getImageBuffer("/assets/logo.png");
 
         JButton boutonMenu = new JButton("JOUER");
         boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());

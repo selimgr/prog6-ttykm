@@ -6,6 +6,7 @@ import Modele.Jeu;
 import Modele.Plateau;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
+import Vue.Imager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,19 +19,18 @@ public class CPlateau extends JPanel implements Observateur {
     Image current;
     CollecteurEvenements c;
     int num;
-    Image pionB = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionB.png"))).getImage();
-    Image pionN = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/pionN.png"))).getImage();
-    Image brillance = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Brillance.png"))).getImage();
+    Image pionB = Imager.getImageBuffer("/assets/pionB.png");
+    Image pionN = Imager.getImageBuffer("/assets/pionN.png");
+    Image brillance = Imager.getImageBuffer("/assets/Brillance.png");
+    Image graine = Imager.getImageBuffer("/assets/seed_.png");
 
     public CPlateau(int numero, CollecteurEvenements c){
-        Image plateauPasse = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Passé.png"))).getImage();
-        Image plateauPresent = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Présent.png"))).getImage();
-        Image plateauFutur = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Futur.png"))).getImage();
-
+        Image plateauPasse = Imager.getImageBuffer("/assets/Passé.png");
+        Image plateauPresent = Imager.getImageBuffer("/assets/Présent.png");
+        Image plateauFutur = Imager.getImageBuffer("/assets/Futur.png");
 
         this.c = c;
-
-        num = numero;
+        this.num = numero;
 
         switch(numero) {
             case 1:
@@ -51,20 +51,23 @@ public class CPlateau extends JPanel implements Observateur {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        g.drawImage(current, 0, 0, getWidth(), getHeight(), null);
+        g2d.drawImage(current, 0, 0, getWidth(), getHeight(), null);
+
         switch (num){
             case 1:
-                drawBrillance(g,Epoque.PASSE);
-                drawPion(g,Epoque.PASSE);
+                drawBrillance(g2d, Epoque.PASSE);
+                drawPion(g2d, Epoque.PASSE);
                 break;
             case 2:
-                drawBrillance(g,Epoque.PRESENT);
-                drawPion(g,Epoque.PRESENT);
+                drawBrillance(g2d, Epoque.PRESENT);
+                drawPion(g2d, Epoque.PRESENT);
                 break;
             case 3:
-                drawBrillance(g,Epoque.FUTUR);
-                drawPion(g,Epoque.FUTUR);
+                drawBrillance(g2d, Epoque.FUTUR);
+                drawPion(g2d, Epoque.FUTUR);
                 break;
         }
     }
@@ -82,6 +85,18 @@ public class CPlateau extends JPanel implements Observateur {
                 }
                 if (this.c.jeu().plateau().aNoir(l, c, e)) {
                     g.drawImage(pionN, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
+                }
+
+                if (this.c.jeu().plateau().aGraine(l, c, e)) {
+                    g.drawImage(graine, (c*multX+offX+multX/4)-5, (l*multY+offY+multY/4)-6, (int) (multX*0.7), (int) (multY*0.7),this );
+                }
+
+                if (this.c.jeu().plateau().aArbuste(l, c, e)) {
+//                    g.drawImage(arbuste, c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2,this );
+                }
+
+                if (this.c.jeu().plateau().aArbre(l, c, e)) {
+                    g.drawOval(c*multX+offX+multX/4, l*multY+offY+multY/4, multX/2, multY/2);
                 }
             }
         }

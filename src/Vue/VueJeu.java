@@ -77,7 +77,7 @@ class VueJeu extends JPanel {
         buttonsPanel.add(menuBar);
 
         JMenu menu = new JMenu();
-        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        menu.setIcon(new ImageIcon(Imager.getScaledImage("/assets/white_burger.png", 32, 32)));
         menuBar.add(menu);
 
         JMenuItem[] menu_items = {
@@ -93,9 +93,10 @@ class VueJeu extends JPanel {
         for (JMenuItem menu_item: menu_items)
             menu.add(menu_item);
 
-        JMenu regles = new JMenu();
+        JMenuItem regles = new JMenuItem();
+        regles.setOpaque(false);
         regles.addActionListener(e -> controleur.afficherRegles());
-        regles.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        regles.setIcon(new ImageIcon(Imager.getScaledImage("/assets/Point-d'interrogation.jpg", 32, 32)));
         menuBar.add(regles);
 
         c.fill = GridBagConstraints.VERTICAL;
@@ -217,16 +218,14 @@ class VueJeu extends JPanel {
         c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
 
-        seeds.setSeeds(4);
-
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
-//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
+        recolter.addActionListener((e) -> controleur.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
-//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
+        planter.addActionListener((e) -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         seedsButtons.add(planter);
@@ -256,12 +255,14 @@ class VueJeu extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         mainPanel.add(vueNiveau, c);
 
+        // Initialisation du niveau
         j1.setName((!controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
         j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
 
         j2.setName((!controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
         j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
 
+        seeds.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
 
         topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.addKeyListener(new AdaptateurClavier(controleur));

@@ -13,32 +13,6 @@ public class TestJeu {
         j = new Jeu();
     }
 
-    private void assertPartieNonCommencee() {
-        IllegalStateException e;
-        e = assertThrows(IllegalStateException.class, j::joueurActuel);
-        assertTrue(e.getMessage().contains("Impossible de récupérer le joueur actuel : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::joueurSuivant);
-        assertTrue(e.getMessage().contains("Impossible de récupérer le joueur suivant : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::selectionnerPlantation);
-        assertTrue(e.getMessage().contains("Impossible de sélectionner l'action planter une graine : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::selectionnerRecolte);
-        assertTrue(e.getMessage().contains("Impossible de sélectionner l'action récolter une graine : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, () -> j.jouer(0, 1, Epoque.PASSE));
-        assertTrue(e.getMessage().contains("Impossible de jouer : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::annuler);
-        assertTrue(e.getMessage().contains("Impossible d'annuler : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::prochaineActionSelectionPion);
-        assertTrue(e.getMessage().contains("Impossible de récupérer la prochaine action : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::prochaineActionMouvement);
-        assertTrue(e.getMessage().contains("Impossible de récupérer la prochaine action : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::prochaineActionPlantation);
-        assertTrue(e.getMessage().contains("Impossible de récupérer la prochaine action : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::prochaineActionRecolte);
-        assertTrue(e.getMessage().contains("Impossible de récupérer la prochaine action : aucune partie créée"));
-        e = assertThrows(IllegalStateException.class, j::prochaineActionChangementFocus);
-        assertTrue(e.getMessage().contains("Impossible de récupérer la prochaine action : aucune partie créée"));
-    }
-
     @Test
     public void testInitialisation() {
         NullPointerException e = assertThrows(NullPointerException.class, j::plateau);
@@ -50,8 +24,6 @@ public class TestJeu {
 
         IllegalStateException e2 = assertThrows(IllegalStateException.class, j::nouvellePartie);
         assertTrue(e2.getMessage().contains("Impossible de lancer une nouvelle partie : joueurs manquants"));
-
-        assertPartieNonCommencee();
     }
 
     @Test
@@ -120,9 +92,9 @@ public class TestJeu {
         assertFalse(j.partieTerminee());
         assertNull(j.vainqueur());
         assertTrue(j.prochaineActionSelectionPion());
-        assertFalse(j.prochaineActionMouvement());
-        assertFalse(j.prochaineActionPlantation());
-        assertFalse(j.prochaineActionRecolte());
+        assertFalse(j.prochainCoupMouvement());
+        assertFalse(j.prochainCoupPlantation());
+        assertFalse(j.prochainCoupRecolte());
         assertFalse(j.prochaineActionChangementFocus());
     }
 
@@ -146,7 +118,7 @@ public class TestJeu {
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
 
             j.selectionnerPlantation();
-            j.selectionnerPlantation();
+            j.selectionnerMouvement();
             assertFalse(j.plateau().aBlanc(0, 1, Epoque.PASSE));
             j.jouer(0, 1, Epoque.PASSE);
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
@@ -166,7 +138,7 @@ public class TestJeu {
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
 
             j.selectionnerPlantation();
-            j.selectionnerPlantation();
+            j.selectionnerMouvement();
             assertFalse(j.plateau().aNoir(3, 2, Epoque.FUTUR));
             j.jouer(3, 2, Epoque.FUTUR);
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
@@ -194,7 +166,7 @@ public class TestJeu {
             j.annuler();
 
             j.selectionnerRecolte();
-            j.selectionnerRecolte();
+            j.selectionnerMouvement();
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
             j.jouer(0, 1, Epoque.PASSE);
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
@@ -215,7 +187,7 @@ public class TestJeu {
             j.annuler();
 
             j.selectionnerRecolte();
-            j.selectionnerRecolte();
+            j.selectionnerMouvement();
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
             j.jouer(3, 2, Epoque.FUTUR);
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
@@ -280,21 +252,22 @@ public class TestJeu {
     }
 
     @Test
-    public void testJouerAnnulerMouvement() {
+    public void testJouerAnnulerRefaireMouvement() {
         initialiserPartie();
         assertTrue(j.prochaineActionSelectionPion());
-        assertFalse(j.prochaineActionMouvement());
-        assertFalse(j.prochaineActionPlantation());
-        assertFalse(j.prochaineActionRecolte());
+        assertFalse(j.prochainCoupMouvement());
+        assertFalse(j.prochainCoupPlantation());
+        assertFalse(j.prochainCoupRecolte());
         assertFalse(j.prochaineActionChangementFocus());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
             j.jouer(0, 0, Epoque.PASSE);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aBlanc(0, 0, Epoque.PASSE));
@@ -304,9 +277,10 @@ public class TestJeu {
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(2, 3, Epoque.PASSE));
@@ -314,9 +288,10 @@ public class TestJeu {
             assertTrue(j.plateau().estVide(2, 3, Epoque.PASSE));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
@@ -326,9 +301,7 @@ public class TestJeu {
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
@@ -338,9 +311,7 @@ public class TestJeu {
             assertTrue(j.plateau().estVide(0, 3, Epoque.PASSE));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
@@ -348,11 +319,16 @@ public class TestJeu {
             j.annuler();
             assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 2, Epoque.PASSE));
+            j.refaire();
+            assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
+            assertTrue(j.plateau().aBlanc(0, 2, Epoque.PASSE));
+            j.annuler();
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(0, 0, Epoque.PASSE));
@@ -360,27 +336,42 @@ public class TestJeu {
             j.annuler();
             assertTrue(j.plateau().aBlanc(0, 0, Epoque.PASSE));
             assertTrue(j.plateau().estVide(0, 1, Epoque.PASSE));
+            j.refaire();
+            assertTrue(j.plateau().estVide(0, 0, Epoque.PASSE));
+            assertTrue(j.plateau().aBlanc(0, 1, Epoque.PASSE));
+            j.annuler();
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(0, 0, Epoque.PASSE);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(0, 0, Epoque.PASSE);
@@ -389,9 +380,10 @@ public class TestJeu {
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aNoir(3, 3, Epoque.FUTUR));
@@ -401,9 +393,10 @@ public class TestJeu {
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(1, 0, Epoque.FUTUR));
@@ -411,9 +404,10 @@ public class TestJeu {
             assertTrue(j.plateau().estVide(1, 0, Epoque.FUTUR));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
@@ -423,9 +417,7 @@ public class TestJeu {
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
@@ -435,9 +427,7 @@ public class TestJeu {
             assertTrue(j.plateau().estVide(3, 0, Epoque.FUTUR));
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
@@ -445,11 +435,16 @@ public class TestJeu {
             j.annuler();
             assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 1, Epoque.FUTUR));
+            j.refaire();
+            assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
+            assertTrue(j.plateau().aNoir(3, 1, Epoque.FUTUR));
+            j.annuler();
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().estVide(3, 3, Epoque.FUTUR));
@@ -457,36 +452,49 @@ public class TestJeu {
             j.annuler();
             assertTrue(j.plateau().aNoir(3, 3, Epoque.FUTUR));
             assertTrue(j.plateau().estVide(3, 2, Epoque.FUTUR));
+            j.refaire();
+            assertTrue(j.plateau().estVide(3, 3, Epoque.FUTUR));
+            assertTrue(j.plateau().aNoir(3, 2, Epoque.FUTUR));
+            j.annuler();
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(3, 3, Epoque.FUTUR);
 
         }
         assertTrue(j.prochaineActionSelectionPion());
-        assertFalse(j.prochaineActionMouvement());
-        assertFalse(j.prochaineActionPlantation());
-        assertFalse(j.prochaineActionRecolte());
+        assertFalse(j.prochaineActionJouerCoup());
         assertFalse(j.prochaineActionChangementFocus());
     }
 
@@ -494,9 +502,7 @@ public class TestJeu {
     public void testJouerAnnulerPlantation() {
         initialiserPartie();
         assertTrue(j.prochaineActionSelectionPion());
-        assertFalse(j.prochaineActionMouvement());
-        assertFalse(j.prochaineActionPlantation());
-        assertFalse(j.prochaineActionRecolte());
+        assertFalse(j.prochaineActionJouerCoup());
         assertFalse(j.prochaineActionChangementFocus());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
@@ -504,9 +510,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
@@ -515,9 +522,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(2, 3, Epoque.PASSE));
@@ -526,9 +534,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
@@ -537,9 +546,7 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(1, 0, Epoque.PASSE));
@@ -548,55 +555,69 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.annuler();
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
+            j.refaire();
+            assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
+            j.annuler();
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.annuler();
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
+            j.refaire();
+            assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
+            j.annuler();
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(0, 0, Epoque.PASSE);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(0, 0, Epoque.PASSE);
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(0, 0, Epoque.PASSE);
@@ -617,9 +638,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
@@ -628,9 +650,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(1, 0, Epoque.FUTUR));
@@ -639,9 +662,10 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
@@ -650,9 +674,7 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(2, 3, Epoque.FUTUR));
@@ -661,55 +683,69 @@ public class TestJeu {
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.annuler();
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
+            j.refaire();
+            assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
+            j.annuler();
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.annuler();
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
+            j.refaire();
+            assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
+            j.annuler();
 
             j.selectionnerPlantation();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertTrue(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertTrue(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(3, 3, Epoque.FUTUR);
@@ -732,9 +768,7 @@ public class TestJeu {
     public void testJouerAnnulerRecolte() {
         initialiserPartie();
         assertTrue(j.prochaineActionSelectionPion());
-        assertFalse(j.prochaineActionMouvement());
-        assertFalse(j.prochaineActionPlantation());
-        assertFalse(j.prochaineActionRecolte());
+        assertFalse(j.prochaineActionJouerCoup());
         assertFalse(j.prochaineActionChangementFocus());
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
@@ -742,9 +776,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(0, 0, Epoque.PASSE, Piece.GRAINE);
@@ -754,9 +789,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(2, 3, Epoque.PASSE, Piece.GRAINE);
@@ -766,9 +802,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(0, 1, Epoque.PASSE, Piece.GRAINE);
@@ -778,9 +815,7 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(1, 0, Epoque.PASSE, Piece.GRAINE);
@@ -790,55 +825,68 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aGraine(0, 1, Epoque.PASSE));
+            j.refaire();
+            assertFalse(j.plateau().aGraine(0, 1, Epoque.PASSE));
+            j.annuler();
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
             j.annuler();
             assertTrue(j.plateau().aGraine(0, 0, Epoque.PASSE));
+            j.refaire();
+            assertFalse(j.plateau().aGraine(0, 0, Epoque.PASSE));
+            j.annuler();
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(0, 0, Epoque.PASSE);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(0, 0, Epoque.PASSE);
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(0, 0, Epoque.PASSE);
@@ -859,9 +907,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(3, 3, Epoque.FUTUR, Piece.GRAINE);
@@ -871,9 +920,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(1, 0, Epoque.FUTUR, Piece.GRAINE);
@@ -883,9 +933,10 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(3, 2, Epoque.FUTUR, Piece.GRAINE);
@@ -895,9 +946,7 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             j.plateau().ajouter(2, 3, Epoque.FUTUR, Piece.GRAINE);
@@ -907,55 +956,68 @@ public class TestJeu {
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertTrue(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aGraine(3, 2, Epoque.FUTUR));
+            j.refaire();
+            assertFalse(j.plateau().aGraine(3, 2, Epoque.FUTUR));
+            j.annuler();
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
             j.annuler();
             assertTrue(j.plateau().aGraine(3, 3, Epoque.FUTUR));
+            j.refaire();
+            assertFalse(j.plateau().aGraine(3, 3, Epoque.FUTUR));
+            j.annuler();
 
             j.selectionnerRecolte();
             assertFalse(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertTrue(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertFalse(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertTrue(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.annuler();
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
+
+            j.refaire();
+            assertFalse(j.prochaineActionSelectionPion());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
+            assertFalse(j.prochaineActionChangementFocus());
+
+            j.annuler();
 
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertFalse(j.prochaineActionSelectionPion());
-            assertTrue(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertTrue(j.prochaineActionJouerCoup());
+            assertTrue(j.prochainCoupMouvement());
+            assertFalse(j.prochainCoupPlantation());
+            assertFalse(j.prochainCoupRecolte());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(3, 3, Epoque.FUTUR);
 
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
 
             j.jouer(3, 3, Epoque.FUTUR);
@@ -1104,9 +1166,7 @@ public class TestJeu {
             assertEquals(j.joueur2(), j.joueurSuivant());
             assertFalse(j.partieTerminee());
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
             assertEquals(0, j.joueur1().nombreVictoires());
             assertEquals(1, j.joueur2().nombreVictoires());
@@ -1217,9 +1277,7 @@ public class TestJeu {
             assertEquals(j.joueur1(), j.joueurSuivant());
             assertFalse(j.partieTerminee());
             assertTrue(j.prochaineActionSelectionPion());
-            assertFalse(j.prochaineActionMouvement());
-            assertFalse(j.prochaineActionPlantation());
-            assertFalse(j.prochaineActionRecolte());
+            assertFalse(j.prochaineActionJouerCoup());
             assertFalse(j.prochaineActionChangementFocus());
             assertEquals(1, j.joueur1().nombreVictoires());
             assertEquals(0, j.joueur2().nombreVictoires());
@@ -1265,7 +1323,6 @@ public class TestJeu {
 
     @Test
     public void testExceptionsPartieTermine() {
-        IllegalStateException e;
         initialiserPartie();
 
         if (j.joueurActuel().pions() == Pion.BLANC) {
@@ -1361,16 +1418,5 @@ public class TestJeu {
             j.jouer(0, 0, Epoque.PRESENT);
         }
         assertTrue(j.partieTerminee());
-
-        e = assertThrows(IllegalStateException.class, j::joueurActuel);
-        assertTrue(e.getMessage().contains("Impossible de récupérer le joueur actuel : partie terminée"));
-        e = assertThrows(IllegalStateException.class, j::joueurSuivant);
-        assertTrue(e.getMessage().contains("Impossible de récupérer le joueur suivant : partie terminée"));
-        e = assertThrows(IllegalStateException.class, j::selectionnerPlantation);
-        assertTrue(e.getMessage().contains("Impossible de sélectionner l'action planter une graine : partie terminée"));
-        e = assertThrows(IllegalStateException.class, j::selectionnerRecolte);
-        assertTrue(e.getMessage().contains("Impossible de sélectionner l'action récolter une graine : partie terminée"));
-        e = assertThrows(IllegalStateException.class, () -> j.jouer(0, 0, Epoque.PRESENT));
-        assertTrue(e.getMessage().contains("Impossible de jouer : partie terminée"));
     }
 }

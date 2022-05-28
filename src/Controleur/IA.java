@@ -77,7 +77,7 @@ public abstract class IA {
     }
 
     int coup1(Joueur j,int minmax,int horizon) {
-        Plateau p = ctrl.jeu().plateau();
+        Plateau p = ctrl.jeu().plateau().copier();
         // Mauvais focus de départ ?
         ArrayList<Coup> C = ctrl.jeu().plateau().casesJouablesEpoque(j, false, 0, 0, null);
         Iterator<Coup> it = C.iterator();
@@ -85,20 +85,21 @@ public abstract class IA {
         int valeur = -1000000000;
         if (!it.hasNext()) choixFocus(null,j,null,null,minmax,horizon);
         while (it.hasNext()) {
+            System.out.println("Avant C1 :\n" +ctrl.jeu().plateau().hash2());
             Coup c = it.next();
-            System.out.println("it coup 1 : "+c.depart().toString());
-            // Selectionner pio*
+            System.out.println("it coup 1 : " + c.depart().toString() + " -> " + c.arrivee().toString());
+            // Selectionner pion
             System.out.print("JOUER SEL:");ctrl.jouer(c.depart().ligne(), c.depart().colonne(), c.depart().epoque());
             Case arr = c.arrivee();
             if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Premier coup
-            List<Case> pions = ctrl.jeu().plateau().chercherPions(j,j.focus());
             System.out.print("JOUER C1 :");ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 1 joué : " + p.hash());
             valeur = coup2(arr, j,c,minmax,horizon);
-            System.out.print("Annuler C1 : "); ctrl.annuler(); // Annuler coup 1
-            System.out.print("Annuler Selection : "); ctrl.annuler(); // Deselection pion
+            System.out.print("Annuler C1 ? : "); ctrl.annuler(); // Annuler coup 1
+            System.out.print("Annuler Selection ? : "); ctrl.annuler(); // Deselection pion
+            System.out.println("Apres tour :\n" +ctrl.jeu().plateau().hash2());
         }
         C = null;
         return valeur;
@@ -119,14 +120,16 @@ public abstract class IA {
             System.out.print("JOUER C2 :"); ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 2 joué : " + p.hash());
             valeur = choixFocus(arr, j,c,c2,minmax,horizon);
-            System.out.print("Annuler C2 :"); ctrl.annuler();
+            System.out.print("Annuler C2 ? :"); ctrl.annuler();
         }
 
         return valeur;
     }
 
     int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int minmax,int horizon){
-        if (c2 == null) System.out.print("FOCUS COUP MANQUANT --- ");
+        if (c2 == null) System.out.println("FOCUS COUP MANQUANT ---\n" +ctrl.jeu().plateau().hash2());
+        //if (c != null) System.out.println(c.toString());
+
         Plateau p = ctrl.jeu().plateau();
         Epoque focusJ = j.focus();
         int valeur = -1000000000;
@@ -146,7 +149,7 @@ public abstract class IA {
                     coupFocus = Epoque.depuisIndice(foc);
                     //System.out.println(((Mouvement) premierCoup).toString() + "  :: " + ((Mouvement) secondCoup).toString() + " approx =" + valeur);
                 }
-                System.out.print("Annuler Foc :"); ctrl.annuler();
+                System.out.print("Annuler Foc ? :"); ctrl.annuler();
             }
         }
         return valeur;

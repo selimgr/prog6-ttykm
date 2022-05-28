@@ -358,6 +358,20 @@ public class Plateau {
         return plateauStr;
     }
 
+    public String hash2() {
+        String plateauStr = "";
+        for (int i = 0; i < Epoque.NOMBRE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
+                for (int k = 0; k < TAILLE; k++) {
+                    plateauStr += this.contenu(j, k, Epoque.depuisIndice(i)) + " ";
+                }
+                plateauStr += "\n";
+            }
+            plateauStr += "\n\n";
+        }
+        return plateauStr;
+    }
+
     public void briller(int l, int c, Epoque e) {
         this.brillance[e.indice()][l][c]=1;
     }

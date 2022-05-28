@@ -240,7 +240,7 @@ public class Plateau {
         nombreGrainesReserve--;
     }
 
-    private List<Case> chercherPions(Joueur j, Epoque e){
+    public List<Case> chercherPions(Joueur j, Epoque e){
         ArrayList<Case> cases = new ArrayList<>();
         Epoque e2 = e;
         Piece p = Piece.depuisValeur(j.pions().valeur());
@@ -249,7 +249,6 @@ public class Plateau {
                 if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
             }
         }
-
         return cases;
     }
     public ArrayList<Coup> casesJouablesEpoque(Joueur j, boolean sel,  int l, int c, Epoque e){
@@ -259,26 +258,26 @@ public class Plateau {
             pions = chercherPions(j,j.focus());
         }
         else { pions = new ArrayList<>(); pions.add(new Case(l,c,e));}
-        gestionCoupsJouables(j, jouables, pions);
-        return jouables;
+        return gestionCoupsJouables(j, jouables, pions,sel);
     }
 
     public int coupJouables(Joueur j){
         ArrayList<Coup> jouables = new ArrayList<>();
         List<Case> pions;
         pions = chercherPions(j,Epoque.PASSE);
-        gestionCoupsJouables(j, jouables, pions);
+        jouables.addAll(gestionCoupsJouables(j, jouables, pions,false));
         pions = chercherPions(j,Epoque.PRESENT);
-        gestionCoupsJouables(j, jouables, pions);
+        jouables.addAll(gestionCoupsJouables(j, jouables, pions,false));
         pions = chercherPions(j,Epoque.FUTUR);
-        gestionCoupsJouables(j, jouables, pions);
+        jouables.addAll(gestionCoupsJouables(j, jouables, pions,false));
         return jouables.size();
     }
 
-    private  void gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions){
+    private ArrayList<Coup> gestionCoupsJouables(Joueur j, ArrayList<Coup> jouables,List<Case> pions,boolean sel){
         Iterator<Case> it  = pions.iterator();
         ArrayList<Coup> coup = new ArrayList<>();
         int i =0;
+        int i2 =0;
 
         while(it.hasNext()){
             Case cas = it.next();
@@ -287,18 +286,45 @@ public class Plateau {
             for (int k = 0; k <7 ;k++) {
                 coup.add(new Mouvement(this, j, cas.ligne(), cas.colonne(), eActu));
             }
-                if (coup.get(i*7).creer(cas.ligne()+1, cas.colonne(), eActu)) jouables.add(coup.get(i*7));
-                if (coup.get(i*7+1).creer(cas.ligne()-1,cas.colonne(),eActu) ) jouables.add(coup.get(i*7+1));
-                if (coup.get(i*7+2).creer(cas.ligne(), cas.colonne()+1, eActu) ) jouables.add(coup.get(i*7+2));
-                if (coup.get(i*7+3).creer(cas.ligne(), cas.colonne()-1,eActu) ) jouables.add(coup.get(i*7+3));
-                if (coup.get(i*7+4).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR) ) jouables.add(coup.get(i*7+4));
-                if (coup.get(i*7+5).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)) jouables.add(coup.get(i*7+5));
-                if (coup.get(i*7+6).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)) jouables.add(coup.get(i*7+6));
-                i++;
+            if (coup.get(i).creer(cas.ligne()+1, cas.colonne(), eActu)) {
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne()-1,cas.colonne(),eActu)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne(), cas.colonne()+1, eActu)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne(), cas.colonne()-1,eActu)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne(), cas.colonne(), Epoque.FUTUR)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne(), cas.colonne(), Epoque.PRESENT)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
+            if (coup.get(i).creer(cas.ligne(), cas.colonne(), Epoque.PASSE)){
+                jouables.add(coup.get(i));
+                i2++;
+            }
+            i++;
             // TODO : Ajouter action sur les graines
             // ...
         }
-
+        return jouables;
 
     }
 

@@ -138,7 +138,7 @@ class VueJeu extends JPanel {
         // -----------
 
         c.fill = GridBagConstraints.NONE;
-        // ESPACEMENT POUR LE RESTE (hors plateau)
+        // MARK: ESPACEMENT POUR LE RESTE (hors plateau)
         c.insets = new Insets(0, 60, 0, 60);
         c.gridx = 0;
         c.gridy = 0;

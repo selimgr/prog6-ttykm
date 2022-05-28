@@ -155,11 +155,11 @@ public class Plateau {
                 aArbreCoucheVersLeBas(l, c, e) || aArbreCoucheVersLaGauche(l, c, e);
     }
 
-    boolean estOccupable(int l, int c, Epoque e) {
+    public boolean estOccupable(int l, int c, Epoque e) {
         return estVide(l, c, e) || contenu(l, c, e) == Piece.GRAINE.valeur();
     }
 
-    boolean aObstacleMortel(int l, int c, Epoque e, int dL, int dC) {
+    public boolean aObstacleMortel(int l, int c, Epoque e, int dL, int dC) {
         if (Math.abs(dL) + Math.abs(dC) >= 2 || dL + dC == 0) {
             throw new IllegalArgumentException("Déplacement incorrect : " + dL + ", " + dC);
         }

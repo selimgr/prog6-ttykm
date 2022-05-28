@@ -311,4 +311,16 @@ public class Jeu extends Observable {
     public void choixJoueurDebut(int numeroJoueur) {
         choixJoueurDebut = numeroJoueur % 2;
     }
+
+    public int lignePion() {
+        return tourActuel.lignePion();
+    }
+
+    public int colonnePion() {
+        return tourActuel.colonnePion();
+    }
+
+    public Epoque epoquePion() {
+        return tourActuel.epoquePion();
+    }
 }

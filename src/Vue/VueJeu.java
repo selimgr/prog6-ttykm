@@ -6,8 +6,6 @@ import Vue.JComposants.CInfoJoueur;
 import  javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 import static java.awt.GridBagConstraints.*;
@@ -222,11 +220,11 @@ class VueJeu extends JPanel {
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
-//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
+        recolter.addActionListener(e -> controleur.selectionnerRecolterGraine());
         recolter.setEnabled(false);
 
         JButton planter = new JButton("Planter une graine");
-//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
+        planter.addActionListener(e -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         seedsButtons.add(planter);

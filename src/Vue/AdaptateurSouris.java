@@ -10,12 +10,6 @@ class AdaptateurSouris extends MouseAdapter {
     CollecteurEvenements controleur;
     String Objet;
     CPlateau pane;
-    static double BORDURE_PASSE_Y = 0.09102564;
-    static double BORDURE_PRESENT_Y = 0.08678756;
-    static double BORDURE_FUTUR_Y = 0.08903226;
-    static double BORDURE_PASSE_X = 0.09137709;
-    static double BORDURE_PRESENT_X = 0.08667529;
-    static double BORDURE_FUTUR_X = 0.08914729;
 
     AdaptateurSouris(CollecteurEvenements c, CPlateau pane, String nomObjet) {
         controleur = c;
@@ -25,8 +19,8 @@ class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int bordureHaut = Math.round(Theme.instance().bordureHaut() * pane.getWidth() / (float) Theme.instance().largeurPlateau());
-        int bordureGauche = Math.round(Theme.instance().bordureGauche() * pane.getHeight() / (float) Theme.instance().hauteurPlateau());
+        int bordureHaut = Math.round(Theme.instance().bordureHaut() * pane.getHeight() / (float) Theme.instance().hauteurPlateau());
+        int bordureGauche = Math.round(Theme.instance().bordureGauche() * pane.getWidth() / (float) Theme.instance().largeurPlateau());
         int bordureBas = Math.round(Theme.instance().bordureBas() * pane.getHeight() / (float) Theme.instance().hauteurPlateau());
         int bordureDroite = Math.round(Theme.instance().bordureDroite() * pane.getWidth() / (float) Theme.instance().largeurPlateau());
 

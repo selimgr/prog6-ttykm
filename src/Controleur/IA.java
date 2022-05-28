@@ -165,14 +165,14 @@ public abstract class IA {
         //Selection
         System.out.println(ia.toString());
         System.out.println(ctrl.jeu().joueurActuel().toString());
-        if(c1 != null) {
+        if (ctrl.jeu().prochaineActionJouerCoup()) {
             System.out.printf("coup1 = %s%n", c1);
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
             // Coup 1
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
         }
         // Coup 2
-        if(c2 != null) {
+        if (ctrl.jeu().prochaineActionJouerCoup()) {
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
             System.out.println("coup2 = " + c2.toString());
         }

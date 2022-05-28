@@ -1,5 +1,6 @@
 package Modele;
 
+import Global.Configuration;
 import Patterns.Observable;
 
 import java.util.Random;
@@ -114,6 +115,7 @@ public class Jeu extends Observable {
             return;
         }
 
+        Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
         if (prochaineActionSelectionPion()) {
             System.out.println("jouer Selection   ");
             selectionnerPion(l, c, e);
@@ -147,6 +149,7 @@ public class Jeu extends Observable {
             changerFocus(e);
             plateau.resetBrillance();
         }
+        Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {
@@ -297,11 +300,27 @@ public class Jeu extends Observable {
         return prochainCoup == TypeCoup.RECOLTE;
     }
 
+    public boolean pionSelectionne() {
+        return tourActuel.pionSelectionne();
+    }
+
     public int nombreCoupsRestantTour(){
         return tourActuel.nombreCoupsRestants();
     }
 
     public void choixJoueurDebut(int numeroJoueur) {
         choixJoueurDebut = numeroJoueur % 2;
+    }
+
+    public int lignePion() {
+        return tourActuel.lignePion();
+    }
+
+    public int colonnePion() {
+        return tourActuel.colonnePion();
+    }
+
+    public Epoque epoquePion() {
+        return tourActuel.epoquePion();
     }
 }

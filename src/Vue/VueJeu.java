@@ -6,9 +6,6 @@ import Vue.JComposants.CInfoJoueur;
 import  javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Objects;
 
 import static java.awt.GridBagConstraints.*;
 
@@ -27,8 +24,8 @@ class VueJeu extends JPanel {
     VueJeu(CollecteurEvenements c) {
         controleur = c;
 
-        j1 = new CInfoJoueur(0);
-        j2 = new CInfoJoueur(1);
+        j1 = new CInfoJoueur(false);
+        j2 = new CInfoJoueur(true);
         seeds = new CGraines();
 
         setLayout(new OverlayLayout(this));
@@ -77,7 +74,7 @@ class VueJeu extends JPanel {
         buttonsPanel.add(menuBar);
 
         JMenu menu = new JMenu();
-        menu.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/white_burger.png"))).getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT)));
+        menu.setIcon(new ImageIcon(Imager.getScaledImage("assets/white_burger.png", 32, 32)));
         menuBar.add(menu);
 
         JMenuItem[] menu_items = {
@@ -93,9 +90,10 @@ class VueJeu extends JPanel {
         for (JMenuItem menu_item: menu_items)
             menu.add(menu_item);
 
-        JMenu regles = new JMenu();
+        JMenuItem regles = new JMenuItem();
+        regles.setOpaque(false);
         regles.addActionListener(e -> controleur.afficherRegles());
-        regles.setIcon(new ImageIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/Point-d'interrogation.jpg"))).getImage().getScaledInstance(15, 20, Image.SCALE_DEFAULT)));
+        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.jpg", 32, 32)));
         menuBar.add(regles);
 
         c.fill = GridBagConstraints.VERTICAL;
@@ -128,7 +126,6 @@ class VueJeu extends JPanel {
         c.weightx = 1;
         c.weighty = 1;
 
-        c.insets = new Insets(0,60,0,60);
         c.anchor = GridBagConstraints.CENTER;
 
         mainPanel = new JPanel();
@@ -138,7 +135,8 @@ class VueJeu extends JPanel {
         // -----------
 
         c.fill = GridBagConstraints.NONE;
-        c.insets = new Insets(0, 0, 0, 0);
+        // MARK: ESPACEMENT POUR LE RESTE (hors plateau)
+        c.insets = new Insets(0, 60, 0, 60);
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 1;
@@ -217,16 +215,14 @@ class VueJeu extends JPanel {
         c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
 
-        seeds.setSeeds(4);
-
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
-//        recolter.addActionListener((e) -> c.selectionnerRecolterGraine());
-        recolter.setEnabled(false);
+        recolter.addActionListener(e -> controleur.selectionnerRecolterGraine());
+        recolter.setEnabled(true);
 
         JButton planter = new JButton("Planter une graine");
-//        planter.addActionListener((e) -> c.selectionnerPlanterGraine());
+        planter.addActionListener(e -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
         seedsButtons.add(planter);
@@ -249,6 +245,8 @@ class VueJeu extends JPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
+        // MARK: ESPACEMENT PLATEAU GAUCHE ET DROITE
+        c.insets = new Insets(0,10,0,10);
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 1;
@@ -256,12 +254,14 @@ class VueJeu extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         mainPanel.add(vueNiveau, c);
 
-        j1.setName((!controleur.jeu().joueur1().estHumain() ? "IA : " : "") + controleur.jeu().joueur1().nom());
-        j1.setPions(controleur.jeu().joueur1().nombrePionsReserve());
+        // Initialisation du niveau
+        j1.setName((!controleur.jeu().joueurSuivant().estHumain() ? "IA : " : "") + controleur.jeu().joueurSuivant().nom());
+        j1.setPions(controleur.jeu().joueurSuivant().nombrePionsReserve());
 
-        j2.setName((!controleur.jeu().joueur2().estHumain() ? "IA : " : "") + controleur.jeu().joueur2().nom());
-        j2.setPions(controleur.jeu().joueur2().nombrePionsReserve());
+        j2.setName((!controleur.jeu().joueurActuel().estHumain() ? "IA : " : "") + controleur.jeu().joueurActuel().nom());
+        j2.setPions(controleur.jeu().joueurActuel().nombrePionsReserve());
 
+        seeds.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
 
         topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.addKeyListener(new AdaptateurClavier(controleur));
@@ -269,7 +269,7 @@ class VueJeu extends JPanel {
         topFrame.requestFocus();
 
         vueNiveau.miseAJour();
-        texteJeu.setText("C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
+        texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
 //        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
 

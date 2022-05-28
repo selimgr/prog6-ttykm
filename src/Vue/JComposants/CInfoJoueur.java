@@ -1,5 +1,7 @@
 package Vue.JComposants;
 
+import Vue.Imager;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +16,9 @@ public class CInfoJoueur extends JPanel {
     private final JLabel n;
     private final JPanel p;
     private final ImageIcon pawnW;
+    private final int hgap = 5;
 
-    public CInfoJoueur(int reverse) {
+    public CInfoJoueur(boolean reverse) {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -24,25 +27,15 @@ public class CInfoJoueur extends JPanel {
         n.setFont(new Font("Arial", Font.BOLD, 16));
 
         // --
-        BufferedImage r_pawnW;
-
-        try {
-            r_pawnW = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/assets/pawn.png")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        AffineTransform xform =  AffineTransform.getScaleInstance(0.5, 0.5);
-        r_pawnW = new AffineTransformOp(xform, AffineTransformOp.TYPE_BICUBIC).filter(r_pawnW, null);
-        pawnW = new ImageIcon(r_pawnW);
+        pawnW = new ImageIcon(Imager.getScaledImage(reverse ? "assets/pionB.png" : "assets/pionN.png", 25, 30));
         // --
-        p = new JPanel(new GridLayout(1, 0, 0, 0));
+        p = new JPanel(new GridLayout(1, 0, hgap, 0));
         p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        add(reverse == 0 ? n : p);
+        add(!reverse ? n : p);
         add(Box.createRigidArea(new Dimension(10, 0)));
-        add(reverse == 0 ? p : n);
+        add(!reverse ? p : n);
     }
 
     public void setName(String nom) {
@@ -52,7 +45,7 @@ public class CInfoJoueur extends JPanel {
 
     public void setPions(int nb) {
         p.removeAll();
-        p.setLayout(new GridLayout(1, nb, 0, 0));
+        p.setLayout(new GridLayout(1, nb, hgap, 0));
         for (int i = 0; i < nb; i ++) p.add(new JLabel(pawnW));
         repaint();
     }

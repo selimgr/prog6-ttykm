@@ -129,7 +129,6 @@ class VueJeu extends JPanel {
         c.weightx = 1;
         c.weighty = 1;
 
-        c.insets = new Insets(0,60,0,60);
         c.anchor = GridBagConstraints.CENTER;
 
         mainPanel = new JPanel();
@@ -139,7 +138,8 @@ class VueJeu extends JPanel {
         // -----------
 
         c.fill = GridBagConstraints.NONE;
-        c.insets = new Insets(0, 0, 0, 0);
+        // ESPACEMENT POUR LE RESTE (hors plateau)
+        c.insets = new Insets(0, 60, 0, 60);
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 1;
@@ -222,7 +222,7 @@ class VueJeu extends JPanel {
         seedsButtons.setOpaque(false);
         JButton recolter = new JButton("Récolter une graine");
         recolter.addActionListener((e) -> controleur.selectionnerRecolterGraine());
-        recolter.setEnabled(false);
+        recolter.setEnabled(true);
 
         JButton planter = new JButton("Planter une graine");
         planter.addActionListener((e) -> controleur.selectionnerPlanterGraine());
@@ -248,6 +248,8 @@ class VueJeu extends JPanel {
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
+        // MARK: ESPACEMENT PLATEAU GAUCHE ET DROITE
+        c.insets = new Insets(0,10,0,10);
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 1;
@@ -270,7 +272,7 @@ class VueJeu extends JPanel {
         topFrame.requestFocus();
 
         vueNiveau.miseAJour();
-        texteJeu.setText("C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
+        texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
 //        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
 

@@ -30,7 +30,7 @@ class VueNiveau extends JPanel implements Observateur {
 //        setBorder(BorderFactory.createEmptyBorder(140, 100, 140, 100));
 //        setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 100));
         setOpaque(false);
-        setLayout(new GridLayout(1, 3, 30, 0));
+        setLayout(new GridLayout(1, 3, 10, 0));
 
         JPanel plateau1 = new JPanel(new GridBagLayout());
         plateau1.setOpaque(false);

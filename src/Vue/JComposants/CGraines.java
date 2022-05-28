@@ -21,7 +21,7 @@ public class CGraines extends JPanel {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        seed = new ImageIcon(Imager.getScaledImage("/assets/seed_.png", 32, 32));
+        seed = new ImageIcon(Imager.getScaledImage("assets/seed_.png", 32, 32));
 
         // --
         p = new JPanel(new GridLayout(1, 0, hgap, 0));

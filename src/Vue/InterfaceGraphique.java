@@ -30,8 +30,8 @@ public class InterfaceGraphique implements Runnable {
         DisplayMode dm = device.getDisplayMode();
 
         // TODO: Gérer la taille de la fenêtre dans default.cfg
-        int width = dm.getWidth() / 2;
-        int height = dm.getHeight() / 2 + 80;
+        int width = dm.getWidth() / 4 * 3;
+        int height = dm.getHeight() / 4 * 3;
 
         // On fixe le layout du conteneur contenant les différentes vues de la fenêtre
         frame.getContentPane().setLayout(new CardLayout());

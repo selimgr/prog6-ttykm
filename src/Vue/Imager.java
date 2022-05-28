@@ -1,5 +1,7 @@
 package Vue;
 
+import Global.Configuration;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +13,11 @@ import java.util.Objects;
 
 public class Imager {
 
-    public static BufferedImage getImageBuffer(String path) {
+    public static Image getImageBuffer(String path) {
+        InputStream in = Configuration.chargerFichier(path);
+
         try {
-            InputStream is = Imager.class.getResourceAsStream(path);
-            return ImageIO.read(Objects.requireNonNull(is));
+            return ImageIO.read(in);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -22,7 +25,7 @@ public class Imager {
     }
 
     public static Image getScaledImage(String path, int width, int height) {
-        BufferedImage image = getImageBuffer(path);
+        Image image = getImageBuffer(path);
         return getScaledImage(Objects.requireNonNull(image), width, height);
     }
 

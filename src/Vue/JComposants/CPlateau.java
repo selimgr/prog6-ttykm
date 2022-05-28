@@ -2,7 +2,6 @@ package Vue.JComposants;
 
 import Modele.Epoque;
 import Modele.Jeu;
-import Modele.Joueur;
 import Modele.Plateau;
 import Patterns.Observateur;
 import Vue.CollecteurEvenements;
@@ -14,7 +13,6 @@ import java.awt.*;
 public class CPlateau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
     int num;
-    Image brillance = Theme.instance().chargerImage("assets/Brillance.png");
     int bordureHaut, bordureGauche, hauteurCase, largeurCase;
 
     public CPlateau(int numero, CollecteurEvenements c) {

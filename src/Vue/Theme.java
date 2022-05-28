@@ -3,7 +3,6 @@ package Vue;
 import Global.Configuration;
 import Modele.Epoque;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -60,68 +59,54 @@ public class Theme {
         largeurCase = (largeurPlateau - bordureGauche - bordureDroite) / 4;
     }
 
-    public Image chargerImage(String nomImage) {
-        Image image = null;
-
-        InputStream in = chargerFichier(nomImage);
-
-        try {
-            image = ImageIO.read(in);
-        } catch (Exception e) {
-            Configuration.instance().logger().severe("Impossible de charger l'image : " + nomImage);
-            System.exit(1);
-        }
-        return image;
-    }
-
     void charger() {
         String theme = "assets" + File.separator + "themes" + File.separator + Configuration.instance().lirePropriete("Theme");
         chargerDimensions(theme);
 
         String plateaux = theme + File.separator + "plateaux" + File.separator;
-        plateau_passe_inactif = chargerImage(plateaux + "plateau_passe_inactif.png");
-        plateau_present_inactif = chargerImage(plateaux + "plateau_present_inactif.png");
-        plateau_futur_inactif = chargerImage(plateaux + "plateau_futur_inactif.png");
-        plateau_passe_actif = chargerImage(plateaux + "plateau_passe_actif.png");
-        plateau_present_actif = chargerImage(plateaux + "plateau_present_actif.png");
-        plateau_futur_actif = chargerImage(plateaux + "plateau_futur_actif.png");
+        plateau_passe_inactif = Imager.getImageBuffer(plateaux + "plateau_passe_inactif.png");
+        plateau_present_inactif = Imager.getImageBuffer(plateaux + "plateau_present_inactif.png");
+        plateau_futur_inactif = Imager.getImageBuffer(plateaux + "plateau_futur_inactif.png");
+        plateau_passe_actif = Imager.getImageBuffer(plateaux + "plateau_passe_actif.png");
+        plateau_present_actif = Imager.getImageBuffer(plateaux + "plateau_present_actif.png");
+        plateau_futur_actif = Imager.getImageBuffer(plateaux + "plateau_futur_actif.png");
 
         String pions = theme + File.separator + "pions" + File.separator;
-        blanc_inactif = chargerImage(pions + "blanc_inactif.png");
-        blanc_actif_passe = chargerImage(pions + "blanc_actif_passe.png");
-        blanc_actif_present = chargerImage(pions + "blanc_actif_present.png");
-        blanc_actif_futur = chargerImage(pions + "blanc_actif_futur.png");
-        blanc_selectionne_passe = chargerImage(pions + "blanc_selectionne_passe.png");
-        blanc_selectionne_present = chargerImage(pions + "blanc_selectionne_present.png");
-        blanc_selectionne_futur = chargerImage(pions + "blanc_selectionne_futur.png");
-        noir_inactif = chargerImage(pions + "noir_inactif.png");
-        noir_actif_passe = chargerImage(pions + "noir_actif_passe.png");
-        noir_actif_present = chargerImage(pions + "noir_actif_present.png");
-        noir_actif_futur = chargerImage(pions + "noir_actif_futur.png");
-        noir_selectionne_passe = chargerImage(pions + "noir_selectionne_passe.png");
-        noir_selectionne_present = chargerImage(pions + "noir_selectionne_present.png");
-        noir_selectionne_futur = chargerImage(pions + "noir_selectionne_futur.png");
+        blanc_inactif = Imager.getImageBuffer(pions + "blanc_inactif.png");
+        blanc_actif_passe = Imager.getImageBuffer(pions + "blanc_actif_passe.png");
+        blanc_actif_present = Imager.getImageBuffer(pions + "blanc_actif_present.png");
+        blanc_actif_futur = Imager.getImageBuffer(pions + "blanc_actif_futur.png");
+        blanc_selectionne_passe = Imager.getImageBuffer(pions + "blanc_selectionne_passe.png");
+        blanc_selectionne_present = Imager.getImageBuffer(pions + "blanc_selectionne_present.png");
+        blanc_selectionne_futur = Imager.getImageBuffer(pions + "blanc_selectionne_futur.png");
+        noir_inactif = Imager.getImageBuffer(pions + "noir_inactif.png");
+        noir_actif_passe = Imager.getImageBuffer(pions + "noir_actif_passe.png");
+        noir_actif_present = Imager.getImageBuffer(pions + "noir_actif_present.png");
+        noir_actif_futur = Imager.getImageBuffer(pions + "noir_actif_futur.png");
+        noir_selectionne_passe = Imager.getImageBuffer(pions + "noir_selectionne_passe.png");
+        noir_selectionne_present = Imager.getImageBuffer(pions + "noir_selectionne_present.png");
+        noir_selectionne_futur = Imager.getImageBuffer(pions + "noir_selectionne_futur.png");
 
         String focus = theme + File.separator + "focus" + File.separator;
-        focus_blanc = chargerImage(focus + "focus_blanc.png");
-        focus_noir = chargerImage(focus + "focus_noir.png");
+        focus_blanc = Imager.getImageBuffer(focus + "focus_blanc.png");
+        focus_noir = Imager.getImageBuffer(focus + "focus_noir.png");
 
         String chapitre_1 = theme + File.separator + "chapitre_1" + File.separator;
-        graine_inactif = chargerImage(chapitre_1 + "graine_inactif.png");
-        graine_actif_passe = chargerImage(chapitre_1 + "graine_actif_passe.png");
-        graine_actif_present = chargerImage(chapitre_1 + "graine_actif_present.png");
-        graine_actif_futur = chargerImage(chapitre_1 + "graine_actif_futur.png");
-        arbuste = chargerImage(chapitre_1 + "arbuste.png");
-        arbre = chargerImage(chapitre_1 + "arbre.png");
-        arbre_couche_haut = chargerImage(chapitre_1 + "arbre_couche_haut.png");
-        arbre_couche_droite = chargerImage(chapitre_1 + "arbre_couche_droite.png");
-        arbre_couche_bas = chargerImage(chapitre_1 + "arbre_couche_bas.png");
-        arbre_couche_gauche = chargerImage(chapitre_1 + "arbre_couche_gauche.png");
+        graine_inactif = Imager.getImageBuffer(chapitre_1 + "graine_inactif.png");
+        graine_actif_passe = Imager.getImageBuffer(chapitre_1 + "graine_actif_passe.png");
+        graine_actif_present = Imager.getImageBuffer(chapitre_1 + "graine_actif_present.png");
+        graine_actif_futur = Imager.getImageBuffer(chapitre_1 + "graine_actif_futur.png");
+        arbuste = Imager.getImageBuffer(chapitre_1 + "arbuste.png");
+        arbre = Imager.getImageBuffer(chapitre_1 + "arbre.png");
+        arbre_couche_haut = Imager.getImageBuffer(chapitre_1 + "arbre_couche_haut.png");
+        arbre_couche_droite = Imager.getImageBuffer(chapitre_1 + "arbre_couche_droite.png");
+        arbre_couche_bas = Imager.getImageBuffer(chapitre_1 + "arbre_couche_bas.png");
+        arbre_couche_gauche = Imager.getImageBuffer(chapitre_1 + "arbre_couche_gauche.png");
 
         String surbrillance = theme + File.separator + "surbrillance" + File.separator;
-        surbrillance_passe = chargerImage(surbrillance + "surbrillance_passe.png");
-        surbrillance_present = chargerImage(surbrillance + "surbrillance_present.png");
-        surbrillance_futur = chargerImage(surbrillance + "surbrillance_futur.png");
+        surbrillance_passe = Imager.getImageBuffer(surbrillance + "surbrillance_passe.png");
+        surbrillance_present = Imager.getImageBuffer(surbrillance + "surbrillance_present.png");
+        surbrillance_futur = Imager.getImageBuffer(surbrillance + "surbrillance_futur.png");
     }
 
     public int hauteurPlateau() {

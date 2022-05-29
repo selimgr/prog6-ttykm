@@ -41,7 +41,7 @@ public class VueMenuSaisies extends JPanel {
         $$$setupUI$$$();
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
-        
+
         jouerButton.addActionListener((e) -> {
             c.nouvellePartie(
                     nomJ1.getText(),
@@ -126,7 +126,7 @@ public class VueMenuSaisies extends JPanel {
         nomJ1.setDropMode(DropMode.USE_SELECTION);
         nomJ1.setFocusCycleRoot(false);
         nomJ1.setFocusTraversalPolicyProvider(false);
-        nomJ1.setFocusable(true);
+        nomJ1.setFocusable(false);
         nomJ1.setText("Nom de Joueur 1");
         nomJ1.setVisible(true);
         Joueur1.add(nomJ1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(120, -1), new Dimension(200, -1), 0, false));

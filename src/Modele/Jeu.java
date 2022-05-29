@@ -282,10 +282,15 @@ public class Jeu extends Observable {
     }
 
     public boolean prochaineActionChangementFocus() {
-        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
+        int nombrePionPlateau;
+        if (pionSelectionne()) {
+            nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), epoquePion());
+        } else {
+            nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
+        }
 
-        return tourActuel.nombreCoupsRestants() == 0 || (nombrePionPlateau == 0 &&
-                (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
+        return !tourActuel.termine() && (nombreCoupsRestantsTour() == 0 || (nombrePionPlateau == 0 &&
+                (!pionSelectionne() || epoquePion() == joueurActuel().focus())));
     }
 
     public boolean prochainCoupMouvement() {
@@ -304,7 +309,7 @@ public class Jeu extends Observable {
         return tourActuel.pionSelectionne();
     }
 
-    public int nombreCoupsRestantTour(){
+    public int nombreCoupsRestantsTour(){
         return tourActuel.nombreCoupsRestants();
     }
 

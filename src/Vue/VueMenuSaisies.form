@@ -43,7 +43,7 @@
               <dropMode value="USE_SELECTION"/>
               <focusCycleRoot value="false"/>
               <focusTraversalPolicyProvider value="false"/>
-              <focusable value="true"/>
+              <focusable value="false"/>
               <text value="Nom de Joueur 1"/>
               <visible value="true"/>
             </properties>

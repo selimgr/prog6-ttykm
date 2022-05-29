@@ -254,7 +254,7 @@ class VueJeu extends JPanel {
     }
 
     void nouvellePartie() {
-        vueNiveau = new VueNiveau(controleur, j1, j2, seeds);
+        vueNiveau = new VueNiveau(controleur, j1, j2, seeds,texteJeu);
         controleur.jeu().ajouteObservateur(vueNiveau);
 
         GridBagConstraints c = new GridBagConstraints();

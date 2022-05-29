@@ -165,7 +165,7 @@ public abstract class IA {
         //Selection
         System.out.println(ia.toString());
         System.out.println(ctrl.jeu().joueurActuel().toString());
-        if (ctrl.jeu().prochaineActionJouerCoup()) {
+        if (ctrl.jeu().prochaineActionSelectionPion()) {
             System.out.printf("coup1 = %s%n", c1);
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
             // Coup 1

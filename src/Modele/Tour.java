@@ -99,12 +99,14 @@ class Tour {
             System.out.println("Jouer coup 1  ");
             coup1 = coup;
             coup2 = null;
+            coup.jouer();
+            if (coup1.pionSelectionnerEstMort()) { nombreCoupsRestants--; System.out.println("HERE");}
         } else {
             System.out.println("    Jouer coup 2  ");
-
             coup2 = coup;
+            coup.jouer();
         }
-        coup.jouer();
+
         pion = coup.pion();
         nombreCoupsRestants--;
         prochainFocus = null;
@@ -133,9 +135,14 @@ class Tour {
 
         switch (nombreCoupsRestants) {
             case 0:
-                System.out.println("    Annuler coup 2  ");
-                coup2.annuler();
-                pion = coup2.pion();
+                if (coup2 != null) {
+                    System.out.println("    Annuler coup 2  ");
+                    coup2.annuler();
+                    pion = coup2.pion();
+                }
+                else {
+                    nombreCoupsRestants++;
+                }
                 nombreCoupsRestants++;
                 break;
             case 1:

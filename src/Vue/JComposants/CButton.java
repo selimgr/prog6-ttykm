@@ -1,15 +1,17 @@
 package Vue.JComposants;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class CButton extends JButton {
 
-    private Color highlightColor = new Color(51, 51, 51);
-    private Color normalColor = new Color(29, 29, 29);
-    private Color pressedColor = new Color(241, 241, 241);
+    private Color highlightBackgroundColor = new Color(51, 51, 51);
+    private Color normalBackgroundColor = new Color(29, 29, 29);
+    private Color pressedBackgroundColor = new Color(241, 241, 241);
+    private Color textColor = new Color(255, 255, 255);
+    private Color pressedTextColor = new Color(0, 0, 0);
+    private int radius = 35;
 
     public CButton(String label) {
         super(label);
@@ -21,7 +23,7 @@ public class CButton extends JButton {
         setOpaque(false);
 
         // Customise le style du bouton
-        setBackground(normalColor);
+        setBackground(normalBackgroundColor);
         setForeground(Color.white);
         setFont(new Font("Arial", Font.BOLD, 14));
         setBorder(new EmptyBorder(10, 25, 10, 25));
@@ -36,15 +38,41 @@ public class CButton extends JButton {
         g2.setRenderingHints(qualityHints);
 
         if (getModel().isArmed()) {
-            g2.setColor(pressedColor);
-            setForeground(Color.black);
+            g2.setColor(pressedBackgroundColor);
+            setForeground(pressedTextColor);
         } else {
-            if (getModel().isRollover()) g2.setColor(highlightColor); else g2.setColor(getBackground());
-            setForeground(Color.white);
+            if (getModel().isRollover()) g2.setColor(highlightBackgroundColor); else g2.setColor(normalBackgroundColor);
+            setForeground(textColor);
         }
-        g2.fillRoundRect(0, 0, getSize().width-1, getSize().height-1, 35, 35);
+        g2.fillRoundRect(0, 0, getSize().width-1, getSize().height-1, radius, radius);
 
         super.paintComponent(g);
+    }
+
+    public CButton blanc() {
+        textColor = Color.black;
+        pressedTextColor = Color.black;
+
+        normalBackgroundColor = Color.white;
+        highlightBackgroundColor = new Color(241, 241, 241, 255);
+        pressedBackgroundColor = new Color(208, 208, 208, 255);
+
+        return this;
+    }
+
+    public CButton boutonJouer() {
+        textColor = Color.white;
+        pressedTextColor = Color.white;
+
+        normalBackgroundColor = new Color(42, 187, 94, 255);
+        highlightBackgroundColor = new Color(35, 162, 81, 255);
+        pressedBackgroundColor = new Color(32, 138, 70, 255);
+        radius = 45;
+
+        setFont(new Font("Arial", Font.BOLD, 24));
+        setBorder(new EmptyBorder(10, 35, 10, 35));
+
+        return this;
     }
 
 }

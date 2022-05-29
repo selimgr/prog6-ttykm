@@ -1,11 +1,10 @@
 package Vue;
 
-import Vue.JComposants.CButton;
-import Vue.JComposants.CGraines;
-import Vue.JComposants.CInfoJoueur;
+import Vue.JComposants.*;
 
 import  javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 import static java.awt.GridBagConstraints.*;
@@ -75,6 +74,10 @@ class VueJeu extends JPanel {
         buttonsPanel.add(menuBar);
 
         JMenu menu = new JMenu();
+        menu.setBorderPainted(false);
+        menu.setBorder(new MatteBorder(0, 0, 1, 0, Color.red));
+        menu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        menu.setUI(new CMenuUI());
         menu.setIcon(new ImageIcon(Imager.getScaledImage("assets/white_burger.png", 32, 32)));
         menuBar.add(menu);
 
@@ -90,15 +93,25 @@ class VueJeu extends JPanel {
 
         for (JMenuItem menu_item: menu_items) {
             menu_item.setFont(new Font("Arial", Font.PLAIN, 14));
+            menu_item.setBorderPainted(false);
+            menu_item.setUI(menu_item.getClass().getName().contains("Check") ? new CCheckBoxMenuItemUI() : new CMenuItemUI(true));
             menu.add(menu_item);
         }
 
-        JMenuItem regles = new JMenuItem("Règles");
-        regles.setForeground(Color.WHITE);
-        regles.setFont(new Font("Arial", Font.PLAIN, 14));
-        regles.setOpaque(false);
+//        JMenuItem regles = new JMenuItem("Règles");
+//        regles.setBorderPainted(false);
+//        regles.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        regles.setUI(new CMenuItemUI(false));
+//        regles.setForeground(Color.WHITE);
+//        regles.setFont(new Font("Arial", Font.PLAIN, 14));
+//        regles.setBackground(new Color(23, 23, 23));
+//        regles.addActionListener(e -> controleur.afficherRegles());
+//        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.png", 32, 32)));
+
+        JButton regles = new CButton("? Règles").blanc();
         regles.addActionListener(e -> controleur.afficherRegles());
-        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.png", 32, 32)));
+
+        menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
         menuBar.add(regles);
 
         c.fill = GridBagConstraints.VERTICAL;

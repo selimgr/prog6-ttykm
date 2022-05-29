@@ -8,9 +8,11 @@ public class CButton extends JButton {
 
     private Color highlightBackgroundColor = new Color(51, 51, 51);
     private Color normalBackgroundColor = new Color(29, 29, 29);
-    private Color pressedBackgroundColor = new Color(241, 241, 241);
+    private Color pressedBackgroundColor = new Color(21, 21, 21);
+//    private Color pressedBackgroundColor = new Color(241, 241, 241);
     private Color textColor = new Color(255, 255, 255);
-    private Color pressedTextColor = new Color(0, 0, 0);
+    private Color pressedTextColor = new Color(255, 255, 255);
+//    private Color pressedTextColor = new Color(0, 0, 0);
     private int radius = 35;
 
     public CButton(String label) {

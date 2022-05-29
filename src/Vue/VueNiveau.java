@@ -125,8 +125,8 @@ class VueNiveau extends JPanel implements Observateur {
         present.setBorder(present_focus);
         futur.setBorder(futur_focus);
 
-        j1.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
-        j2.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
+        j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
+        j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
     }
 }

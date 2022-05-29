@@ -1,5 +1,7 @@
 package Vue;
 
+import Vue.JComposants.CButton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -21,7 +23,7 @@ class VueDemarrage extends JPanel {
         t = Imager.getImageBuffer("assets/topbanner.png");
         logo = Imager.getImageBuffer("assets/logo.png");
 
-        JButton boutonMenu = new JButton("JOUER");
+        JButton boutonMenu = new CButton("JOUER");
         boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());
         boutonMenu.setAlignmentX(CENTER_ALIGNMENT);
         add(boutonMenu);

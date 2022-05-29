@@ -3,6 +3,7 @@ package Vue.JComposants;
 import Vue.Imager;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class CInfoJoueur extends JPanel {
@@ -16,19 +17,19 @@ public class CInfoJoueur extends JPanel {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        n = new JLabel("");
+        setBorder(new EmptyBorder(5, !reverse ? 20 : 10, 5, !reverse ? 10 : 20));
+
+        n = new JLabel();
         n.setForeground(Color.WHITE);
         n.setFont(new Font("Arial", Font.BOLD, 16));
 
         // --
         pawnW = new ImageIcon(Imager.getScaledImage(reverse ? "assets/pionB.png" : "assets/pionN.png", 25, 30));
         // --
-        p = new JPanel(new GridLayout(1, 0, hgap, 0));
-        p.setBackground(Color.WHITE);
-        p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        p = new CPions(reverse);
 
         add(!reverse ? n : p);
-        add(Box.createRigidArea(new Dimension(10, 0)));
+        add(Box.createRigidArea(new Dimension(14, 0)));
         add(!reverse ? p : n);
     }
 

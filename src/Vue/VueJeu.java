@@ -1,5 +1,6 @@
 package Vue;
 
+import Vue.JComposants.CButton;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
 
@@ -24,8 +25,8 @@ class VueJeu extends JPanel {
     VueJeu(CollecteurEvenements c) {
         controleur = c;
 
-        j1 = new CInfoJoueur(false);
-        j2 = new CInfoJoueur(true);
+        j1 = new CInfoJoueur(true);
+        j2 = new CInfoJoueur(false);
         seeds = new CGraines();
 
         setLayout(new OverlayLayout(this));
@@ -35,7 +36,7 @@ class VueJeu extends JPanel {
         backgroundTop = new JPanel(new BorderLayout());
         backgroundTop.setBackground(new Color(23, 23, 23));
         backgroundBottom = new JPanel(new BorderLayout());
-        backgroundBottom.setBackground(new Color(254, 125, 97));
+        backgroundBottom.setBackground(new Color(255, 116, 87));
         background.add(backgroundTop);
         background.add(backgroundBottom);
         // --
@@ -87,10 +88,14 @@ class VueJeu extends JPanel {
         menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
         menu_items[3].addActionListener(e -> controleur.toClose());
 
-        for (JMenuItem menu_item: menu_items)
+        for (JMenuItem menu_item: menu_items) {
+            menu_item.setFont(new Font("Arial", Font.PLAIN, 14));
             menu.add(menu_item);
+        }
 
-        JMenuItem regles = new JMenuItem();
+        JMenuItem regles = new JMenuItem("Règles");
+        regles.setForeground(Color.WHITE);
+        regles.setFont(new Font("Arial", Font.PLAIN, 14));
         regles.setOpaque(false);
         regles.addActionListener(e -> controleur.afficherRegles());
         regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.png", 32, 32)));
@@ -107,10 +112,11 @@ class VueJeu extends JPanel {
         JPanel textPanel = new JPanel();
         textPanel.setOpaque(false);
         texteJeu = new JLabel("");
-        texteJeu.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+        texteJeu.setFont(new Font("Arial", Font.PLAIN, 16));
         texteJeu.setForeground(Color.white);
         texteJeu.setBorder(new EmptyBorder(10,0,0,0));
         textPanel.add(texteJeu);
+
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
@@ -136,13 +142,20 @@ class VueJeu extends JPanel {
 
         c.fill = GridBagConstraints.NONE;
         // MARK: ESPACEMENT POUR LE RESTE (hors plateau)
-        c.insets = new Insets(0, 60, 0, 60);
+        c.insets = new Insets(10, 60, 0, 60);
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 1;
         c.weighty = 1;
         c.anchor = FIRST_LINE_END;
         mainPanel.add(j1, c);
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = FIRST_LINE_START;
+        mainPanel.add(j2, c);
 
         // --
         c.fill = BOTH;
@@ -153,15 +166,6 @@ class VueJeu extends JPanel {
         c.anchor = LAST_LINE_START;
 
         mainPanel.add(addUserActions(), c);
-//
-//        // --
-//        c.fill = NONE;
-//        c.gridx = 0;
-//        c.gridy = 3;
-//        c.weightx = 1;
-//        c.weighty = 1;
-//        c.anchor = LAST_LINE_START;
-//        mainPanel.add(j2, c);
     }
 
     private void addBottom(JPanel contenu) {
@@ -181,9 +185,9 @@ class VueJeu extends JPanel {
         controlsPanel.setOpaque(false);
 
         JButton[] controls = {
-            new JButton("<"),
-            new JButton(">"),
-            new JButton("Fin tour")
+            new CButton("<"),
+            new CButton(">"),
+            new CButton("Fin tour")
         };
 
         controls[0].addActionListener(e -> controleur.annuler());
@@ -217,11 +221,11 @@ class VueJeu extends JPanel {
 
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
-        JButton recolter = new JButton("Récolter une graine");
+        JButton recolter = new CButton("Récolter une graine");
         recolter.addActionListener(e -> controleur.selectionnerRecolterGraine());
         recolter.setEnabled(true);
 
-        JButton planter = new JButton("Planter une graine");
+        JButton planter = new CButton("Planter une graine");
         planter.addActionListener(e -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
 
@@ -234,7 +238,7 @@ class VueJeu extends JPanel {
 
         c.gridy = 1;
         c.anchor = GridBagConstraints.LAST_LINE_START;
-        userActions.add(j2, c);
+//        userActions.add(j2, c);
         // --
         return userActions;
     }
@@ -246,7 +250,7 @@ class VueJeu extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         // MARK: ESPACEMENT PLATEAU GAUCHE ET DROITE
-        c.insets = new Insets(0,10,0,10);
+        c.insets = new Insets(5,28,5,28);
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 1;
@@ -270,7 +274,6 @@ class VueJeu extends JPanel {
 
         vueNiveau.miseAJour();
         texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
-//        JOptionPane.showMessageDialog(null, "C'est " + controleur.jeu().joueurActuel().nom() + " qui commence (PIONS " + controleur.jeu().joueurActuel().pions().toString() + ")");
     }
 
 }

@@ -1,10 +1,11 @@
 package Vue;
 
+import Vue.JComposants.CButton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.Objects;
 
 class VueMenuPrincipal extends JPanel {
 
@@ -22,40 +23,43 @@ class VueMenuPrincipal extends JPanel {
         t = Imager.getImageBuffer("assets/topbanner.png");
         logo = Imager.getImageBuffer("assets/logo.png");
 
-        JButton nouvellePartie = new JButton("Nouvelle Partie");
+        JButton nouvellePartie = new CButton("Nouvelle Partie");
         nouvellePartie.addActionListener((e) -> {
             c.afficherMenuNouvellePartie();
         });
-        add(nouvellePartie);
 
-        JButton chargerPartie = new JButton("Charger Partie");
+        JButton chargerPartie = new CButton("Charger Partie");
         chargerPartie.addActionListener((e) -> {
             c.afficherMenuChargerPartie();
         });
-        add(chargerPartie);
 
-        JButton regles = new JButton("Règles");
+        JButton regles = new CButton("Règles");
         regles.addActionListener((e) -> {
             c.afficherRegles();
         });
-        add(regles);
+        JButton didacticiel = new CButton("Didacticiel");
 
-        add(Box.createRigidArea(new Dimension(10, 30)));
-
-        JButton didacticiel = new JButton("Didacticiel");
-        add(didacticiel);
-
-        JButton quitter = new JButton("Quitter");
+        JButton quitter = new CButton("Quitter");
         quitter.addActionListener((e) -> {
             c.toClose();
         });
-        add(quitter);
 
-        for (Component ca : getComponents()) {
-            if (ca.getClass().getName().contains("Button"))
-                ((JButton)ca).setAlignmentX(CENTER_ALIGNMENT);
+        Component[] components = {
+                nouvellePartie,
+                chargerPartie,
+                regles,
+                Box.createRigidArea(new Dimension(10, 30)),
+                didacticiel,
+                quitter
+        };
+
+        for (Component component : components) {
+            if (component.getClass().getName().contains("Button"))
+                ((JButton)component).setAlignmentX(CENTER_ALIGNMENT);
+            add(component);
+            if (!component.getClass().getName().contains("Box"))
+                add(Box.createRigidArea(new Dimension(0, 5)));
         }
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

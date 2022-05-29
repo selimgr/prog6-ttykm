@@ -157,7 +157,16 @@ class VueJeu extends JPanel {
         c.anchor = FIRST_LINE_START;
         mainPanel.add(j2, c);
 
+        c.insets = new Insets(14, 0, 0, 0);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.anchor = PAGE_START;
+        mainPanel.add(seeds, c);
+
         // --
+        c.insets = new Insets(10, 60, 0, 60);
         c.fill = BOTH;
         c.gridx = 0;
         c.gridy = 2;
@@ -231,9 +240,10 @@ class VueJeu extends JPanel {
 
         seedsButtons.add(planter);
         seedsButtons.add(recolter);
-        seeds.add(seedsButtons);
-
-        userActions.add(seeds, c);
+//        seeds.add(seedsButtons);
+//
+//        userActions.add(seeds, c);
+        userActions.add(seedsButtons);
         // --
 
         c.gridy = 1;

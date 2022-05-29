@@ -64,12 +64,12 @@ public class Theme {
         chargerDimensions(theme);
 
         String plateaux = theme + File.separator + "plateaux" + File.separator;
-        plateau_passe_inactif = Imager.getImageBuffer(plateaux + "plateau_passe_inactif.png");
-        plateau_present_inactif = Imager.getImageBuffer(plateaux + "plateau_present_inactif.png");
-        plateau_futur_inactif = Imager.getImageBuffer(plateaux + "plateau_futur_inactif.png");
-        plateau_passe_actif = Imager.getImageBuffer(plateaux + "plateau_passe_actif.png");
-        plateau_present_actif = Imager.getImageBuffer(plateaux + "plateau_present_actif.png");
-        plateau_futur_actif = Imager.getImageBuffer(plateaux + "plateau_futur_actif.png");
+        plateau_passe_inactif = Imager.getImageBuffer(plateaux + "plateau_passe_inactif-min.png");
+        plateau_present_inactif = Imager.getImageBuffer(plateaux + "plateau_present_inactif-min.png");
+        plateau_futur_inactif = Imager.getImageBuffer(plateaux + "plateau_futur_inactif-min.png");
+        plateau_passe_actif = Imager.getImageBuffer(plateaux + "plateau_passe_actif-min.png");
+        plateau_present_actif = Imager.getImageBuffer(plateaux + "plateau_present_actif-min.png");
+        plateau_futur_actif = Imager.getImageBuffer(plateaux + "plateau_futur_actif-min.png");
 
         String pions = theme + File.separator + "pions" + File.separator;
         blanc_inactif = Imager.getImageBuffer(pions + "blanc_inactif.png");

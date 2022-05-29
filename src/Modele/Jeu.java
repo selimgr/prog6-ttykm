@@ -81,6 +81,14 @@ public class Jeu extends Observable {
         return joueur2;
     }
 
+    public Joueur joueurPionsBlancs() {
+        return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
+    }
+
+    public Joueur joueurPionsNoirs() {
+        return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
+    }
+
     public Joueur joueurActuel() {
         if (joueurActuel == 0) {
             return joueur1();

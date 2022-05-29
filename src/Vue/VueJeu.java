@@ -112,7 +112,7 @@ class VueJeu extends JPanel {
         JPanel textPanel = new JPanel();
         textPanel.setOpaque(false);
         texteJeu = new JLabel("");
-        texteJeu.setFont(new Font("Arial", Font.PLAIN, 16));
+        texteJeu.setFont(new Font("Arial", Font.PLAIN, 18));
         texteJeu.setForeground(Color.white);
         texteJeu.setBorder(new EmptyBorder(10,0,0,0));
         textPanel.add(texteJeu);

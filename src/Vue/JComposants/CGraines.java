@@ -1,5 +1,6 @@
 package Vue.JComposants;
 
+import Modele.Plateau;
 import Vue.Imager;
 
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 public class CGraines extends JPanel {
 
     private final ImageIcon seed;
+    private final ImageIcon seed_dead;
     private final int hgap = 5;
 
     public CGraines() {
@@ -17,12 +19,14 @@ public class CGraines extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
 
         seed = new ImageIcon(Imager.getScaledImage("assets/seed_.png", 32, 32));
+        seed_dead = new ImageIcon(Imager.getScaledImage("assets/seed_dead.png", 32, 32));
     }
 
     public void setSeeds(int nb) {
         removeAll();
-        setLayout(new GridLayout(1, nb, hgap, 0));
+        setLayout(new GridLayout(1, Plateau.NOMBRE_MAX_GRAINES, hgap, 0));
         for (int i = 0; i < nb; i ++) add(new JLabel(seed));
+        for (int i = 0; i < Plateau.NOMBRE_MAX_GRAINES-nb; i ++) add(new JLabel(seed_dead));
     }
 
     @Override

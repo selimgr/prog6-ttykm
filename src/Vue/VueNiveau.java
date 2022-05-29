@@ -1,7 +1,10 @@
 package Vue;
 
+import Global.Configuration;
 import Modele.Pion;
 import Patterns.Observateur;
+import Vue.JComposants.CGraines;
+import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
 
 import javax.swing.*;
@@ -16,12 +19,18 @@ class VueNiveau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
     CPlateau passe, present, futur;
     MatteBorder top, bottom;
+    CInfoJoueur j1, j2;
+    CGraines g;
 
-    VueNiveau(CollecteurEvenements c) {
+    VueNiveau(CollecteurEvenements c, CInfoJoueur j1, CInfoJoueur j2, CGraines g) {
         controleur = c;
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
         futur = new CPlateau(3, controleur);
+        this.j1 = j1;
+        this.j2 = j2;
+        this.g = g;
+
         c.jeu().ajouteObservateur(passe);
         c.jeu().ajouteObservateur(present);
         c.jeu().ajouteObservateur(futur);
@@ -115,5 +124,9 @@ class VueNiveau extends JPanel implements Observateur {
         passe.setBorder(passe_focus);
         present.setBorder(present_focus);
         futur.setBorder(futur_focus);
+
+        j1.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
+        j2.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
+        g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
     }
 }

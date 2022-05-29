@@ -1,15 +1,11 @@
 package Vue.JComposants;
 
+import Global.Configuration;
 import Vue.Imager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class CInfoJoueur extends JPanel {
 
@@ -40,14 +36,12 @@ public class CInfoJoueur extends JPanel {
 
     public void setName(String nom) {
         n.setText(nom);
-        repaint();
     }
 
     public void setPions(int nb) {
         p.removeAll();
         p.setLayout(new GridLayout(1, nb, hgap, 0));
         for (int i = 0; i < nb; i ++) p.add(new JLabel(pawnW));
-        repaint();
     }
 
 }

@@ -35,6 +35,5 @@ public class CGraines extends JPanel {
         p.removeAll();
         p.setLayout(new GridLayout(1, nb, hgap, 0));
         for (int i = 0; i < nb; i ++) p.add(new JLabel(seed));
-        repaint();
     }
 }

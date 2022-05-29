@@ -1,7 +1,5 @@
 package Vue;
 
-import Global.Configuration;
-import Modele.Pion;
 import Patterns.Observateur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
@@ -21,8 +19,9 @@ class VueNiveau extends JPanel implements Observateur {
     MatteBorder top, bottom;
     CInfoJoueur j1, j2;
     CGraines g;
+    JLabel texteJeu;
 
-    VueNiveau(CollecteurEvenements c, CInfoJoueur j1, CInfoJoueur j2, CGraines g) {
+    VueNiveau(CollecteurEvenements c, CInfoJoueur j1, CInfoJoueur j2, CGraines g, JLabel texteJeu) {
         controleur = c;
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
@@ -30,6 +29,7 @@ class VueNiveau extends JPanel implements Observateur {
         this.j1 = j1;
         this.j2 = j2;
         this.g = g;
+        this.texteJeu = texteJeu;
 
         c.jeu().ajouteObservateur(passe);
         c.jeu().ajouteObservateur(present);
@@ -128,5 +128,6 @@ class VueNiveau extends JPanel implements Observateur {
         j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
         j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
+        texteJeu.setText("C'est au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer ! ");
     }
 }

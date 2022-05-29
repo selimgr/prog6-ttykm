@@ -187,7 +187,7 @@ class VueJeu extends JPanel {
         JButton[] controls = {
             new CButton("<"),
             new CButton(">"),
-            new CButton("Fin tour")
+//            new CButton("Fin tour")
         };
 
         controls[0].addActionListener(e -> controleur.annuler());

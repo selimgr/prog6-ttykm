@@ -93,7 +93,7 @@ class VueJeu extends JPanel {
         JMenuItem regles = new JMenuItem();
         regles.setOpaque(false);
         regles.addActionListener(e -> controleur.afficherRegles());
-        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.jpg", 32, 32)));
+        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.png", 32, 32)));
         menuBar.add(regles);
 
         c.fill = GridBagConstraints.VERTICAL;

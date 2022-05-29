@@ -24,7 +24,7 @@ public class CInfoJoueur extends JPanel {
         n.setFont(new Font("Arial", Font.BOLD, 16));
 
         // --
-        pawnW = new ImageIcon(Imager.getScaledImage(reverse ? "assets/pionB.png" : "assets/pionN.png", 25, 30));
+        pawnW = new ImageIcon(Imager.getScaledImage(reverse ? "assets/IconePB.png" : "assets/IconePN.png", 25, 30));
         // --
         p = new CPions(reverse);
 

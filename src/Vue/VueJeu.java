@@ -284,11 +284,11 @@ class VueJeu extends JPanel {
         mainPanel.add(vueNiveau, c);
 
         // Initialisation du niveau
-        j1.setName((!controleur.jeu().joueurSuivant().estHumain() ? "IA : " : "") + controleur.jeu().joueurSuivant().nom());
-        j1.setPions(controleur.jeu().joueurSuivant().nombrePionsReserve());
+        j1.setName((!controleur.jeu().joueurActuel().estHumain() ? "IA : " : "") + controleur.jeu().joueurActuel().nom());
+        j1.setPions(controleur.jeu().joueurActuel().nombrePionsReserve());
 
-        j2.setName((!controleur.jeu().joueurActuel().estHumain() ? "IA : " : "") + controleur.jeu().joueurActuel().nom());
-        j2.setPions(controleur.jeu().joueurActuel().nombrePionsReserve());
+        j2.setName((!controleur.jeu().joueurSuivant().estHumain() ? "IA : " : "") + controleur.jeu().joueurSuivant().nom());
+        j2.setPions(controleur.jeu().joueurSuivant().nombrePionsReserve());
 
         seeds.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
 

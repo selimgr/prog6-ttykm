@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 public class Joueur {
     private final String nom;
     private final TypeJoueur type;
-    private final Pion pions;
+    private Pion pions;
     private final int handicap;
     private Epoque focus;
     private int nombrePionsReserve;
@@ -131,6 +131,10 @@ public class Joueur {
             throw new IllegalStateException("Impossible d'enlever une victoire au joueur : aucune victoire");
         }
         nombreVictoires--;
+    }
+
+    void setPions(Pion pions) {
+        this.pions = pions;
     }
 
     @Override

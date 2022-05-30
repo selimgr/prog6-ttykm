@@ -53,6 +53,9 @@ public class Jeu extends Observable {
         // Sinon le perdant de la partie précédente commence
         if (joueurActuel == -1) {
             joueurActuel = choixJoueurDebut == -1 ? rand.nextInt(2) : choixJoueurDebut;
+            // Par défaut le joueur qui commence a les pions blancs
+            joueurActuel().setPions(Pion.BLANC);
+            joueurSuivant().setPions(Pion.NOIR);
         } else if (vainqueur() == joueur1) {
             joueurActuel = 1;
         } else {

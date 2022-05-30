@@ -21,25 +21,8 @@ class Tour {
         return focus;
     }
 
-    private void verifierPionSelectionne(String message) {
-        if (!pionSelectionne()) {
-            throw new IllegalStateException(message + " : pion non sélectionné");
-        }
-    }
-
-    int lignePion() {
-        verifierPionSelectionne("Impossible de renvoyer la ligne du pion");
-        return pion.ligne();
-    }
-
-    int colonnePion() {
-        verifierPionSelectionne("Impossible de renvoyer la colonne du pion");
-        return pion.colonne();
-    }
-
-    Epoque epoquePion() {
-        verifierPionSelectionne("Impossible de renvoyer l'époque du pion");
-        return pion.epoque();
+    Case pion() {
+        return pion;
     }
 
     Epoque prochainFocus() {
@@ -77,7 +60,7 @@ class Tour {
     }
 
     boolean deselectionnerPion(int l, int c, Epoque e) {
-        if (pionSelectionne() && l == lignePion() && c == colonnePion() && e == epoquePion() &&
+        if (pionSelectionne() && l == pion.ligne() && c == pion.colonne() && e == pion.epoque() &&
                 nombreCoupsRestants == 2 || termine()) {
             pionSelectionne = false;
             return true;
@@ -86,11 +69,13 @@ class Tour {
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
-        verifierPionSelectionne("Impossible de jouer un nouveau coup");
-
+        if (!pionSelectionne()) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : pion non sélectionné");
+        }
         if (nombreCoupsRestants == 0 || termine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tous les coups ont déjà été joués ce tour");
         }
+
         if (!coup.creer(destL, destC, eDest)) {
             return false;
         }

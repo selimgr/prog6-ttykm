@@ -127,6 +127,7 @@ public class Jeu extends Observable {
         }
 
         Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
+
         if (prochaineActionSelectionPion()) {
             System.out.println("jouer Selection   ");
             selectionnerPion(l, c, e);
@@ -141,16 +142,13 @@ public class Jeu extends Observable {
                         metAJour();
                         return;
                     }
-                    coup = new Mouvement(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Mouvement(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
                 case PLANTATION:
-                    coup = new Plantation(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Plantation(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
                 default:
-                    coup = new Recolte(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Recolte(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
             }
             jouerCoup(coup, l, c, e);
@@ -160,6 +158,7 @@ public class Jeu extends Observable {
             changerFocus(e);
             plateau.resetBrillance();
         }
+
         Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
     }
 
@@ -293,15 +292,10 @@ public class Jeu extends Observable {
     }
 
     public boolean prochaineActionChangementFocus() {
-        int nombrePionPlateau;
-        if (pionSelectionne()) {
-            nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), epoquePion());
-        } else {
-            nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
-        }
+        int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        return !tourActuel.termine() && (nombreCoupsRestantsTour() == 0 || (nombrePionPlateau == 0 &&
-                (!pionSelectionne() || epoquePion() == joueurActuel().focus())));
+        return nombreCoupsRestantsTour() == 0 || (!pionSelectionne() && nombrePionPlateau == 0) ||
+                (pionSelectionne() && pion() == null);
     }
 
     public boolean prochainCoupMouvement() {
@@ -328,15 +322,7 @@ public class Jeu extends Observable {
         choixJoueurDebut = numeroJoueur % 2;
     }
 
-    public int lignePion() {
-        return tourActuel.lignePion();
-    }
-
-    public int colonnePion() {
-        return tourActuel.colonnePion();
-    }
-
-    public Epoque epoquePion() {
-        return tourActuel.epoquePion();
+    public Case pion() {
+        return tourActuel.pion();
     }
 }

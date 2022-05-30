@@ -83,6 +83,17 @@ public class CButton extends JButton {
         return this;
     }
 
+    public CButton rouge() {
+        textColor = Color.white;
+        pressedTextColor = Color.white;
+
+        normalBackgroundColor = new Color(193, 5, 0, 255);
+        highlightBackgroundColor = new Color(168, 3, 0, 255);
+        pressedBackgroundColor = new Color(143, 0, 0, 255);
+
+        return this;
+    }
+
     public CButton big() {
         radius = 45;
 

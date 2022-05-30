@@ -13,6 +13,8 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-8"/>
+          <opaque value="false"/>
           <text value="Partie &quot;Essai&quot; 04/05/2022   Joueur1 : &quot;David&quot;, Joueur2 : &quot;Tom&quot;"/>
         </properties>
       </component>
@@ -21,6 +23,9 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <foreground color="-8"/>
+          <hideActionText value="false"/>
+          <opaque value="false"/>
           <text value="Partie &quot;Essai 2&quot; 04/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
         </properties>
       </component>
@@ -31,10 +36,12 @@
             <preferred-size width="304" height="143"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <opaque value="false"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="14d5" class="javax.swing.JButton" binding="chargerPartie">
+          <component id="14d5" class="javax.swing.JButton" binding="chargerPartie" custom-create="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -46,7 +53,7 @@
               <text value="Charger Partie"/>
             </properties>
           </component>
-          <component id="513a0" class="javax.swing.JButton" binding="supprimerPartie">
+          <component id="513a0" class="javax.swing.JButton" binding="supprimerPartie" custom-create="true">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -65,10 +72,12 @@
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <opaque value="false"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="e2ebf" class="javax.swing.JButton" binding="menuPrincipalButton">
+          <component id="e2ebf" class="javax.swing.JButton" binding="menuPrincipalButton" custom-create="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>

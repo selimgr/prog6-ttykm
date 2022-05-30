@@ -3,6 +3,7 @@ package Vue;
 import Modele.Pion;
 import Modele.TypeJoueur;
 import Vue.JComposants.CButton;
+import Vue.JComposants.CTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +43,8 @@ public class VueMenuSaisies extends JPanel {
         menuPrincipalButton = new CButton("");
         jouerButton = new CButton("").vert();
         comboBox1 = new JComboBox();
+        nomJ1 = new CTextField();
+        nomJ2 = new CTextField();
 
         setBackground(Color.PINK);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -136,7 +139,6 @@ public class VueMenuSaisies extends JPanel {
         final JLabel label1 = new JLabel();
         label1.setText(" Joueur 1");
         Joueur1.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        nomJ1 = new JTextField();
         nomJ1.setDropMode(DropMode.USE_SELECTION);
         nomJ1.setFocusCycleRoot(false);
         nomJ1.setFocusTraversalPolicyProvider(false);
@@ -166,7 +168,6 @@ public class VueMenuSaisies extends JPanel {
         final JLabel label2 = new JLabel();
         label2.setText(" Joueur 2");
         Joueur2.add(label2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        nomJ2 = new JTextField();
         nomJ2.setText("Tom");
         Joueur2.add(nomJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(100, -1), new Dimension(200, -1), 0, false));
         final DefaultComboBoxModel defaultComboBoxModel3 = new DefaultComboBoxModel();

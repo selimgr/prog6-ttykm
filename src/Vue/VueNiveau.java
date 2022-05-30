@@ -1,5 +1,6 @@
 package Vue;
 
+import Modele.Pion;
 import Patterns.Observateur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
@@ -131,8 +132,8 @@ class VueNiveau extends JPanel implements Observateur {
         texteJeu.setText("Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer !");
 
         if (controleur.jeu().partieTerminee()) {
+            // TODO : Ajout du point du vainqueur
             controleur.afficherMenuFin();
-            texteJeu.setText("Partie terminée !");
         }
     }
 }

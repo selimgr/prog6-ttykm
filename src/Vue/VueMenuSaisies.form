@@ -47,7 +47,7 @@
               <focusCycleRoot value="false"/>
               <focusTraversalPolicyProvider value="false"/>
               <focusable value="true"/>
-              <text value="Nom de Joueur 1"/>
+              <text value="Ate"/>
               <visible value="true"/>
             </properties>
           </component>
@@ -112,7 +112,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Nom du Joueur 2"/>
+              <text value="Tom"/>
             </properties>
           </component>
           <component id="1aeba" class="javax.swing.JComboBox" binding="typeJ2" custom-create="true">

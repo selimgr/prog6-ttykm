@@ -35,6 +35,8 @@ public class VueFinPartie extends JPanel {
         $$$setupUI$$$();
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
+
+        rejouerButton.addActionListener((e) -> controleur.partieSuivante());
     }
 
     /**

@@ -2,7 +2,7 @@ package Vue;
 
 import Vue.JComposants.*;
 
-import  javax.swing.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;

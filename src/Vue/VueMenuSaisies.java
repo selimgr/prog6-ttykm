@@ -27,6 +27,10 @@ public class VueMenuSaisies extends JPanel {
     private JComboBox niveauJ1;
     private JLabel JoueurCommence;
     private JComboBox comboBox1;
+    int logoHeight;
+    Image t;
+    Image vs;
+    int called = 0;
 
     public VueMenuSaisies(CollecteurEvenements c) {
         controleur = c;
@@ -38,6 +42,14 @@ public class VueMenuSaisies extends JPanel {
         menuPrincipalButton = new CButton("");
         jouerButton = new CButton("").vert();
         comboBox1 = new JComboBox();
+
+        setBackground(Color.PINK);
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
+
+        // Chargement des assets
+        t = Imager.getImageBuffer("assets/topbanner.png");
+        vs = Imager.getImageBuffer("assets/VS.jpg");
 
         MenuSaisies = this;
         $$$setupUI$$$();
@@ -199,4 +211,34 @@ public class VueMenuSaisies extends JPanel {
         return MenuSaisies;
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        int w = getWidth(), h = getHeight();
+        Color color1 = new Color(255, 140, 85);
+        Color color2 = new Color(255, 120, 105);
+        GradientPaint gp = new GradientPaint(0, 0, color1, w, h, color2);
+        g2d.setPaint(gp);
+        g2d.fillRect(0, 0, w, h);
+
+        int width = (int) (getWidth() * 1.7);
+        int height = (t.getHeight(null) * width) / t.getWidth(null);
+
+        g.drawImage(t, 0, 0, width, height, null);
+        // --
+
+        width = (int) (getWidth() * 0.25);
+        logoHeight = (vs.getHeight(null) * width) / vs.getWidth(null);
+
+        int x = (int) ((getWidth() - width) / 2) - 5;
+
+        g.drawImage(vs, x, 35, width, logoHeight, null);
+        if (called == 0) {
+            setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
+            called = 1;
+        }
+    }
 }

@@ -34,6 +34,10 @@ public abstract class Coup {
         return pion;
     }
 
+    boolean pionSelectionnerEstMort(){
+        return plateau.estVide(arrivee().ligne(),arrivee().colonne(),arrivee().epoque());
+    }
+
     protected void verifierCoupCree(String message) {
         if (etats.isEmpty()) {
             throw new IllegalStateException(message + " : aucun coup créé");

@@ -3,9 +3,12 @@ package Vue;
 import Modele.Pion;
 import Modele.TypeJoueur;
 import Vue.JComposants.CButton;
+import Vue.JComposants.CComboxBox;
+import Vue.JComposants.CComboxBoxUI;
 import Vue.JComposants.CTextField;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -36,12 +39,12 @@ public class VueMenuSaisies extends JPanel {
     public VueMenuSaisies(CollecteurEvenements c) {
         controleur = c;
 
-        typeJ1 = new JComboBox();
+        typeJ1 = new CComboxBox();
         typeJ2 = new JComboBox();
         niveauJ1 = new JComboBox();
         niveauJ2 = new JComboBox();
-        menuPrincipalButton = new CButton("");
-        jouerButton = new CButton("").vert();
+        menuPrincipalButton = new CButton();
+        jouerButton = new CButton().vert();
         comboBox1 = new JComboBox();
         nomJ1 = new CTextField();
         nomJ2 = new CTextField();

@@ -121,14 +121,14 @@ public class CPlateau extends JPanel implements Observateur {
         Jeu j = controleur.jeu();
         Plateau p = j.plateau();
 
-        if (j.pionSelectionne()) {
-            int x = bordureGauche + j.colonnePion() * largeurCase;
-            int y = bordureHaut + j.lignePion() * hauteurCase;
+        if (j.pionSelectionne() && j.pion() != null) {
+            int x = bordureGauche + j.pion().colonne() * largeurCase;
+            int y = bordureHaut + j.pion().ligne() * hauteurCase;
 
-            if (j.epoquePion() == e) {
+            if (j.pion().epoque() == e) {
                 if (j.prochaineActionJouerCoup()) {
-                    int l = j.lignePion();
-                    int c = j.colonnePion();
+                    int l = j.pion().ligne();
+                    int c = j.pion().colonne();
 
                     if (j.prochainCoupMouvement()) {
                         if (l + 1 < Plateau.TAILLE && (p.estOccupable(l + 1, c, e) || p.aPion(l + 1, c, e) ||
@@ -185,12 +185,12 @@ public class CPlateau extends JPanel implements Observateur {
                 }
             }
 
-            if (j.joueurActuel().aPionsBlancs() && j.epoquePion() == e) {
+            if (j.joueurActuel().aPionsBlancs() && j.pion().epoque() == e) {
                 g.drawImage(Theme.instance().blanc_selectionne(e), x, y, largeurCase, hauteurCase, this);
-            } else if (j.joueurActuel().aPionsNoirs() && j.epoquePion() == e) {
+            } else if (j.joueurActuel().aPionsNoirs() && j.pion().epoque() == e) {
                 g.drawImage(Theme.instance().noir_selectionne(e), x, y, largeurCase, hauteurCase, this);
-            } else if (e.indice() == j.epoquePion().indice() + 1 || e.indice() == j.epoquePion().indice() - 1) {
-                if (p.estOccupable(j.lignePion(), j.colonnePion(), e) &&
+            } else if (e.indice() == j.pion().epoque().indice() + 1 || e.indice() == j.pion().epoque().indice() - 1) {
+                if (p.estOccupable(j.pion().ligne(), j.pion().colonne(), e) &&
                         j.prochaineActionJouerCoup() && j.prochainCoupMouvement()) {
                     g.drawImage(Theme.instance().surbrillance(e), x, y, largeurCase, hauteurCase, this);
                 }

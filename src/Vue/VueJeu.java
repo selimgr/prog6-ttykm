@@ -270,16 +270,11 @@ class VueJeu extends JPanel {
         c2.insets = new Insets(8, 0, 0, 0);
         c2.gridy = 1;
         seedsPanel.add(seedsButtons, c2);
-//        seeds.add(seedsButtons);
-//
-//        userActions.add(seeds, c);
         userActions.add(seedsPanel);
         // --
 
         c.gridy = 1;
         c.anchor = GridBagConstraints.LAST_LINE_START;
-//        userActions.add(j2, c);
-        // --
         return userActions;
     }
 

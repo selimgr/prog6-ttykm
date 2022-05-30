@@ -75,7 +75,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu = new Jeu();
         jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
         jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
-        if (choixJoueurDebut <= 1) jeu.choixJoueurDebut(choixJoueurDebut);
+        if (choixJoueurDebut > 0) jeu.choixJoueurDebut(choixJoueurDebut);
         jeu.nouvellePartie();
         vues.nouvellePartie();
         initIA(typeJ1,typeJ2);

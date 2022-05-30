@@ -60,12 +60,12 @@ public class VueMenuSaisies extends JPanel {
             c.nouvellePartie(
                     nomJ1.getText(),
                     TypeJoueur.values()[typeJ1.getSelectedIndex()],
-                    comboBox1.getSelectedIndex() == 0 ? Pion.BLANC : (comboBox1.getSelectedIndex() > 1 ? Pion.BLANC : Pion.NOIR),
+                    comboBox1.getSelectedIndex() == 1 ? Pion.BLANC : (comboBox1.getSelectedIndex() == 2 ? Pion.NOIR : Pion.BLANC),
                     niveauJ1.getSelectedIndex(),
                     // --
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],
-                    comboBox1.getSelectedIndex() == 1 ? Pion.BLANC : Pion.NOIR,
+                    comboBox1.getSelectedIndex() == 2 ? Pion.BLANC : Pion.NOIR,
                     niveauJ2.getSelectedIndex(),
                     // --
                     comboBox1.getSelectedIndex()
@@ -204,9 +204,9 @@ public class VueMenuSaisies extends JPanel {
         panel1.add(JoueurCommence, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         comboBox1 = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel5 = new DefaultComboBoxModel();
+        defaultComboBoxModel5.addElement("Aléatoire");
         defaultComboBoxModel5.addElement("Joueur 1");
         defaultComboBoxModel5.addElement("Joueur 2");
-        defaultComboBoxModel5.addElement("Aléatoire");
         comboBox1.setModel(defaultComboBoxModel5);
         panel1.add(comboBox1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         label1.setLabelFor(nomJ1);

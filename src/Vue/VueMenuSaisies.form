@@ -202,9 +202,9 @@
             </constraints>
             <properties>
               <model>
+                <item value="Aléatoire"/>
                 <item value="Joueur 1"/>
                 <item value="Joueur 2"/>
-                <item value="Aléatoire"/>
               </model>
             </properties>
           </component>

@@ -246,10 +246,12 @@ class VueJeu extends JPanel {
         JButton recolter = new CButton("Récolter une graine");
         recolter.addActionListener(e -> controleur.selectionnerRecolterGraine());
         recolter.setEnabled(true);
+        recolter.setFocusable(false);
 
         JButton planter = new CButton("Planter une graine");
         planter.addActionListener(e -> controleur.selectionnerPlanterGraine());
         planter.setEnabled(true);
+        planter.setFocusable(false);
 
         seedsButtons.add(planter);
         seedsButtons.add(recolter);

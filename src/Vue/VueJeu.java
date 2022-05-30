@@ -207,8 +207,8 @@ class VueJeu extends JPanel {
         controlsPanel.setOpaque(false);
 
         JButton[] controls = {
-            new CButton("<"),
-            new CButton(">"),
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/undo.png", 18, 18))),
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/redo.png", 18, 18))),
 //            new CButton("Fin tour")
         };
 

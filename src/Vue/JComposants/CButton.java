@@ -31,6 +31,16 @@ public class CButton extends JButton {
         setBorder(new EmptyBorder(10, 25, 10, 25));
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+    public CButton() {
+        this("");
+    }
+
+    public CButton(ImageIcon ig) {
+        this("");
+        setFont(new Font("Arial", Font.BOLD, 1));
+        setBorder(new EmptyBorder(10, 15, 10, 15));
+        setIcon(ig);
+    }
 
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

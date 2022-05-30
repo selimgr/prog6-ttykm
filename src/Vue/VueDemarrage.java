@@ -23,7 +23,7 @@ class VueDemarrage extends JPanel {
         t = Imager.getImageBuffer("assets/topbanner.png");
         logo = Imager.getImageBuffer("assets/logo.png");
 
-        JButton boutonMenu = new CButton("JOUER").boutonJouer();
+        JButton boutonMenu = new CButton("JOUER").vert().big();
         boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());
         boutonMenu.setAlignmentX(CENTER_ALIGNMENT);
         add(boutonMenu);

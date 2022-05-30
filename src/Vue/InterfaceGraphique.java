@@ -44,6 +44,7 @@ public class InterfaceGraphique implements Runnable {
         ajouterVue(Vues.MENU_PRINCIPAL);
         ajouterVue(Vues.MENU_PARTIES);
         ajouterVue(Vues.JEU);
+        ajouterVue(Vues.MENU_FIN);
 
         controleur.fixerMediateurVues(vues);
 
@@ -93,6 +94,9 @@ public class InterfaceGraphique implements Runnable {
                 break;
             case Vues.MENU_PARTIES:
                 vue = new VueMenuParties(controleur);
+                break;
+            case Vues.MENU_FIN:
+                vue = new VueFinPartie(controleur);
                 break;
             default:
                 throw new IllegalArgumentException("Nom de vue incorrect : " + nom);

@@ -7,16 +7,14 @@ import java.util.Random;
 
 import static java.util.Objects.requireNonNull;
 
-// TODO: Ajouter des logs quand des actions correctes et incorrectes sont effectuées
-
 public class Jeu extends Observable {
     private Plateau plateau;
     private Joueur joueur1;
     private Joueur joueur2;
     private int joueurActuel;
     private Tour tourActuel;
-    private TypeCoup prochainCoup;
     private Historique historique;
+    private TypeCoup prochainCoup;
     private final Random rand;
     private int choixJoueurDebut = -1;
 
@@ -25,15 +23,12 @@ public class Jeu extends Observable {
         joueurActuel = -1;
     }
 
-    public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
+    public void nouveauJoueur(String nom, TypeJoueur type, int handicap) {
         if (joueur1 == null) {
-            joueur1 = new Joueur(nom, type, p, handicap);
+            joueur1 = new Joueur(nom, type, handicap);
         }
         else if (joueur2 == null) {
-            if (p == joueur1.pions()) {
-                throw new IllegalArgumentException("Impossible de créer le nouveau joueur : le joueur 1 possède déjà les pions " + p);
-            }
-            joueur2 = new Joueur(nom, type, p, handicap);
+            joueur2 = new Joueur(nom, type, handicap);
         }
         else {
             throw new IllegalStateException("Impossible d'ajouter un nouveau joueur : tous les joueurs ont déjà été ajoutés");
@@ -58,12 +53,16 @@ public class Jeu extends Observable {
         } else {
             joueurActuel = 0;
         }
-        // Par défaut le joueur qui commence a les pions blancs
-        joueurActuel().setPions(Pion.BLANC);
-        joueurSuivant().setPions(Pion.NOIR);
 
-        joueur1.initialiserJoueur();
-        joueur2.initialiserJoueur();
+        // Par défaut le joueur qui commence a les pions blancs
+        if (joueur1 == joueurActuel()) {
+            joueur1.initialiserJoueur(Pion.BLANC);
+            joueur2.initialiserJoueur(Pion.NOIR);
+        } else {
+            joueur2.initialiserJoueur(Pion.BLANC);
+            joueur1.initialiserJoueur(Pion.NOIR);
+        }
+
         plateau = new Plateau();
         historique = new Historique();
         tourActuel = historique.nouveauTour(joueurActuel().focus());
@@ -86,11 +85,11 @@ public class Jeu extends Observable {
     }
 
     public Joueur joueurPionsBlancs() {
-        return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
+        return joueur1.aPionsBlancs() ? joueur1 : joueur2;
     }
 
     public Joueur joueurPionsNoirs() {
-        return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
+        return joueur1.aPionsNoirs() ? joueur1 : joueur2;
     }
 
     public Joueur joueurActuel() {
@@ -139,7 +138,6 @@ public class Jeu extends Observable {
             switch (prochainCoup) {
                 case MOUVEMENT:
                     if (tourActuel.deselectionnerPion(l, c, e)) {
-                        plateau.resetBrillance();
                         metAJour();
                         return;
                     }
@@ -157,7 +155,6 @@ public class Jeu extends Observable {
         else {
             System.out.println("        Jouer Focus  ");
             changerFocus(e);
-            plateau.resetBrillance();
         }
 
         Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
@@ -167,7 +164,6 @@ public class Jeu extends Observable {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
             historique.reinitialiserToursSuivants();
-            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }
@@ -175,7 +171,6 @@ public class Jeu extends Observable {
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
             historique.reinitialiserToursSuivants();
-            plateau.briller(l, c, e);
             selectionnerMouvement();
         }
     }
@@ -232,7 +227,6 @@ public class Jeu extends Observable {
         if (!historique.peutAnnuler()) {
             return;
         }
-        plateau.resetBrillance();
         boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {

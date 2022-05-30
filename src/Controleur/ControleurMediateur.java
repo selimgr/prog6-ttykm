@@ -73,8 +73,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                                String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2, int choixJoueurDebut) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");
         jeu = new Jeu();
-        jeu.nouveauJoueur(nomJ1, typeJ1, pionsJ1 , handicapJ1);
-        jeu.nouveauJoueur(nomJ2, typeJ2, pionsJ2 , handicapJ2);
+        jeu.nouveauJoueur(nomJ1, typeJ1, handicapJ1);
+        jeu.nouveauJoueur(nomJ2, typeJ2, handicapJ2);
         if (choixJoueurDebut > 0) jeu.choixJoueurDebut(choixJoueurDebut);
         jeu.nouvellePartie();
         vues.nouvellePartie();

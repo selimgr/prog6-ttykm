@@ -10,8 +10,8 @@ public class TestJoueur {
 
     @Before
     public void initialiserJoueur() {
-        j = new Joueur("abc", TypeJoueur.HUMAIN, Pion.BLANC, 0);
-        j.initialiserJoueur();
+        j = new Joueur("abc", TypeJoueur.HUMAIN, 0);
+        j.initialiserJoueur(Pion.BLANC);
     }
 
     @Test
@@ -26,7 +26,7 @@ public class TestJoueur {
                     Pion pion = Pion.depuisValeur(k);
 
                     for (int l = 0; l < Joueur.HANDICAP_MAX; l++) {
-                        Joueur joueur = new Joueur(nom, type, pion, l);
+                        Joueur joueur = new Joueur(nom, type, l);
                         assertEquals(nom, joueur.nom());
                         assertEquals(type, joueur.type());
 
@@ -57,10 +57,10 @@ public class TestJoueur {
                                 break;
                         }
 
+                        joueur.initialiserJoueur(pion);
                         assertEquals(pion, joueur.pions());
                         assertEquals(l, joueur.handicap());
 
-                        joueur.initialiserJoueur();
                         if (pion == Pion.BLANC) {
                             assertTrue(joueur.aPionsBlancs());
                             assertFalse(joueur.aPionsNoirs());
@@ -105,7 +105,7 @@ public class TestJoueur {
                 final int handicap = i;
                 IllegalStateException e = assertThrows(
                         IllegalStateException.class,
-                        () -> new Joueur("abc", TypeJoueur.HUMAIN, Pion.BLANC, handicap)
+                        () -> new Joueur("abc", TypeJoueur.HUMAIN, handicap)
                 );
                 assertTrue(e.getMessage().contains("Handicap " + handicap + " incorrect"));
             }
@@ -200,21 +200,15 @@ public class TestJoueur {
 
         e = assertThrows(
                 NullPointerException.class,
-                () -> new Joueur(null, TypeJoueur.HUMAIN, Pion.BLANC, 0)
+                () -> new Joueur(null, TypeJoueur.HUMAIN, 0)
         );
         assertTrue(e.getMessage().contains("Le nom du joueur ne doit pas être null"));
 
         e = assertThrows(
                 NullPointerException.class,
-                () -> new Joueur("abc", null, Pion.BLANC, 0)
+                () -> new Joueur("abc", null, 0)
         );
         assertTrue(e.getMessage().contains("Le type du joueur ne doit pas être null"));
-
-        e = assertThrows(
-                NullPointerException.class,
-                () -> new Joueur("abc", TypeJoueur.HUMAIN, null, 0)
-        );
-        assertTrue(e.getMessage().contains("Le type de pions du joueur ne doit pas être null"));
 
         e = assertThrows(
                 NullPointerException.class,
@@ -227,8 +221,8 @@ public class TestJoueur {
     public void testToString() {
         assertEquals("Joueur{nom='abc', type=Humain, pions=Blanc, handicap=0, focus=Passé, nombrePionsReserve=4" +
                 ", nombreVictoires=0}", j.toString());
-        j = new Joueur("def", TypeJoueur.IA_MOYEN, Pion.NOIR, 3);
-        j.initialiserJoueur();
+        j = new Joueur("def", TypeJoueur.IA_MOYEN, 3);
+        j.initialiserJoueur(Pion.NOIR);
         assertEquals("Joueur{nom='def', type=IA Moyen, pions=Noir, handicap=3, focus=Futur, nombrePionsReserve=1" +
                 ", nombreVictoires=0}", j.toString());
     }

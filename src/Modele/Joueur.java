@@ -5,21 +5,19 @@ import static java.util.Objects.requireNonNull;
 public class Joueur {
     private final String nom;
     private final TypeJoueur type;
-    private Pion pions;
     private final int handicap;
+    private Pion pions;
     private Epoque focus;
     private int nombrePionsReserve;
     private int nombreVictoires;
 
     static int HANDICAP_MAX = 3;
 
-    Joueur(String nom, TypeJoueur type, Pion pions, int handicap) {
+    Joueur(String nom, TypeJoueur type, int handicap) {
         requireNonNull(nom, "Le nom du joueur ne doit pas être null");
         requireNonNull(type, "Le type du joueur ne doit pas être null");
-        requireNonNull(pions, "Le type de pions du joueur ne doit pas être null");
         this.nom = nom;
         this.type = type;
-        this.pions = pions;
         this.handicap = handicap;
 
         if (handicap < 0 || handicap > HANDICAP_MAX) {
@@ -27,7 +25,9 @@ public class Joueur {
         }
     }
 
-    void initialiserJoueur() {
+    void initialiserJoueur(Pion p) {
+        pions = p;
+
         // blanc commence dans le passé
         if (pions == Pion.BLANC) {
             fixerFocus(Epoque.PASSE);
@@ -131,10 +131,6 @@ public class Joueur {
             throw new IllegalStateException("Impossible d'enlever une victoire au joueur : aucune victoire");
         }
         nombreVictoires--;
-    }
-
-    void setPions(Pion pions) {
-        this.pions = pions;
     }
 
     @Override

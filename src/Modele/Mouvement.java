@@ -26,7 +26,10 @@ public class Mouvement extends Coup {
     @Override
     public Case pion() {
         if (positionPionChangee) {
-            return arriveePion;
+            if (plateau().aPion(arriveePion.ligne(), arriveePion.colonne(), arriveePion.epoque())) {
+                return arriveePion;
+            }
+            return null;
         }
         return super.pion();
     }
@@ -92,7 +95,6 @@ public class Mouvement extends Coup {
             // on supprime les deux car un paradoxe temporel est créé
             supprimer(pion, departL, departC, pion().epoque());
             supprimer(pion, arriveeL, arriveeC, pion().epoque());
-            arriveePion = null;
         }
         // Si la case d'arrivée a un arbre, on déplace l'arbre et le pion (le pion pousse l'arbre)
         else if (plateau().aArbre(arriveeL, arriveeC, pion().epoque())) {

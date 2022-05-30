@@ -13,10 +13,10 @@ public class TestMouvement {
     @Before
     public void initialisation() {
         p = new Plateau();
-        j1 = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
-        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 3);
-        j1.initialiserJoueur();
-        j2.initialiserJoueur();
+        j1 = new Joueur("a", TypeJoueur.HUMAIN, 0);
+        j2 = new Joueur("b", TypeJoueur.HUMAIN, 3);
+        j1.initialiserJoueur(Pion.BLANC);
+        j2.initialiserJoueur(Pion.NOIR);
     }
 
     private void nouveauCoup1() {

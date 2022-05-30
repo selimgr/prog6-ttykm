@@ -12,14 +12,12 @@ public class Plateau {
     private int nombrePlateauVideBlanc;
     private int nombrePlateauVideNoir;
     private int nombreGrainesReserve;
-    private final int[][][] brillance;
 
     public static final int TAILLE = 4;
     public static final int NOMBRE_MAX_GRAINES = 5;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
-        brillance = new int[Epoque.NOMBRE][TAILLE][TAILLE];
 
         nbBlancParPlateau = new int[Epoque.NOMBRE];
         nbNoirParPlateau = new int[Epoque.NOMBRE];
@@ -33,6 +31,7 @@ public class Plateau {
         nombrePlateauVideNoir = 0;
         nombreGrainesReserve = NOMBRE_MAX_GRAINES;
     }
+
     public void fixerPlateau(Plateau p){
         for (int i = 0; i < Epoque.NOMBRE; i++) {
             for (int j = 0; j < TAILLE; j++) {
@@ -242,11 +241,11 @@ public class Plateau {
 
     public List<Case> chercherPions(Joueur j, Epoque e){
         ArrayList<Case> cases = new ArrayList<>();
-        Epoque e2 = e;
+
         Piece p = Piece.depuisValeur(j.pions().valeur());
         for (int l2 = 0; l2 < Plateau.TAILLE;l2++) {
             for (int c2 = 0; c2 < Plateau.TAILLE; c2++) {
-                if (aPiece(l2,c2,e2,p)) cases.add(new Case(l2,c2,e2));
+                if (aPiece(l2,c2,e,p)) cases.add(new Case(l2,c2,e));
             }
         }
         return cases;
@@ -357,21 +356,4 @@ public class Plateau {
         }
         return plateauStr;
     }
-
-    public void briller(int l, int c, Epoque e) {
-        this.brillance[e.indice()][l][c]=1;
-    }
-    public void resetBrillance(){
-        for(int i=0; i<3 ; i++){
-            for(int j=0; j<TAILLE ; j++ ){
-                for(int k=0; k<TAILLE ; k++){
-                    brillance[i][j][k]=0;
-                }
-            }
-        }
-    }
-    public boolean aBrillance(int l, int c, Epoque e){
-        return brillance[e.indice()][l][c]==1;
-    }
-
 }

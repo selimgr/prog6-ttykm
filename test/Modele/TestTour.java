@@ -15,7 +15,8 @@ public class TestTour {
     public void initialisation() {
         tour = new Tour(Epoque.PASSE);
         plateau = new Plateau();
-        joueur = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
+        joueur = new Joueur("a", TypeJoueur.HUMAIN, 0);
+        joueur.initialiserJoueur(Pion.BLANC);
         coup = new Mouvement(plateau, joueur, 0, 0, Epoque.PASSE);
     }
 
@@ -121,7 +122,8 @@ public class TestTour {
 
         tour = new Tour(Epoque.FUTUR);
         tour.selectionnerPion(3, 3, Epoque.FUTUR);
-        joueur = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
+        joueur = new Joueur("b", TypeJoueur.HUMAIN, 0);
+        joueur.initialiserJoueur(Pion.NOIR);
         coup = new Mouvement(plateau, joueur, 3, 3, Epoque.FUTUR);
         tour.jouerCoup(coup, 2, 3, Epoque.FUTUR);
         assertFalse(tour.deselectionnerPion(3, 3, Epoque.FUTUR));

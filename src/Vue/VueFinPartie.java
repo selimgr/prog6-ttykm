@@ -11,8 +11,14 @@ public class VueFinPartie extends JPanel {
     private JTextField dommageJoueurAPerduTextField;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
+
     public VueFinPartie(CollecteurEvenements c) {
         controleur = c;
+
+        bravoJoueurAGagnéTextField = new JTextField();
+        dommageJoueurAPerduTextField = new JTextField();
+        rejouerButton = new JButton();
+        menuPrincipalButton = new JButton();
 
         MenuFin = this;
 
@@ -29,27 +35,23 @@ public class VueFinPartie extends JPanel {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
-        MenuFin = new JPanel();
+        createUIComponents();
         MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        bravoJoueurAGagnéTextField = new JTextField();
         bravoJoueurAGagnéTextField.setEditable(false);
         bravoJoueurAGagnéTextField.setText("Bravo, <Joueur> a gagné !");
         bravoJoueurAGagnéTextField.setVisible(true);
         panel1.add(bravoJoueurAGagnéTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
-        dommageJoueurAPerduTextField = new JTextField();
         dommageJoueurAPerduTextField.setEditable(false);
         dommageJoueurAPerduTextField.setText("Dommage, <Joueur> a perdu !");
         panel1.add(dommageJoueurAPerduTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        rejouerButton = new JButton();
         rejouerButton.setText("Rejouer");
         panel2.add(rejouerButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        menuPrincipalButton = new JButton();
         menuPrincipalButton.setText("Menu Principal");
         panel2.add(menuPrincipalButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
@@ -57,7 +59,9 @@ public class VueFinPartie extends JPanel {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {return MenuFin;}
+    public JComponent $$$getRootComponent$$$() {
+        return MenuFin;
+    }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here

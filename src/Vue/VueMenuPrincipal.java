@@ -1,10 +1,11 @@
 package Vue;
 
+import Vue.JComposants.CButton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.Objects;
 
 class VueMenuPrincipal extends JPanel {
 
@@ -15,54 +16,97 @@ class VueMenuPrincipal extends JPanel {
 
     VueMenuPrincipal(CollecteurEvenements c) {
         setBackground(Color.PINK);
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
+        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         // Chargement des assets
-        t = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/topbanner.png"))).getImage();
-        logo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/assets/logo.png"))).getImage();
+        t = Imager.getImageBuffer("assets/topbanner.png");
+        logo = Imager.getImageBuffer("assets/logo.png");
 
-        JButton nouvellePartie = new JButton("Nouvelle Partie");
+        JButton nouvellePartie = new CButton("Nouvelle Partie");
         nouvellePartie.addActionListener((e) -> {
             c.afficherMenuNouvellePartie();
         });
-        add(nouvellePartie);
 
-        JButton chargerPartie = new JButton("Charger Partie");
+        JButton chargerPartie = new CButton("Charger Partie");
         chargerPartie.addActionListener((e) -> {
             c.afficherMenuChargerPartie();
         });
-        add(chargerPartie);
 
-        JButton regles = new JButton("Règles");
+        JButton regles = new CButton("Règles");
         regles.addActionListener((e) -> {
             c.afficherRegles();
         });
-        add(regles);
+        JButton didacticiel = new CButton("Didacticiel");
 
-        add(Box.createRigidArea(new Dimension(10, 30)));
-
-        JButton didacticiel = new JButton("Didacticiel");
-        add(didacticiel);
-
-        JButton quitter = new JButton("Quitter");
+        JButton quitter = new CButton("Quitter");
         quitter.addActionListener((e) -> {
             c.toClose();
         });
-        add(quitter);
 
-        for (Component ca : getComponents()) {
-            if (ca.getClass().getName().contains("Button"))
-                ((JButton)ca).setAlignmentX(CENTER_ALIGNMENT);
+        Component[] components = {
+                nouvellePartie,
+                chargerPartie,
+                regles,
+                Box.createRigidArea(new Dimension(10, 30)),
+                didacticiel,
+                quitter
+        };
+
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                super.componentResized(e);
+//                setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
+//            }
+//        });
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+        leftPanel.add(new JLabel(new ImageIcon(Imager.getScaledImage(logo, 360, 450))));
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setOpaque(false);
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+
+        for (Component component : components) {
+            if (component.getClass().getName().contains("Button")) {
+                ((JButton) component).setAlignmentX(CENTER_ALIGNMENT);
+                ((JButton) component).setAlignmentY(CENTER_ALIGNMENT);
+            }
+            buttonsPanel.add(component);
+            if (!component.getClass().getName().contains("Box"))
+                buttonsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         }
 
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
-            }
-        });
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+
+//        centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 110));
+//        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
+        centerPanel.setOpaque(false);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.NONE;
+        // MARK: ESPACEMENT PLATEAU GAUCHE ET DROITE
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(centerPanel, gbc);
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        centerPanel.add(leftPanel, gbc);
+        gbc.insets = new Insets(0, 80, 0, 80);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        centerPanel.add(buttonsPanel, gbc);
+        centerPanel.setBounds(centerPanel.getX()-150, centerPanel.getY(), centerPanel.getWidth(), centerPanel.getHeight());
 
     }
 
@@ -79,21 +123,9 @@ class VueMenuPrincipal extends JPanel {
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, w, h);
 
-        int width = (int) (getWidth() * 1.7);
+        int width = (int) (getWidth() * 1.5);
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
         g.drawImage(t, 0, 0, width, height, null);
-        // --
-
-        width = (int) (getWidth() * 0.25);
-        logoHeight = (logo.getHeight(null) * width) / logo.getWidth(null);
-
-        int x = (int) ((getWidth() - width) / 2) - 5;
-
-        g.drawImage(logo, x, 35, width, logoHeight, null);
-        if (called == 0) {
-            setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
-            called = 1;
-        }
     }
 }

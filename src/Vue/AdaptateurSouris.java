@@ -10,12 +10,6 @@ class AdaptateurSouris extends MouseAdapter {
     CollecteurEvenements controleur;
     String Objet;
     CPlateau pane;
-    static double BORDURE_PASSE_Y = 0.09102564;
-    static double BORDURE_PRESENT_Y = 0.08678756;
-    static double BORDURE_FUTUR_Y = 0.08903226;
-    static double BORDURE_PASSE_X = 0.09137709;
-    static double BORDURE_PRESENT_X = 0.08667529;
-    static double BORDURE_FUTUR_X = 0.08914729;
 
     AdaptateurSouris(CollecteurEvenements c, CPlateau pane, String nomObjet) {
         controleur = c;
@@ -25,26 +19,25 @@ class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int l;
-        int c;
+        int bordureHaut = Math.round(Theme.instance().bordureHaut() * pane.getHeight() / (float) Theme.instance().hauteurPlateau());
+        int bordureGauche = Math.round(Theme.instance().bordureGauche() * pane.getWidth() / (float) Theme.instance().largeurPlateau());
+        int bordureBas = Math.round(Theme.instance().bordureBas() * pane.getHeight() / (float) Theme.instance().hauteurPlateau());
+        int bordureDroite = Math.round(Theme.instance().bordureDroite() * pane.getWidth() / (float) Theme.instance().largeurPlateau());
+
+        if (e.getX() < bordureGauche || e.getY() < bordureHaut ||
+                e.getX() > pane.getWidth() - bordureDroite || e.getY() > pane.getHeight() - bordureBas) {
+            return;
+        }
+        int x = e.getX() - bordureGauche;
+        int y = e.getY() - bordureHaut;
+        int hauteur = pane.getHeight() - bordureHaut - bordureBas;
+        int largeur = pane.getWidth() - bordureGauche - bordureDroite;
+
+        int l = y * 4 / hauteur;
+        int c = x * 4 / largeur;
         Epoque epoque = resolution_nom(Objet);
 
-        switch (epoque) {
-            case PASSE:
-                l = (int) ((e.getY() / (pane.getHeight() - 2 * BORDURE_PASSE_Y)) * 4);
-                c = (int) ((e.getX() / (pane.getHeight() - 2 * BORDURE_PASSE_X)) * 4);
-                break;
-            case PRESENT:
-                l = (int) ((e.getY() / (pane.getHeight() - 2 * BORDURE_PRESENT_Y)) * 4);
-                c = (int) ((e.getX() / (pane.getHeight() - 2 * BORDURE_PRESENT_X)) * 4);
-                break;
-            default:
-                l = (int) ((e.getY() / (pane.getHeight() - 2 * BORDURE_FUTUR_Y) * 4));
-                c = (int) ((e.getX() / (pane.getHeight() - 2 * BORDURE_FUTUR_X)) * 4);
-        }
-        if (l >= 0 && l <= 3 && c >= 0 && c <= 3) {
-            controleur.jouer(l, c, epoque);
-        }
+        controleur.clicSouris(l, c, epoque);
         System.out.println("l = " + l + ", c = " + c);
     }
 

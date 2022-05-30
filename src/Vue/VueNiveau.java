@@ -1,7 +1,8 @@
 package Vue;
 
-import Modele.Pion;
 import Patterns.Observateur;
+import Vue.JComposants.CGraines;
+import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
 
 import javax.swing.*;
@@ -16,12 +17,20 @@ class VueNiveau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
     CPlateau passe, present, futur;
     MatteBorder top, bottom;
+    CInfoJoueur j1, j2;
+    CGraines g;
+    JLabel texteJeu;
 
-    VueNiveau(CollecteurEvenements c) {
+    VueNiveau(CollecteurEvenements c, CInfoJoueur j1, CInfoJoueur j2, CGraines g, JLabel texteJeu) {
         controleur = c;
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
         futur = new CPlateau(3, controleur);
+        this.j1 = j1;
+        this.j2 = j2;
+        this.g = g;
+        this.texteJeu = texteJeu;
+
         c.jeu().ajouteObservateur(passe);
         c.jeu().ajouteObservateur(present);
         c.jeu().ajouteObservateur(futur);
@@ -30,7 +39,7 @@ class VueNiveau extends JPanel implements Observateur {
 //        setBorder(BorderFactory.createEmptyBorder(140, 100, 140, 100));
 //        setBorder(BorderFactory.createEmptyBorder(0, 100, 0, 100));
         setOpaque(false);
-        setLayout(new GridLayout(1, 3, 30, 0));
+        setLayout(new GridLayout(1, 3, 10, 0));
 
         JPanel plateau1 = new JPanel(new GridBagLayout());
         plateau1.setOpaque(false);
@@ -115,5 +124,15 @@ class VueNiveau extends JPanel implements Observateur {
         passe.setBorder(passe_focus);
         present.setBorder(present_focus);
         futur.setBorder(futur_focus);
+
+        j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
+        j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
+        g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
+        texteJeu.setText("Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer !");
+
+        if (controleur.jeu().partieTerminee()) {
+            controleur.afficherMenuFin();
+            texteJeu.setText("Partie terminée !");
+        }
     }
 }

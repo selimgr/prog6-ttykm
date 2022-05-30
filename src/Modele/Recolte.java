@@ -24,7 +24,7 @@ public class Recolte extends Coup {
     }
 
     @Override
-    boolean creer(int destL, int destC, Epoque eDest) {
+    public boolean creer(int destL, int destC, Epoque eDest) {
         verifierAucunCoupCree();
 
         int dL = destL - pion().ligne();

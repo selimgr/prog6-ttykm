@@ -1,46 +1,45 @@
 package Vue.JComposants;
 
-import javax.imageio.ImageIO;
+import Modele.Plateau;
+import Vue.Imager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class CGraines extends JPanel {
 
     private final ImageIcon seed;
-    private final JPanel p;
+    private final ImageIcon seed_dead;
+    private final int hgap = 5;
 
     public CGraines() {
         setOpaque(false);
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setBackground(null);
+        setLayout(new GridLayout(1, 0, hgap, 0));
+        setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
 
-        BufferedImage r_seed;
-
-        try {
-            r_seed = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/assets/seed.png")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        AffineTransform xform =  AffineTransform.getScaleInstance(0.6, 0.6);
-        r_seed = new AffineTransformOp(xform, AffineTransformOp.TYPE_BILINEAR).filter(r_seed, null);
-        seed = new ImageIcon(r_seed);
-        // --
-        p = new JPanel(new GridLayout(1, 0, 10, 0));
-        p.setBackground(new Color(255, 255, 255, 218));
-        p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        add(p);
+        seed = new ImageIcon(Imager.getScaledImage("assets/seed_.png", 32, 32));
+        seed_dead = new ImageIcon(Imager.getScaledImage("assets/seed_dead.png", 32, 32));
     }
 
     public void setSeeds(int nb) {
-        p.removeAll();
-        p.setLayout(new GridLayout(1, nb, 10, 0));
-        for (int i = 0; i < nb; i ++) p.add(new JLabel(seed));
-        repaint();
+        removeAll();
+        setLayout(new GridLayout(1, Plateau.NOMBRE_MAX_GRAINES, hgap, 0));
+        for (int i = 0; i < nb; i ++) add(new JLabel(seed));
+        for (int i = 0; i < Plateau.NOMBRE_MAX_GRAINES-nb; i ++) add(new JLabel(seed_dead));
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        // Pour que ce soit bien smoooooooooooooooth
+        RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2.setRenderingHints(qualityHints);
+
+        g2.setColor(new Color(101, 154, 99, 255));
+        g2.fillRoundRect(0, 0, getSize().width-1, getSize().height-1, 45, 45);
+
+        super.paintComponent(g);
     }
 }

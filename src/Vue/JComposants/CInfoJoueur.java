@@ -1,60 +1,46 @@
 package Vue.JComposants;
 
-import javax.imageio.ImageIO;
+import Vue.Imager;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class CInfoJoueur extends JPanel {
 
     private final JLabel n;
     private final JPanel p;
     private final ImageIcon pawnW;
+    private final int hgap = 5;
 
-    public CInfoJoueur(int reverse) {
+    public CInfoJoueur(boolean reverse) {
         setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        n = new JLabel("");
+        setBorder(new EmptyBorder(5, !reverse ? 20 : 10, 5, !reverse ? 10 : 20));
+
+        n = new JLabel();
         n.setForeground(Color.WHITE);
         n.setFont(new Font("Arial", Font.BOLD, 16));
 
         // --
-        BufferedImage r_pawnW;
-
-        try {
-            r_pawnW = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/assets/pawn.png")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        AffineTransform xform =  AffineTransform.getScaleInstance(0.5, 0.5);
-        r_pawnW = new AffineTransformOp(xform, AffineTransformOp.TYPE_BICUBIC).filter(r_pawnW, null);
-        pawnW = new ImageIcon(r_pawnW);
+        pawnW = new ImageIcon(Imager.getScaledImage(reverse ? "assets/IconePB.png" : "assets/IconePN.png", 25, 30));
         // --
-        p = new JPanel(new GridLayout(1, 0, 0, 0));
-        p.setBackground(Color.WHITE);
-        p.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        p = new CPions(reverse);
 
-        add(reverse == 0 ? n : p);
-        add(Box.createRigidArea(new Dimension(10, 0)));
-        add(reverse == 0 ? p : n);
+        add(!reverse ? n : p);
+        add(Box.createRigidArea(new Dimension(14, 0)));
+        add(!reverse ? p : n);
     }
 
     public void setName(String nom) {
         n.setText(nom);
-        repaint();
     }
 
     public void setPions(int nb) {
         p.removeAll();
-        p.setLayout(new GridLayout(1, nb, 0, 0));
+        p.setLayout(new GridLayout(1, nb, hgap, 0));
         for (int i = 0; i < nb; i ++) p.add(new JLabel(pawnW));
-        repaint();
     }
 
 }

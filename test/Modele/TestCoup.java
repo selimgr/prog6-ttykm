@@ -13,8 +13,10 @@ public class TestCoup {
     @Before
     public void initialisation() {
         p = new Plateau();
-        j1 = new Joueur("a", TypeJoueur.HUMAIN, Pion.BLANC, 0);
-        j2 = new Joueur("b", TypeJoueur.HUMAIN, Pion.NOIR, 0);
+        j1 = new Joueur("a", TypeJoueur.HUMAIN, 0);
+        j1.initialiserJoueur(Pion.BLANC);
+        j2 = new Joueur("b", TypeJoueur.HUMAIN, 0);
+        j2.initialiserJoueur(Pion.NOIR);
         c1 = new Mouvement(p, j1, 0, 0, Epoque.PASSE);
         c2 = new Plantation(p, j2, 3, 3, Epoque.FUTUR);
         p.ajouter(1, 2, Epoque.PRESENT, Piece.BLANC);

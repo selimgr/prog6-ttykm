@@ -21,25 +21,8 @@ class Tour {
         return focus;
     }
 
-    private void verifierPionSelectionne(String message) {
-        if (!pionSelectionne()) {
-            throw new IllegalStateException(message + " : pion non sélectionné");
-        }
-    }
-
-    int lignePion() {
-        verifierPionSelectionne("Impossible de renvoyer la ligne du pion");
-        return pion.ligne();
-    }
-
-    int colonnePion() {
-        verifierPionSelectionne("Impossible de renvoyer la colonne du pion");
-        return pion.colonne();
-    }
-
-    Epoque epoquePion() {
-        verifierPionSelectionne("Impossible de renvoyer l'époque du pion");
-        return pion.epoque();
+    Case pion() {
+        return pion;
     }
 
     Epoque prochainFocus() {
@@ -69,12 +52,15 @@ class Tour {
         if (e == focus) {
             pion = new Case(l, c, e);
             pionSelectionne = true;
+            coup1 = null;
+            coup2 = null;
+            focusChange = false;
         }
         return pionSelectionne;
     }
 
     boolean deselectionnerPion(int l, int c, Epoque e) {
-        if (pionSelectionne() && l == lignePion() && c == colonnePion() && e == epoquePion() &&
+        if (pionSelectionne() && l == pion.ligne() && c == pion.colonne() && e == pion.epoque() &&
                 nombreCoupsRestants == 2 || termine()) {
             pionSelectionne = false;
             return true;
@@ -83,23 +69,30 @@ class Tour {
     }
 
     boolean jouerCoup(Coup coup, int destL, int destC, Epoque eDest) {
-        verifierPionSelectionne("Impossible de jouer un nouveau coup");
-
+        if (!pionSelectionne()) {
+            throw new IllegalStateException("Impossible de jouer un nouveau coup : pion non sélectionné");
+        }
         if (nombreCoupsRestants == 0 || termine()) {
             throw new IllegalStateException("Impossible de jouer un nouveau coup : tous les coups ont déjà été joués ce tour");
         }
+
         if (!coup.creer(destL, destC, eDest)) {
             return false;
         }
 
         if (nombreCoupsRestants == 2) {
+            System.out.println("Jouer coup 1  ");
             coup1 = coup;
+            coup2 = null;
         } else {
+            System.out.println("    Jouer coup 2  ");
+
             coup2 = coup;
         }
         coup.jouer();
         pion = coup.pion();
         nombreCoupsRestants--;
+        prochainFocus = null;
         return true;
     }
 
@@ -125,11 +118,13 @@ class Tour {
 
         switch (nombreCoupsRestants) {
             case 0:
+                System.out.println("    Annuler coup 2  ");
                 coup2.annuler();
                 pion = coup2.pion();
                 nombreCoupsRestants++;
                 break;
             case 1:
+                System.out.println("Annuler coup 1  ");
                 coup1.annuler();
                 pion = coup1.pion();
                 nombreCoupsRestants++;
@@ -138,6 +133,7 @@ class Tour {
                 if (!pionSelectionne()) {
                     return false;
                 }
+                System.out.println("Annuler Selection");
                 pionSelectionne = false;
                 break;
             default:

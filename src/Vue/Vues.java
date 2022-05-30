@@ -14,6 +14,7 @@ public class Vues {
     final static String MENU_SAISIES = "Nouvelle Partie";
     final static String MENU_PARTIES = "Charger Partie";
     final static String JEU = "Jeu";
+    final static String MENU_FIN = "Fin";
 
     Vues(JFrame f) {
         frame = f;
@@ -52,6 +53,8 @@ public class Vues {
     }
 
     public void afficherMenuChargerPartie(){afficher(MENU_PARTIES);}
+
+    public void afficherMenuFin(){afficher(MENU_FIN);}
 
     public void close() {
         frame.setVisible(true);

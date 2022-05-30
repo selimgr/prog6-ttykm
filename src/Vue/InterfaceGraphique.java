@@ -30,8 +30,8 @@ public class InterfaceGraphique implements Runnable {
         DisplayMode dm = device.getDisplayMode();
 
         // TODO: Gérer la taille de la fenêtre dans default.cfg
-        int width = dm.getWidth() / 2;
-        int height = dm.getHeight() / 2 + 80;
+        int width = dm.getWidth() / 4 * 3;
+        int height = dm.getHeight() / 4 * 3;
 
         // On fixe le layout du conteneur contenant les différentes vues de la fenêtre
         frame.getContentPane().setLayout(new CardLayout());
@@ -44,6 +44,7 @@ public class InterfaceGraphique implements Runnable {
         ajouterVue(Vues.MENU_PRINCIPAL);
         ajouterVue(Vues.MENU_PARTIES);
         ajouterVue(Vues.JEU);
+        ajouterVue(Vues.MENU_FIN);
 
         controleur.fixerMediateurVues(vues);
 
@@ -58,6 +59,7 @@ public class InterfaceGraphique implements Runnable {
 
         // On fixe la taille et centre la fenêtre
         frame.setSize(width, height);
+        frame.setMinimumSize(new Dimension(1040, 666));
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
@@ -92,6 +94,9 @@ public class InterfaceGraphique implements Runnable {
                 break;
             case Vues.MENU_PARTIES:
                 vue = new VueMenuParties(controleur);
+                break;
+            case Vues.MENU_FIN:
+                vue = new VueFinPartie(controleur);
                 break;
             default:
                 throw new IllegalArgumentException("Nom de vue incorrect : " + nom);

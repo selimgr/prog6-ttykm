@@ -1,12 +1,11 @@
 package Modele;
 
+import Global.Configuration;
 import Patterns.Observable;
 
 import java.util.Random;
 
 import static java.util.Objects.requireNonNull;
-
-// TODO: Ajouter des logs quand des actions correctes et incorrectes sont effectuées
 
 public class Jeu extends Observable {
     private Plateau plateau;
@@ -14,26 +13,22 @@ public class Jeu extends Observable {
     private Joueur joueur2;
     private int joueurActuel;
     private Tour tourActuel;
-    private TypeCoup prochainCoup;
-    private boolean partieTerminee;
     private Historique historique;
+    private TypeCoup prochainCoup;
     private final Random rand;
+    private int choixJoueurDebut = -1;
 
     public Jeu() {
         rand = new Random();
         joueurActuel = -1;
-        partieTerminee = true;
     }
 
-    public void nouveauJoueur(String nom, TypeJoueur type, Pion p, int handicap) {
+    public void nouveauJoueur(String nom, TypeJoueur type, int handicap) {
         if (joueur1 == null) {
-            joueur1 = new Joueur(nom, type, p, handicap);
+            joueur1 = new Joueur(nom, type, handicap);
         }
         else if (joueur2 == null) {
-            if (p == joueur1.pions()) {
-                throw new IllegalArgumentException("Impossible de créer le nouveau joueur : le joueur 1 possède déjà les pions " + p);
-            }
-            joueur2 = new Joueur(nom, type, p, handicap);
+            joueur2 = new Joueur(nom, type, handicap);
         }
         else {
             throw new IllegalStateException("Impossible d'ajouter un nouveau joueur : tous les joueurs ont déjà été ajoutés");
@@ -45,23 +40,30 @@ public class Jeu extends Observable {
             throw new IllegalStateException("Impossible de lancer une nouvelle partie : joueurs manquants");
         }
         // Si une partie est en cours mais n'est pas terminée, on choisit le joueur qui commence la nouvelle aléatoirement
-        if (!partieTerminee()) {
+        if (plateau != null && !partieTerminee()) {
             joueurActuel = -1;
         }
 
         // On choisit le joueur commençant la partie aléatoirement lorsqu'il s'agit de la première
         // Sinon le perdant de la partie précédente commence
         if (joueurActuel == -1) {
-            joueurActuel = rand.nextInt(2);
+            joueurActuel = choixJoueurDebut == -1 ? rand.nextInt(2) : choixJoueurDebut;
         } else if (vainqueur() == joueur1) {
             joueurActuel = 1;
         } else {
             joueurActuel = 0;
         }
-        joueur1.initialiserJoueur();
-        joueur2.initialiserJoueur();
+
+        // Par défaut le joueur qui commence a les pions blancs
+        if (joueur1 == joueurActuel()) {
+            joueur1.initialiserJoueur(Pion.BLANC);
+            joueur2.initialiserJoueur(Pion.NOIR);
+        } else {
+            joueur2.initialiserJoueur(Pion.BLANC);
+            joueur1.initialiserJoueur(Pion.NOIR);
+        }
+
         plateau = new Plateau();
-        partieTerminee = false;
         historique = new Historique();
         tourActuel = historique.nouveauTour(joueurActuel().focus());
         metAJour();
@@ -80,6 +82,14 @@ public class Jeu extends Observable {
     public Joueur joueur2() {
         requireNonNull(joueur2, "Impossible de récupérer le joueur 2 : le joueur n'a pas été créé");
         return joueur2;
+    }
+
+    public Joueur joueurPionsBlancs() {
+        return joueur1.aPionsBlancs() ? joueur1 : joueur2;
+    }
+
+    public Joueur joueurPionsNoirs() {
+        return joueur1.aPionsNoirs() ? joueur1 : joueur2;
     }
 
     public Joueur joueurActuel() {
@@ -112,7 +122,14 @@ public class Jeu extends Observable {
     }
 
     public void jouer(int l, int c, Epoque e) {
+        if (partieTerminee()) {
+            return;
+        }
+
+        Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
+
         if (prochaineActionSelectionPion()) {
+            System.out.println("jouer Selection   ");
             selectionnerPion(l, c, e);
         }
         else if (prochaineActionJouerCoup()) {
@@ -124,34 +141,36 @@ public class Jeu extends Observable {
                         metAJour();
                         return;
                     }
-                    coup = new Mouvement(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Mouvement(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
                 case PLANTATION:
-                    coup = new Plantation(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Plantation(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
                 default:
-                    coup = new Recolte(plateau, joueurActuel(), tourActuel.lignePion(), tourActuel.colonnePion(),
-                            tourActuel.epoquePion());
+                    coup = new Recolte(plateau, joueurActuel(), pion().ligne(), pion().colonne(), pion().epoque());
                     break;
             }
             jouerCoup(coup, l, c, e);
         }
         else {
+            System.out.println("        Jouer Focus  ");
             changerFocus(e);
         }
+
+        Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {
         if (((joueurActuel().aPionsBlancs() && plateau.aBlanc(l, c, e)) || (joueurActuel().aPionsNoirs() &&
                 plateau.aNoir(l, c, e))) && tourActuel.selectionnerPion(l, c, e)) {
+            historique.reinitialiserToursSuivants();
             selectionnerMouvement();
         }
     }
 
     private void jouerCoup(Coup coup, int l, int c, Epoque e) {
         if (tourActuel.jouerCoup(coup, l, c, e)) {
+            historique.reinitialiserToursSuivants();
             selectionnerMouvement();
         }
     }
@@ -161,14 +180,14 @@ public class Jeu extends Observable {
             return;
         }
         joueurActuel().fixerFocus(e);
-        joueurActuel = (joueurActuel + 1) % 2;
 
-        if (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2) {
-            partieTerminee = true;
+        if (partieTerminee()) {
             ajouterVictoire();
         } else {
+            joueurActuel = (joueurActuel + 1) % 2;
             tourActuel = historique.nouveauTour(joueurActuel().focus());
         }
+        historique.reinitialiserToursSuivants();
         metAJour();
     }
 
@@ -188,15 +207,39 @@ public class Jeu extends Observable {
         }
     }
 
+    private void annulerAjoutVictoire() {
+        if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
+            if (joueur1.pions() == Pion.BLANC) {
+                joueur2.enleverVictoire();
+            } else {
+                joueur1.enleverVictoire();
+            }
+        } else {
+            if (joueur1.pions() == Pion.BLANC) {
+                joueur1.enleverVictoire();
+            } else {
+                joueur2.enleverVictoire();
+            }
+        }
+    }
+
     public void annuler() {
         if (!historique.peutAnnuler()) {
             return;
         }
+        boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {
+            System.out.println("        Annuler Focus  ");
             tourActuel = historique.tourPrecedent();
+            joueurActuel = (joueurActuel + 1) % 2;
+            joueurActuel().fixerFocus(tourActuel.focus());
         }
         if (tourActuel.annuler()) {
+            if (partieTerminee) {
+                joueurActuel().fixerFocus(tourActuel.focus());
+                annulerAjoutVictoire();
+            }
             selectionnerMouvement();
         }
     }
@@ -206,16 +249,21 @@ public class Jeu extends Observable {
             return;
         }
 
-        if (tourActuel.termine()) {
-            tourActuel = historique.tourSuivant();
-        }
         if (tourActuel.refaire()) {
+            if (partieTerminee()) {
+                joueurActuel().fixerFocus(tourActuel.prochainFocus());
+                ajouterVictoire();
+            } else if (tourActuel.termine()) {
+                joueurActuel().fixerFocus(tourActuel.prochainFocus());
+                joueurActuel = (joueurActuel + 1) % 2;
+                tourActuel = historique.tourSuivant();
+            }
             selectionnerMouvement();
         }
     }
 
     public boolean partieTerminee() {
-        return partieTerminee;
+        return tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2);
     }
 
     public Joueur vainqueur() {
@@ -225,10 +273,8 @@ public class Jeu extends Observable {
 
         if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
             return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
-        } else if (plateau.nombrePlateauVide(Pion.NOIR) >= 2) {
-            return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
         } else {
-            throw new IllegalStateException("Impossible de renvoyer le vainqueur : aucun vainqueur");
+            return joueur1.pions() == Pion.BLANC ? joueur1 : joueur2;
         }
     }
 
@@ -243,8 +289,8 @@ public class Jeu extends Observable {
     public boolean prochaineActionChangementFocus() {
         int nombrePionPlateau = plateau.nombrePionPlateau(joueurActuel().pions(), joueurActuel().focus());
 
-        return tourActuel.nombreCoupsRestants() == 0 || (nombrePionPlateau == 0 &&
-                (!tourActuel.pionSelectionne() || tourActuel.epoquePion() == joueurActuel().focus()));
+        return nombreCoupsRestantsTour() == 0 || (!pionSelectionne() && nombrePionPlateau == 0) ||
+                (pionSelectionne() && pion() == null);
     }
 
     public boolean prochainCoupMouvement() {
@@ -257,5 +303,21 @@ public class Jeu extends Observable {
 
     public boolean prochainCoupRecolte() {
         return prochainCoup == TypeCoup.RECOLTE;
+    }
+
+    public boolean pionSelectionne() {
+        return tourActuel.pionSelectionne();
+    }
+
+    public int nombreCoupsRestantsTour(){
+        return tourActuel.nombreCoupsRestants();
+    }
+
+    public void choixJoueurDebut(int numeroJoueur) {
+        choixJoueurDebut = numeroJoueur % 2;
+    }
+
+    public Case pion() {
+        return tourActuel.pion();
     }
 }

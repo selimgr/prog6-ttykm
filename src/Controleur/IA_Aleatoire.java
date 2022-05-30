@@ -28,19 +28,16 @@ public class IA_Aleatoire extends IA {
         System.out.println(coups.size() + " !1! " + alea);
         c1 = coups.get(alea);
         System.out.println(( (Mouvement) c1).toString());
-        if (ctrl.jeu().prochaineActionSelectionPion()) {
+        if (ctrl.jeu().prochaineActionSelectionPion())
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
-        }
-        else {
-            throw new IllegalStateException("IA ne doit pas avoir de pion préselectionné");
-        }
-        ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
+        if (ctrl.jeu().prochaineActionJouerCoup())
+            ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
         // Second coup avec pion déjà choisi
-        if (ctrl.jeu().plateau().aPion(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque())) {
+        if (ctrl.jeu().prochaineActionJouerCoup()) {
             coups = ctrl.jeu().plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
-            if (coups.size() ==0 ) throw new IllegalStateException("coups est vide");
+            if (coups.size() ==0 ) throw new IllegalStateException("Aucun coups jouable");
             alea = r.nextInt(coups.size());
-            System.out.println(coups.size() + " !2! " + alea);
+            //System.out.println(coups.size() + " !2! " + alea);
             c2 = coups.get(alea);
             System.out.print(( (Mouvement) c2).toString() + " -- ");
             //System.out.println(( (Mouvement) c2).arrivee().toString());
@@ -54,15 +51,31 @@ public class IA_Aleatoire extends IA {
     }
 
     void gestionFocus(int alea ){
-        if (ia.focus().indice() == alea){
+        if (ia.focus().indice() == Epoque.PASSE.indice()){
             if (alea == 1){
-                alea = alea + 1;
+                alea = Epoque.FUTUR.indice();
             }
             else {
-                alea = 1;
+                alea = Epoque.PRESENT.indice();
             }
         }
-        System.out.println("Focus choisi = " +alea);
+        else if (ia.focus().indice() == Epoque.PRESENT.indice()){
+            if (alea == 1){
+                alea = Epoque.FUTUR.indice();
+            }
+            else {
+                alea = Epoque.PASSE.indice();
+            }
+        }
+        else {
+            if (alea == 1){
+                alea = Epoque.PRESENT.indice();
+            }
+            else {
+                alea = Epoque.PASSE.indice();
+            }
+        }
+        System.out.println("Focus choisi Alea = " + Epoque.depuisIndice(alea));
         ctrl.jouer(0,0,Epoque.depuisIndice(alea));
     }
 

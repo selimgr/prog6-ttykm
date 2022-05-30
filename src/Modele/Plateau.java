@@ -356,4 +356,18 @@ public class Plateau {
         }
         return plateauStr;
     }
+
+    public String hash2() {
+        StringBuilder plateauStr = new StringBuilder();
+        for (int lig = 0; lig < TAILLE; lig++){
+            for (int ep =0; ep < Epoque.NOMBRE; ep++){
+                for(int col = 0; col < TAILLE; col++){
+                    plateauStr.append(this.contenu(lig, col, Epoque.depuisIndice(ep))).append(" ");
+                }
+                plateauStr.append("     ");
+            }
+            plateauStr.append("\n");
+        }
+        return plateauStr.toString();
+    }
 }

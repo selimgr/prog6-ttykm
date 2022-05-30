@@ -126,7 +126,7 @@ public class Jeu extends Observable {
             return;
         }
 
-        Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
+        //Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
 
         if (prochaineActionSelectionPion()) {
             System.out.println("jouer Selection   ");
@@ -157,7 +157,7 @@ public class Jeu extends Observable {
             changerFocus(e);
         }
 
-        Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
+        //Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {

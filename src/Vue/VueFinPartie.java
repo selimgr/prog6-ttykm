@@ -1,5 +1,7 @@
 package Vue;
 
+import Vue.JComposants.CButton;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,8 +19,8 @@ public class VueFinPartie extends JPanel {
 
         bravoJoueurAGagneTextField = new JTextField();
         dommageJoueurAPerduTextField = new JTextField();
-        rejouerButton = new JButton();
-        menuPrincipalButton = new JButton();
+        menuPrincipalButton = new CButton("");
+        rejouerButton = new CButton("").vert();
 
         MenuFin = this;
 

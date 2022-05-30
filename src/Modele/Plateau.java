@@ -12,12 +12,14 @@ public class Plateau {
     private int nombrePlateauVideBlanc;
     private int nombrePlateauVideNoir;
     private int nombreGrainesReserve;
+    private final int[][][] brillance;
 
     public static final int TAILLE = 4;
     public static final int NOMBRE_MAX_GRAINES = 5;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
+            brillance = new int[Epoque.NOMBRE][TAILLE][TAILLE];
 
         nbBlancParPlateau = new int[Epoque.NOMBRE];
         nbNoirParPlateau = new int[Epoque.NOMBRE];

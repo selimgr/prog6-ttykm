@@ -18,27 +18,25 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="ab074" class="javax.swing.JTextField" binding="bravoJoueurAGagneTextField" custom-create="true">
+          <component id="bf842" class="javax.swing.JLabel" binding="bravoJoueurAGagneLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="300" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <editable value="false"/>
               <opaque value="true"/>
               <text value="Bravo, &lt;Joueur&gt; a gagné !"/>
               <visible value="true"/>
             </properties>
           </component>
-          <component id="8848d" class="javax.swing.JTextField" binding="dommageJoueurAPerduTextField" custom-create="true" default-binding="true">
+          <component id="ca1b0" class="javax.swing.JLabel" binding="dommageJoueurAPerduLabel" default-binding="true">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="300" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <editable value="false"/>
               <opaque value="true"/>
               <text value="Dommage, &lt;Joueur&gt; a perdu !"/>
             </properties>

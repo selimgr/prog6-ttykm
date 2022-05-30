@@ -20,6 +20,12 @@ class AdaptateurClavier extends KeyAdapter {
             case KeyEvent.VK_I:
                 controleur.toucheClavier("IA");
                 break;
+            case KeyEvent.VK_LEFT:
+                controleur.toucheClavier("Annuler");
+                break;
+            case KeyEvent.VK_RIGHT:
+                controleur.toucheClavier("Refaire");
+                break;
             default:
                 System.out.println("Touche non supportée");
         }

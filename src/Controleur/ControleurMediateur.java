@@ -85,6 +85,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     public void partieSuivante() {
         verifierJeu("Impossible de passer à la partie suivante");
         jeu.nouvellePartie();
+        vues.nouvellePartie();
     }
 
     @Override
@@ -158,6 +159,12 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (touche) {
             case "IA":
                 jouerIA();
+                break;
+            case "Annuler":
+                annuler();
+                break;
+            case "Refaire":
+                refaire();
                 break;
             default:
                 System.out.println("Touche inconnue : " + touche);

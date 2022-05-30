@@ -9,8 +9,8 @@ public class VueFinPartie extends JPanel {
 
     CollecteurEvenements controleur;
     private JPanel MenuFin;
-    private JTextField bravoJoueurAGagneTextField;
-    private JTextField dommageJoueurAPerduTextField;
+    private JLabel bravoJoueurAGagneLabel;
+    private JLabel dommageJoueurAPerduLabel;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
     int logoHeight;
@@ -21,8 +21,8 @@ public class VueFinPartie extends JPanel {
     public VueFinPartie(CollecteurEvenements c) {
         controleur = c;
 
-        bravoJoueurAGagneTextField = new JTextField();
-        dommageJoueurAPerduTextField = new JTextField();
+        bravoJoueurAGagneLabel = new JLabel();
+        dommageJoueurAPerduLabel = new JLabel();
         menuPrincipalButton = new CButton("");
         rejouerButton = new CButton("").vert();
 
@@ -50,13 +50,11 @@ public class VueFinPartie extends JPanel {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        bravoJoueurAGagneTextField.setEditable(false);
-        bravoJoueurAGagneTextField.setText("Bravo, <Joueur> a gagné !");
-        bravoJoueurAGagneTextField.setVisible(true);
-        panel1.add(bravoJoueurAGagneTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
-        dommageJoueurAPerduTextField.setEditable(false);
-        dommageJoueurAPerduTextField.setText("Dommage, <Joueur> a perdu !");
-        panel1.add(dommageJoueurAPerduTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        bravoJoueurAGagneLabel.setText("Bravo, <Joueur> a gagné !");
+        bravoJoueurAGagneLabel.setVisible(true);
+        panel1.add(bravoJoueurAGagneLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        dommageJoueurAPerduLabel.setText("Dommage, <Joueur> a perdu !");
+        panel1.add(dommageJoueurAPerduLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -76,8 +74,8 @@ public class VueFinPartie extends JPanel {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        bravoJoueurAGagneTextField.setText("Il a gagné !");
-        //bravoJoueurAGagneTextField.setText(controleur.jeu().vainqueur().nom() + " a gagné !");
+        bravoJoueurAGagneLabel.setText("Il a gagné !");
+        //bravoJoueurAGagneLabel.setText(controleur.jeu().vainqueur().nom() + " a gagné !");
     }
 
     @Override

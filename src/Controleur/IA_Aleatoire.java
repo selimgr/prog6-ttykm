@@ -43,7 +43,7 @@ public class IA_Aleatoire extends IA {
             System.out.println(coups.size() + " !2! " + alea);
             c2 = coups.get(alea);
             System.out.print(( (Mouvement) c2).toString() + " -- ");
-            System.out.println(( (Mouvement) c2).arrivee().toString());
+            //System.out.println(( (Mouvement) c2).arrivee().toString());
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
 
         }

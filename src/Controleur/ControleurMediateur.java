@@ -86,6 +86,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         verifierJeu("Impossible de passer à la partie suivante");
         jeu.nouvellePartie();
         vues.nouvellePartie();
+        vues.afficherJeu();
     }
 
     @Override

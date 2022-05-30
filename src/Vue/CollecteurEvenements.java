@@ -20,8 +20,8 @@ public interface CollecteurEvenements {
 
     void afficherMenuFin();
     
-    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, Pion pionsJ1, int handicapJ1,
-                        String nomJ2, TypeJoueur typeJ2, Pion pionsJ2, int handicapJ2, int choixJoueurDebut);
+    void nouvellePartie(String nomJ1, TypeJoueur typeJ1, int handicapJ1,
+                        String nomJ2, TypeJoueur typeJ2, int handicapJ2, int choixJoueurDebut);
     
     void partieSuivante();
 

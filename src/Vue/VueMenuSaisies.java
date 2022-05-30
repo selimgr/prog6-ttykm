@@ -60,15 +60,13 @@ public class VueMenuSaisies extends JPanel {
             c.nouvellePartie(
                     nomJ1.getText(),
                     TypeJoueur.values()[typeJ1.getSelectedIndex()],
-                    comboBox1.getSelectedIndex() == 1 ? Pion.BLANC : (comboBox1.getSelectedIndex() == 2 ? Pion.NOIR : Pion.BLANC),
                     niveauJ1.getSelectedIndex(),
                     // --
                     nomJ2.getText(),
                     TypeJoueur.values()[typeJ2.getSelectedIndex()],
-                    comboBox1.getSelectedIndex() == 2 ? Pion.BLANC : Pion.NOIR,
                     niveauJ2.getSelectedIndex(),
                     // --
-                    comboBox1.getSelectedIndex()
+                    comboBox1.getSelectedIndex() - 1
             );
             c.afficherJeu();
         });

@@ -143,7 +143,7 @@ public class VueMenuSaisies extends JPanel {
         nomJ1.setFocusCycleRoot(false);
         nomJ1.setFocusTraversalPolicyProvider(false);
         nomJ1.setFocusable(true);
-        nomJ1.setText("Nom de Joueur 1");
+        nomJ1.setText("Ate");
         nomJ1.setVisible(true);
         Joueur1.add(nomJ1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(120, -1), new Dimension(200, -1), 0, false));
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
@@ -169,7 +169,7 @@ public class VueMenuSaisies extends JPanel {
         label2.setText(" Joueur 2");
         Joueur2.add(label2, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         nomJ2 = new JTextField();
-        nomJ2.setText("Nom du Joueur 2");
+        nomJ2.setText("Tom");
         Joueur2.add(nomJ2, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(3, -1), new Dimension(100, -1), new Dimension(200, -1), 0, false));
         final DefaultComboBoxModel defaultComboBoxModel3 = new DefaultComboBoxModel();
         defaultComboBoxModel3.addElement("Humain");

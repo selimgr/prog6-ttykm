@@ -52,7 +52,7 @@ public class VueMenuSaisies extends JPanel {
 
         // Chargement des assets
         t = Imager.getImageBuffer("assets/topbanner.png");
-        vs = Imager.getImageBuffer("assets/VS.jpg");
+        vs = Imager.getImageBuffer("assets/VS.png");
 
         MenuSaisies = this;
         $$$setupUI$$$();

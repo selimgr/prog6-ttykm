@@ -13,10 +13,7 @@ public class VueFinPartie extends JPanel {
     private JLabel dommageJoueurAPerduLabel;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
-    int logoHeight;
     Image t;
-    Image vs;
-    int called = 0;
 
     public VueFinPartie(CollecteurEvenements c) {
         controleur = c;
@@ -28,7 +25,6 @@ public class VueFinPartie extends JPanel {
 
         // Chargement des assets
         t = Imager.getImageBuffer("assets/topbanner.png");
-        //vs = Imager.getImageBuffer("assets/VS.jpg");
 
         MenuFin = this;
 

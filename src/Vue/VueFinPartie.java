@@ -13,6 +13,10 @@ public class VueFinPartie extends JPanel {
     private JTextField dommageJoueurAPerduTextField;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
+    int logoHeight;
+    Image t;
+    Image vs;
+    int called = 0;
 
     public VueFinPartie(CollecteurEvenements c) {
         controleur = c;
@@ -21,6 +25,10 @@ public class VueFinPartie extends JPanel {
         dommageJoueurAPerduTextField = new JTextField();
         menuPrincipalButton = new CButton("");
         rejouerButton = new CButton("").vert();
+
+        // Chargement des assets
+        t = Imager.getImageBuffer("assets/topbanner.png");
+        //vs = Imager.getImageBuffer("assets/VS.jpg");
 
         MenuFin = this;
 
@@ -69,5 +77,36 @@ public class VueFinPartie extends JPanel {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        int w = getWidth(), h = getHeight();
+        Color color1 = new Color(255, 140, 85);
+        Color color2 = new Color(255, 120, 105);
+        GradientPaint gp = new GradientPaint(0, 0, color1, w, h, color2);
+        g2d.setPaint(gp);
+        g2d.fillRect(0, 0, w, h);
+
+        int width = (int) (getWidth() * 1.7);
+        int height = (t.getHeight(null) * width) / t.getWidth(null);
+
+        g.drawImage(t, 0, 0, width, height, null);
+        // --
+
+        width = (int) (getWidth() * 0.25);
+        //logoHeight = (vs.getHeight(null) * width) / vs.getWidth(null);
+
+        int x = (int) ((getWidth() - width) / 2) - 5;
+
+        //g.drawImage(vs, x, 35, width, logoHeight, null);
+        if (called == 0) {
+            setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
+            called = 1;
+        }
     }
 }

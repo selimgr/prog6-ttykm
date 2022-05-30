@@ -96,17 +96,5 @@ public class VueFinPartie extends JPanel {
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
         g.drawImage(t, 0, 0, width, height, null);
-        // --
-
-        width = (int) (getWidth() * 0.25);
-        //logoHeight = (vs.getHeight(null) * width) / vs.getWidth(null);
-
-        int x = (int) ((getWidth() - width) / 2) - 5;
-
-        //g.drawImage(vs, x, 35, width, logoHeight, null);
-        if (called == 0) {
-            setBorder(BorderFactory.createEmptyBorder(logoHeight + 50, 0, 0, 0));
-            called = 1;
-        }
     }
 }

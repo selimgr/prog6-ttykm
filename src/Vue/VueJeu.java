@@ -180,12 +180,12 @@ class VueJeu extends JPanel {
 
         // --
         c.insets = new Insets(10, 60, 0, 60);
-        c.fill = BOTH;
+        c.fill = NONE;
         c.gridx = 0;
         c.gridy = 2;
         c.weightx = 1;
         c.weighty = 1;
-        c.anchor = LAST_LINE_START;
+        c.anchor = PAGE_END;
 
         mainPanel.add(addUserActions(), c);
     }
@@ -207,8 +207,8 @@ class VueJeu extends JPanel {
         controlsPanel.setOpaque(false);
 
         JButton[] controls = {
-            new CButton("<"),
-            new CButton(">"),
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/undo.png", 18, 18))),
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/redo.png", 18, 18))),
 //            new CButton("Fin tour")
         };
 
@@ -230,7 +230,7 @@ class VueJeu extends JPanel {
     }
 
     private JPanel addUserActions() {
-        JPanel userActions = new JPanel(new GridBagLayout());
+        JPanel userActions = new JPanel();
         userActions.setOpaque(false);
 
         GridBagConstraints c = new GridBagConstraints();
@@ -241,6 +241,9 @@ class VueJeu extends JPanel {
         c.weighty = 1;
         c.anchor = GridBagConstraints.CENTER;
 
+        JPanel seedsPanel = new JPanel(new GridBagLayout());
+
+        seedsPanel.setOpaque(false);
         JPanel seedsButtons = new JPanel();
         seedsButtons.setOpaque(false);
         JButton recolter = new CButton("Récolter une graine");
@@ -255,10 +258,22 @@ class VueJeu extends JPanel {
 
         seedsButtons.add(planter);
         seedsButtons.add(recolter);
+
+        GridBagConstraints c2 = new GridBagConstraints();
+        c2.fill = GridBagConstraints.NONE;
+        c2.gridx = 0;
+        c2.gridy = 0;
+        c2.weightx = 1;
+        c2.weighty = 1;
+        c2.anchor = GridBagConstraints.CENTER;
+        seedsPanel.add(seeds, c2);
+        c2.insets = new Insets(8, 0, 0, 0);
+        c2.gridy = 1;
+        seedsPanel.add(seedsButtons, c2);
 //        seeds.add(seedsButtons);
 //
 //        userActions.add(seeds, c);
-        userActions.add(seedsButtons);
+        userActions.add(seedsPanel);
         // --
 
         c.gridy = 1;

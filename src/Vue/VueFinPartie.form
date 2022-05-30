@@ -16,7 +16,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ab074" class="javax.swing.JTextField" binding="bravoJoueurAGagnéTextField" custom-create="true" default-binding="true">
+          <component id="ab074" class="javax.swing.JTextField" binding="bravoJoueurAGagneTextField" custom-create="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="300" height="-1"/>

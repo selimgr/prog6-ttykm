@@ -7,7 +7,7 @@ public class VueFinPartie extends JPanel {
 
     CollecteurEvenements controleur;
     private JPanel MenuFin;
-    private JTextField bravoJoueurAGagnéTextField;
+    private JTextField bravoJoueurAGagneTextField;
     private JTextField dommageJoueurAPerduTextField;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
@@ -15,7 +15,7 @@ public class VueFinPartie extends JPanel {
     public VueFinPartie(CollecteurEvenements c) {
         controleur = c;
 
-        bravoJoueurAGagnéTextField = new JTextField();
+        bravoJoueurAGagneTextField = new JTextField();
         dommageJoueurAPerduTextField = new JTextField();
         rejouerButton = new JButton();
         menuPrincipalButton = new JButton();
@@ -40,10 +40,12 @@ public class VueFinPartie extends JPanel {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        bravoJoueurAGagnéTextField.setEditable(false);
-        bravoJoueurAGagnéTextField.setText("Bravo, <Joueur> a gagné !");
-        bravoJoueurAGagnéTextField.setVisible(true);
-        panel1.add(bravoJoueurAGagnéTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        bravoJoueurAGagneTextField = new JTextField();
+        bravoJoueurAGagneTextField.setEditable(false);
+        bravoJoueurAGagneTextField.setText("Bravo, <Joueur> a gagné !");
+        bravoJoueurAGagneTextField.setVisible(true);
+        panel1.add(bravoJoueurAGagneTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        dommageJoueurAPerduTextField = new JTextField();
         dommageJoueurAPerduTextField.setEditable(false);
         dommageJoueurAPerduTextField.setText("Dommage, <Joueur> a perdu !");
         panel1.add(dommageJoueurAPerduTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));

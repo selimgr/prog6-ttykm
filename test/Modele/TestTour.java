@@ -20,21 +20,8 @@ public class TestTour {
     }
 
     @Test
-    public void testExceptionLignePion() {
-        IllegalStateException e = assertThrows(IllegalStateException.class, tour::lignePion);
-        assertTrue(e.getMessage().contains("Impossible de renvoyer la ligne du pion : pion non sélectionné"));
-    }
-
-    @Test
-    public void testExceptionColonnePion() {
-        IllegalStateException e = assertThrows(IllegalStateException.class, tour::colonnePion);
-        assertTrue(e.getMessage().contains("Impossible de renvoyer la colonne du pion : pion non sélectionné"));
-    }
-
-    @Test
-    public void testExceptionEpoquePion() {
-        IllegalStateException e = assertThrows(IllegalStateException.class, tour::epoquePion);
-        assertTrue(e.getMessage().contains("Impossible de renvoyer l'époque du pion : pion non sélectionné"));
+    public void testPionNull() {
+        assertNull(tour.pion());
     }
 
     @Test
@@ -47,10 +34,10 @@ public class TestTour {
             for (int j = 0; j < Plateau.TAILLE; j++) {
                 for (int k = 0; k < Plateau.TAILLE; k++) {
                     tour.selectionnerPion(j, k, e);
-                    assertEquals(j, tour.lignePion());
-                    assertEquals(k, tour.colonnePion());
-                    assertEquals(e, tour.epoquePion());
-                    assertEquals(i, tour.epoquePion().indice());
+                    assertEquals(j, tour.pion().ligne());
+                    assertEquals(k, tour.pion().colonne());
+                    assertEquals(e, tour.pion().epoque());
+                    assertEquals(i, tour.pion().indiceEpoque());
                     tour.deselectionnerPion(j, k, e);
                 }
             }
@@ -99,9 +86,9 @@ public class TestTour {
     @Test
     public void testSelectionnerPion() {
         tour.selectionnerPion(1, 3, Epoque.PASSE);
-        assertEquals(1, tour.lignePion());
-        assertEquals(3, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(1, tour.pion().ligne());
+        assertEquals(3, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(tour.pionSelectionne());
 
         IllegalStateException e;
@@ -110,9 +97,9 @@ public class TestTour {
 
         tour.deselectionnerPion(1, 3, Epoque.PASSE);
         tour.selectionnerPion(2, 0, Epoque.PASSE);
-        assertEquals(2, tour.lignePion());
-        assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(2, tour.pion().ligne());
+        assertEquals(0, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
 
         e = assertThrows(IllegalStateException.class, () -> tour.selectionnerPion(2, 0, Epoque.PASSE));
         assertTrue(e.getMessage().contains("Impossible de sélectionner le pion : état du tour incorrect"));
@@ -242,9 +229,9 @@ public class TestTour {
         plateau.ajouter(1, 1, Epoque.PASSE, Piece.NOIR);
         coup = new Mouvement(plateau, joueur, 1, 0, Epoque.PASSE);
         assertTrue(tour.jouerCoup(coup, 1, 1, Epoque.PASSE));
-        assertEquals(1, tour.lignePion());
-        assertEquals(1, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(1, tour.pion().ligne());
+        assertEquals(1, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(plateau.estVide(1, 0, Epoque.PASSE));
         assertTrue(plateau.aBlanc(1, 1, Epoque.PASSE));
         assertTrue(plateau.aNoir(1, 2, Epoque.PASSE));
@@ -257,9 +244,9 @@ public class TestTour {
 
         coup = new Mouvement(plateau, joueur, 1, 0, Epoque.PASSE);
         assertFalse(tour.jouerCoup(coup, 1, 3, Epoque.PASSE));
-        assertEquals(1, tour.lignePion());
-        assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(1, tour.pion().ligne());
+        assertEquals(0, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(plateau.aBlanc(1, 0, Epoque.PASSE));
         assertTrue(plateau.aNoir(1, 1, Epoque.PASSE));
         assertTrue(plateau.estVide(1, 2, Epoque.PASSE));
@@ -273,25 +260,25 @@ public class TestTour {
         assertFalse(plateau.aGraine(0, 0, Epoque.PASSE));
         coup = new Plantation(plateau, joueur, 0, 0, Epoque.PASSE);
         assertTrue(tour.jouerCoup(coup, 0, 0, Epoque.PASSE));
-        assertEquals(0, tour.lignePion());
-        assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(0, tour.pion().ligne());
+        assertEquals(0, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(plateau.aBlanc(0, 0, Epoque.PASSE));
         assertTrue(plateau.aGraine(0, 0, Epoque.PASSE));
 
         coup = new Plantation(plateau, joueur, 0, 0, Epoque.PASSE);
         assertFalse(tour.jouerCoup(coup, 0, 0, Epoque.PASSE));
-        assertEquals(0, tour.lignePion());
-        assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(0, tour.pion().ligne());
+        assertEquals(0, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(plateau.aBlanc(0, 0, Epoque.PASSE));
         assertTrue(plateau.aGraine(0, 0, Epoque.PASSE));
 
         coup = new Recolte(plateau, joueur, 0, 0, Epoque.PASSE);
         assertTrue(tour.jouerCoup(coup, 0, 0, Epoque.PASSE));
-        assertEquals(0, tour.lignePion());
-        assertEquals(0, tour.colonnePion());
-        assertEquals(Epoque.PASSE, tour.epoquePion());
+        assertEquals(0, tour.pion().ligne());
+        assertEquals(0, tour.pion().colonne());
+        assertEquals(Epoque.PASSE, tour.pion().epoque());
         assertTrue(plateau.aBlanc(0, 0, Epoque.PASSE));
         assertFalse(plateau.aGraine(0, 0, Epoque.PASSE));
 

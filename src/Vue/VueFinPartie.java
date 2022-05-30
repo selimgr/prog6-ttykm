@@ -45,6 +45,7 @@ public class VueFinPartie extends JPanel {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
+        createUIComponents();
         MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));

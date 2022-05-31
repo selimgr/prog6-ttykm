@@ -114,7 +114,7 @@ public class VueFinPartie extends JPanel{
         Joueur vainqueur = controleur.jeu().vainqueur();
         Image tete;
         if(!vainqueur.estHumain()){
-            tete = Imager.getImageBuffer("assets/robot.jpg");
+            tete = Imager.getImageBuffer("assets/robot.png");
         } else {
             tete = Imager.getImageBuffer("assets/humain.png");
         }

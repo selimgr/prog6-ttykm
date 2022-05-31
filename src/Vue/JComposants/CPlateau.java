@@ -83,7 +83,7 @@ public class CPlateau extends JPanel implements Observateur {
         for (int l = 0; l < Plateau.TAILLE; l++) {
             for (int c = 0; c < Plateau.TAILLE; c++) {
                 if (p.aGraine(l, c, e)) {
-                    g.drawImage(Theme.instance().graine_inactif(), x, y, largeurCase, hauteurCase, this);
+                    g.drawImage(Theme.instance().graine(), x, y, largeurCase, hauteurCase, this);
                 }
                 if (p.aBlanc(l, c, e)) {
                     if (j.prochaineActionSelectionPion() && j.joueurActuel().aPionsBlancs() && j.joueurActuel().focus() == e) {

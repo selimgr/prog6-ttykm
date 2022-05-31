@@ -23,8 +23,7 @@ public class Theme {
     private Image noir_inactif, noir_actif_passe, noir_actif_present, noir_actif_futur;
     private Image noir_selectionne_passe, noir_selectionne_present, noir_selectionne_futur;
     private Image focus_blanc, focus_noir;
-    private Image graine_inactif, graine_actif_passe, graine_actif_present, graine_actif_futur;
-    private Image arbuste, arbre, arbre_couche_haut, arbre_couche_droite, arbre_couche_bas, arbre_couche_gauche;
+    private Image graine, arbuste, arbre, arbre_couche_haut, arbre_couche_droite, arbre_couche_bas, arbre_couche_gauche;
     private Image surbrillance_passe, surbrillance_present, surbrillance_futur;
 
     private Theme() {
@@ -91,10 +90,7 @@ public class Theme {
         focus_noir = Imager.getImageBuffer(focus + "focus_noir.png");
 
         String chapitre_1 = theme + "/chapitre_1/";
-        graine_inactif = Imager.getImageBuffer(chapitre_1 + "graine_inactif.png");
-        graine_actif_passe = Imager.getImageBuffer(chapitre_1 + "graine_actif_passe.png");
-        graine_actif_present = Imager.getImageBuffer(chapitre_1 + "graine_actif_present.png");
-        graine_actif_futur = Imager.getImageBuffer(chapitre_1 + "graine_actif_futur.png");
+        graine = Imager.getImageBuffer(chapitre_1 + "graine.png");
         arbuste = Imager.getImageBuffer(chapitre_1 + "arbuste.png");
         arbre = Imager.getImageBuffer(chapitre_1 + "arbre.png");
         arbre_couche_haut = Imager.getImageBuffer(chapitre_1 + "arbre_couche_haut.png");
@@ -228,20 +224,8 @@ public class Theme {
         return focus_noir;
     }
 
-    public Image graine_inactif() {
-        return graine_inactif;
-    }
-
-    public Image graine_actif(Epoque e) {
-        if (e == Epoque.PASSE) {
-            return graine_actif_passe;
-        } else if (e == Epoque.PRESENT) {
-            return graine_actif_present;
-        } else if (e == Epoque.FUTUR) {
-            return graine_actif_futur;
-        } else {
-            return null;
-        }
+    public Image graine() {
+        return graine;
     }
 
     public Image arbuste() {

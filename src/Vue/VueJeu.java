@@ -88,7 +88,7 @@ class VueJeu extends JPanel {
 
         gbc2.gridy = 1;
         gbc2.anchor = CENTER;
-        gbc2.insets = new Insets(10, 0, 0, 0);
+        gbc2.insets = new Insets(20, 0, 0, 0);
         JPanel endButtons = new JPanel();
         endButtons.setOpaque(false);
         JButton menu = new CButton("Menu principal");

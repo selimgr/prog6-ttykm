@@ -69,21 +69,6 @@
                 <item value="&quot;Essai 3&quot; 05/04/2022   Joueur1 : &quot;Tata&quot;, Joueur2 : &quot;Toto&quot;"/>
                 <item value="&quot;Essai 4&quot; 06/04/2022   Joueur1 : &quot;Toto&quot;, Joueur2 : IA FAcile &quot;Alpha&quot;"/>
                 <item value="&quot;Essai 5&quot; 07/04/2022   Joueur1 : &quot;Tata&quot;, Joueur2 : &quot;Toto&quot;"/>
-                <item value="&quot;Essai 6&quot; 08/04/2022   Joueur1 : &quot;Toto&quot;, Joueur2 : IA Moyenne &quot;Beta&quot;"/>
-                <item value="&quot;Essai 7&quot; 09/04/2022   Joueur1 : &quot;Toto&quot;, Joueur2 : IA Facile &quot;Alpha&quot;"/>
-                <item value="&quot;Essai 8&quot; 10/04/2022   Joueur1 : &quot;Toto&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 9&quot; 11/04/2022   Joueur1 : &quot;Toto&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 10&quot; 12/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 11&quot; 13/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Toto&quot;"/>
-                <item value="&quot;Essai 12&quot; 14/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 13&quot; 15/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Toto&quot;"/>
-                <item value="&quot;Essai 14&quot; 16/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 15&quot; 17/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 16&quot; 18/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Toto&quot;"/>
-                <item value="&quot;Essai 17&quot; 19/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 18&quot; 20/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
-                <item value="&quot;Essai 19&quot; 21/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Toto&quot;"/>
-                <item value="&quot;Essai 20&quot; 22/04/2022   Joueur1 : &quot;Léonard&quot;, Joueur2 : &quot;Victoria&quot;"/>
               </model>
               <opaque value="false"/>
               <preferredSize width="300" height="357"/>

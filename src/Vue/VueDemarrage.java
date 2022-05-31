@@ -43,7 +43,7 @@ class VueDemarrage extends JPanel {
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, w, h);
 
-        int width = (int) (getWidth() * 1.7);
+        int width = (int) (getWidth() * 1.8);
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
         g.drawImage(t, 0, 0, width, height, null);

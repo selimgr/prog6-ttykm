@@ -18,7 +18,7 @@ class VueMenuPrincipal extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         // Chargement des assets
-        t = Imager.getImageBuffer("assets/topbanner.png");
+        t = Imager.getImageBuffer("assets/topbanner_.png");
         logo = Imager.getImageBuffer("assets/logo.png");
 
         JButton nouvellePartie = new CButton("Nouvelle Partie");
@@ -93,6 +93,7 @@ class VueMenuPrincipal extends JPanel {
         add(centerPanel, gbc);
 
         gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(0, 0, 0, 110);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
@@ -115,8 +116,8 @@ class VueMenuPrincipal extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         int w = getWidth(), h = getHeight();
-        Color color1 = new Color(255, 140, 85);
-        Color color2 = new Color(255, 120, 105);
+        Color color2 = new Color(255, 140, 85);
+        Color color1 = new Color(255, 120, 105);
         GradientPaint gp = new GradientPaint(0, 0, color1, w, h, color2);
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, w, h);
@@ -124,6 +125,6 @@ class VueMenuPrincipal extends JPanel {
         int width = (int) (getWidth() * 1.5);
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
-        g.drawImage(t, 0, 0, width, height, null);
+        g.drawImage(t, 0, 0, (int)(getWidth()*0.73), width, null);
     }
 }

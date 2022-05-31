@@ -1,6 +1,5 @@
 package Vue;
 
-import Modele.Pion;
 import Patterns.Observateur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;

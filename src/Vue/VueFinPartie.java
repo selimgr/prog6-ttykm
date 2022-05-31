@@ -1,11 +1,8 @@
 package Vue;
 
-import Controleur.IA_Facile;
 import Modele.Joueur;
 import Modele.TypeJoueur;
-import Patterns.Observateur;
 import Vue.JComposants.CButton;
-import org.w3c.dom.Text;
 
 import javax.swing.*;
 import java.awt.*;

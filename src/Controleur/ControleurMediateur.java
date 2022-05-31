@@ -201,7 +201,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             case IA_MOYEN:
                 ia1 = new IA_Facile(jeu(), jeu().joueur1(), jeu().joueur2(), this);
                 break;
-                ia1 = new IA_Facile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
             case IA_FACILE:
                 ia1 = new IA_Aleatoire(jeu(), jeu().joueur1(), jeu().joueur2(), this);
                 break;
@@ -217,7 +216,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             case IA_MOYEN:
                 ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);
                 break;
-                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
             case IA_FACILE:
                 ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);
                 break;

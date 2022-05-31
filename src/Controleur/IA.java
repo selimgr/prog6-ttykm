@@ -17,6 +17,7 @@ public abstract class IA {
     Coup c1,c2,premierCoup,secondCoup;
     Epoque focusChangement,coupFocus;
     int minmax;
+    boolean nouveauTour;
 
     IA(Jeu jeu,Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
         this.ia =ia;
@@ -24,6 +25,7 @@ public abstract class IA {
         c1=c2=null;
         this.ctrl =ctrl;
         minmax = 1;
+        nouveauTour = true;
     }
 
 
@@ -54,23 +56,19 @@ public abstract class IA {
         if (ctrl.jeu().plateau().nombrePlateauVide(adversaire.pions()) >=2){
             int r = 1;
             if (ctrl.jeu().joueurActuel() == ia) r =-1;
-            System.out.println("Configuration gagnante trouvée : " + 1000*r + " "+  (ctrl.jeu().joueurActuel() == ia));
             return 1000*r;
         }
         if (ctrl.jeu().plateau().nombrePlateauVide(ia.pions()) >=2){
             int r = -1;
             if (ctrl.jeu().joueurActuel() == ia) r = 1;
-            System.out.println("Configuration perdante trouvée : "+ -1000*r+ " "+ (ctrl.jeu().joueurActuel() == ia));
             return -1000*r;
         }
         if (horizon <= 0 ){
-            System.out.println("Horizon atteint");
             return fonctionApproximation(p);
         }
         // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
         if ( antiCycle.get(p.hash()) != null && antiCycle.get(p.hash()) >= horizon){
-            System.out.println("DéjàVu");
-            return -666;
+            return fonctionApproximation(p);
         }
         return 7777777;
     }
@@ -83,22 +81,22 @@ public abstract class IA {
         while (it.hasNext()) {
             Coup c = it.next();
             // Selectionner pion
-            System.out.print("JOUER SEL:");
+            //System.out.print("JOUER SEL:");
             ctrl.jouer(c.depart().ligne(), c.depart().colonne(), c.depart().epoque());
-            System.out.print("it coup 1 : " + c.depart().toString() + " -> ");
+            //System.out.print("it coup 1 : " + c.depart().toString() + " -> ");
             // Le pion ne se suicide pas
-            System.out.println(c.arrivee().toString());
+            //System.out.println(c.arrivee().toString());
             Case arr = c.arrivee();
             //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Premier coup
-            System.out.print("JOUER C1 :");
+            //System.out.print("JOUER C1 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 1 joué : " + ctrl.jeu().plateau().hash());
             valeur = coup2(arr, j,c,valeur,horizon);
-            System.out.print("Annuler C1 ? : ");
+            //System.out.print("Annuler C1 ? : ");
             ctrl.annuler(); // Annuler coup 1
-            System.out.print("Annuler Selection ? : ");
+            //System.out.print("Annuler Selection ? : ");
             ctrl.annuler(); // Deselection pion
             //System.out.println("Apres tour :\n" +ctrl.jeu().plateau().hash2());
 
@@ -113,15 +111,14 @@ public abstract class IA {
         while (it2.hasNext()) {
             Coup c2 = it2.next();
             arr = c2.arrivee();
-            System.out.print("it coup 2 : " + c.depart().toString() + " -> ");
-            System.out.println(c2.arrivee().toString());
+            //System.out.print("it coup 2 : " + c.depart().toString() + " -> ");
+            //System.out.println(c2.arrivee().toString());
             // Recolte ? Plantation ? Mouvement ?
             //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Second coup
             System.out.print("JOUER C2 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
-            //System.out.println("Coup 2 joué : " + p.hash());
             valeur = choixFocus(arr, j, c, c2, valeur, horizon);
             System.out.print("Annuler C2 ? :");
             ctrl.annuler();
@@ -137,21 +134,14 @@ public abstract class IA {
                 //System.out.print("JOUER FOC :");
                 ctrl.jouer(0,0,Epoque.depuisIndice(foc));
                 valeur2 = valeur;
-                if (horizon ==this.horizon ) System.out.println(horizon + " Avant : %%%%%%%%%%%%%%%%%%%%%% " + valeur +" : " + valeur2+" %%%%%%%%%%%%%%%%%%%%%%%%%%");
                 if (j == ia         ) valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
                 if (j == adversaire ) valeur = Math.min(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
-                if (horizon ==this.horizon ) System.out.println(horizon + " Apres : %%%%%%%%%%%%%%%%%%%%%% " + valeur +" : " + valeur2+" %%%%%%%%%%%%%%%%%%%%%%%%%%");
                 if (horizon == this.horizon && valeur2 < valeur ) {
-                    System.out.println("<<<<<<<<<<<<<<<<<< "+ valeur2 +" < " +valeur +" >>>>>>>>>>>>>>>>>");
                     isFeuille(horizon,ctrl.jeu().plateau());
                     // TODO : Ajout d'aléatoire possible dans une certaine mesure
                     premierCoup = c;
                     secondCoup = c2;
                     coupFocus = Epoque.depuisIndice(foc);
-                    if (premierCoup != null) System.out.print(((Mouvement) premierCoup)+ " -> ");
-                    if (secondCoup !=null )System.out.print (((Mouvement) secondCoup)+ "  == ");
-                    System.out.println(valeur);
-                    System.out.println(ctrl.jeu().plateau().hash2());
                 }
                 //System.out.print("Annuler Foc ? :");
                 ctrl.annuler();
@@ -161,26 +151,25 @@ public abstract class IA {
     }
 
     void jouer() {
-        // Copie d'un plateau pour eviter les modifications
-        Plateau p = ctrl.jeu().plateau().copier();
         // Calcul du meilleur coup et stockage dans c1 et c2
-        this.calcul(ctrl.jeu().plateau(),horizon,1);
-        System.out.println(ia.toString());
+        if (nouveauTour) {
+            this.calcul(ctrl.jeu().plateau(), horizon, 1);
+            nouveauTour = false;
+        }
         if (ctrl.jeu().prochaineActionSelectionPion()) {
-            System.out.printf("coup1 = %s%n", c1);
             //Selection
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
             // Coup 1
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
         }
         // Coup 2
-        if (ctrl.jeu().prochaineActionJouerCoup()) {
-            System.out.println("coup2 = " + c2.toString());
+        else if (ctrl.jeu().prochaineActionJouerCoup()) {
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
         }
         //focus
-        ctrl.jouer(0,0,focusChangement);
-        System.out.println("Epoque changement  " + focusChangement);
-        System.out.println(ctrl.jeu().joueurActuel().toString());
+        else if (ctrl.jeu().prochaineActionChangementFocus()) {
+            ctrl.jouer(0, 0, focusChangement);
+            nouveauTour = true;
+        }
     }
 }

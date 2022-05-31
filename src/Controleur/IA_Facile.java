@@ -2,6 +2,7 @@ package Controleur;
 
 import Modele.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -11,17 +12,19 @@ public class IA_Facile extends IA {
     List<Coup> coups;
     Coup c1;
     Coup c2;
+    Random r;
+
 
 
     IA_Facile(Jeu jeu, Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
     super(jeu,ia,adversaire,ctrl);
+        horizon = 3;
+        antiCycle = new HashMap<>();
+        alphaBeta = new int[horizon];
+        r = new Random();
     }
-    public int calcul(Plateau p, int horizon,int minmax) {
-        return 1;
-    }
-
     @Override
     public int fonctionApproximation(Plateau p) {
-        return 0;
+        return r.nextInt(50);
     }
 }

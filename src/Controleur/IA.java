@@ -16,18 +16,20 @@ public abstract class IA {
     int[] alphaBeta;
     Coup c1,c2,premierCoup,secondCoup;
     Epoque focusChangement,coupFocus;
+    int minmax;
 
     IA(Jeu jeu,Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
         this.ia =ia;
         this.adversaire =adversaire;
         c1=c2=null;
         this.ctrl =ctrl;
+        minmax = 1;
     }
 
 
     int calcul(Plateau p, int horizon,int minmax) {
+        this.minmax = minmax;
         /* --------- Initialisation --------- */
-        ArrayList<Coup> C2;
         Joueur j = ctrl.jeu().joueurActuel();
         int valeur;
 
@@ -36,7 +38,7 @@ public abstract class IA {
         if (isF != 7777777) return isF;
 
         /* --------- Cas général --------- */
-        antiCycle.put(p.hash(),horizon);
+        //antiCycle.put(p.hash(),horizon);
         valeur = coup1(j,minmax,horizon);
         c1 = premierCoup;
         c2 = secondCoup;
@@ -50,31 +52,34 @@ public abstract class IA {
 
     private int isFeuille(int horizon,Plateau p){
         if (ctrl.jeu().plateau().nombrePlateauVide(adversaire.pions()) >=2){
-            //System.out.println("Configuration gagnante trouvée");
-            return 1000;
+            int r = 1;
+            if (ctrl.jeu().joueurActuel() == ia) r =-1;
+            System.out.println("Configuration gagnante trouvée : " + 1000*r + " "+  (ctrl.jeu().joueurActuel() == ia));
+            return 1000*r;
         }
         if (ctrl.jeu().plateau().nombrePlateauVide(ia.pions()) >=2){
-            //System.out.println("Configuration perdante trouvée");
-            return -1000;
+            int r = -1;
+            if (ctrl.jeu().joueurActuel() == ia) r = 1;
+            System.out.println("Configuration perdante trouvée : "+ -1000*r+ " "+ (ctrl.jeu().joueurActuel() == ia));
+            return -1000*r;
         }
         if (horizon <= 0 ){
-            //System.out.println("Horizon atteint");
+            System.out.println("Horizon atteint");
             return fonctionApproximation(p);
         }
         // On peux parcourir un plus grand horizon donc ce coup peut devenir plus nul ou plus intéressant
         if ( antiCycle.get(p.hash()) != null && antiCycle.get(p.hash()) >= horizon){
             System.out.println("DéjàVu");
-            return -1000;
+            return -666;
         }
         return 7777777;
     }
 
     int coup1(Joueur j,int minmax,int horizon) {
-        Plateau p = ctrl.jeu().plateau();
         ArrayList<Coup> C = ctrl.jeu().plateau().casesJouablesEpoque(j, false, 0, 0, null);
         Iterator<Coup> it = C.iterator();
-        int valeur = -1000000000;
-        if (!it.hasNext()) choixFocus(null,j,null,null,minmax,horizon);
+        int valeur = -1000000000*minmax;
+        if (!it.hasNext()) choixFocus(null,j,null,null,valeur,horizon);
         while (it.hasNext()) {
             Coup c = it.next();
             // Selectionner pion
@@ -84,13 +89,13 @@ public abstract class IA {
             // Le pion ne se suicide pas
             System.out.println(c.arrivee().toString());
             Case arr = c.arrivee();
-            if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
-            if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+            //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
+            //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Premier coup
             System.out.print("JOUER C1 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
-            //System.out.println("Coup 1 joué : " + p.hash());
-            valeur = coup2(arr, j,c,minmax,horizon);
+            //System.out.println("Coup 1 joué : " + ctrl.jeu().plateau().hash());
+            valeur = coup2(arr, j,c,valeur,horizon);
             System.out.print("Annuler C1 ? : ");
             ctrl.annuler(); // Annuler coup 1
             System.out.print("Annuler Selection ? : ");
@@ -100,43 +105,45 @@ public abstract class IA {
         }
         return valeur;
     }
-    int coup2(Case arr, Joueur j, Coup c,int minmax,int horizon) {
+    int coup2(Case arr, Joueur j, Coup c,int valeur,int horizon) {
         Plateau p = ctrl.jeu().plateau();
         ArrayList<Coup> C2 = p.casesJouablesEpoque(j, true, arr.ligne(), arr.colonne(), arr.epoque());
         Iterator<Coup> it2 = C2.iterator();
-        int valeur = -1000000000;
-        if (!it2.hasNext()) choixFocus(arr,j,c,null,minmax,horizon);
+        if (!it2.hasNext()) choixFocus(arr,j,c,null,valeur,horizon);
         while (it2.hasNext()) {
             Coup c2 = it2.next();
             arr = c2.arrivee();
             System.out.print("it coup 2 : " + c.depart().toString() + " -> ");
             System.out.println(c2.arrivee().toString());
             // Recolte ? Plantation ? Mouvement ?
-            if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
-            if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
+            //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
+            //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Second coup
             System.out.print("JOUER C2 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             //System.out.println("Coup 2 joué : " + p.hash());
-            valeur = choixFocus(arr, j, c, c2, minmax, horizon);
+            valeur = choixFocus(arr, j, c, c2, valeur, horizon);
             System.out.print("Annuler C2 ? :");
             ctrl.annuler();
         }
-
         return valeur;
     }
 
-    int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int minmax,int horizon){
+    int choixFocus(Case arr, Joueur j, Coup c,Coup c2,int valeur,int horizon){
         //if (c2 == null) System.out.println("FOCUS COUP MANQUANT ---\n" +ctrl.jeu().plateau().hash2());
-        int valeur = -1000000000;
         int valeur2;
         for (int foc = 0; foc < 3; foc++) {
             if (j.focus().indice() != foc){
                 //System.out.print("JOUER FOC :");
                 ctrl.jouer(0,0,Epoque.depuisIndice(foc));
                 valeur2 = valeur;
-                valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1) * minmax);
-                if (valeur2 < valeur && j ==ia) {
+                if (horizon ==this.horizon ) System.out.println(horizon + " Avant : %%%%%%%%%%%%%%%%%%%%%% " + valeur +" : " + valeur2+" %%%%%%%%%%%%%%%%%%%%%%%%%%");
+                if (j == ia         ) valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
+                if (j == adversaire ) valeur = Math.min(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
+                if (horizon ==this.horizon ) System.out.println(horizon + " Apres : %%%%%%%%%%%%%%%%%%%%%% " + valeur +" : " + valeur2+" %%%%%%%%%%%%%%%%%%%%%%%%%%");
+                if (horizon == this.horizon && valeur2 < valeur ) {
+                    System.out.println("<<<<<<<<<<<<<<<<<< "+ valeur2 +" < " +valeur +" >>>>>>>>>>>>>>>>>");
+                    isFeuille(horizon,ctrl.jeu().plateau());
                     // TODO : Ajout d'aléatoire possible dans une certaine mesure
                     premierCoup = c;
                     secondCoup = c2;
@@ -156,16 +163,12 @@ public abstract class IA {
     void jouer() {
         // Copie d'un plateau pour eviter les modifications
         Plateau p = ctrl.jeu().plateau().copier();
-        // Calcul du meilleur coup est stockage dans c1 et c2
+        // Calcul du meilleur coup et stockage dans c1 et c2
         this.calcul(ctrl.jeu().plateau(),horizon,1);
-        //DEBUG
-        System.out.println();
-        //On joue les 2 coups
-        //Selection
         System.out.println(ia.toString());
-        System.out.println(ctrl.jeu().plateau().hash2());
         if (ctrl.jeu().prochaineActionSelectionPion()) {
             System.out.printf("coup1 = %s%n", c1);
+            //Selection
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
             // Coup 1
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());

@@ -166,11 +166,11 @@ public class Theme {
 
     public Image blanc_actif(Epoque e) {
         if (e == Epoque.PASSE) {
-            return blanc_actif_passe;
+            return blanc_selectionne_passe;
         } else if (e == Epoque.PRESENT) {
-            return blanc_actif_present;
+            return blanc_selectionne_present;
         } else if (e == Epoque.FUTUR) {
-            return blanc_actif_futur;
+            return blanc_selectionne_futur;
         } else {
             return null;
         }
@@ -178,11 +178,11 @@ public class Theme {
 
     public Image blanc_selectionne(Epoque e) {
         if (e == Epoque.PASSE) {
-            return blanc_selectionne_passe;
+            return blanc_actif_passe;
         } else if (e == Epoque.PRESENT) {
-            return blanc_selectionne_present;
+            return blanc_actif_present;
         } else if (e == Epoque.FUTUR) {
-            return blanc_selectionne_futur;
+            return blanc_actif_futur;
         } else {
             return null;
         }
@@ -194,11 +194,11 @@ public class Theme {
 
     public Image noir_actif(Epoque e) {
         if (e == Epoque.PASSE) {
-            return noir_actif_passe;
+            return noir_selectionne_passe;
         } else if (e == Epoque.PRESENT) {
-            return noir_actif_present;
+            return noir_selectionne_present;
         } else if (e == Epoque.FUTUR) {
-            return noir_actif_futur;
+            return noir_selectionne_futur;
         } else {
             return null;
         }
@@ -206,11 +206,11 @@ public class Theme {
 
     public Image noir_selectionne(Epoque e) {
         if (e == Epoque.PASSE) {
-            return noir_selectionne_passe;
+            return noir_actif_passe;
         } else if (e == Epoque.PRESENT) {
-            return noir_selectionne_present;
+            return noir_actif_present;
         } else if (e == Epoque.FUTUR) {
-            return noir_selectionne_futur;
+            return noir_actif_futur;
         } else {
             return null;
         }

@@ -1,5 +1,7 @@
 package Vue;
 
+import Global.Sauvegarde;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -22,7 +24,10 @@ public class VueMenuParties extends JPanel {
 
         $$$setupUI$$$();
 
-        menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
+        String[] parties = Sauvegarde.liste();
+        menuPrincipalButton.addActionListener(e -> controleur.afficherMenuPrincipal());
+//        chargerPartie.addActionListener(e -> Sauvegarde.charger());
+//        supprimerPartie.addActionListener(e -> Sauvegarde.supprimer());
     }
 
     /**

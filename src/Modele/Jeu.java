@@ -130,10 +130,8 @@ public class Jeu extends Observable implements Serializable {
             return;
         }
 
-        Configuration.instance().logger().info("Avant\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
-
         if (prochaineActionSelectionPion()) {
-            System.out.println("jouer Selection   ");
+            Configuration.instance().logger().info("jouer Selection   ");
             selectionnerPion(l, c, e);
         }
         else if (prochaineActionJouerCoup()) {
@@ -157,11 +155,9 @@ public class Jeu extends Observable implements Serializable {
             jouerCoup(coup, l, c, e);
         }
         else {
-            System.out.println("        Jouer Focus  ");
+            Configuration.instance().logger().info("        Jouer Focus  ");
             changerFocus(e);
         }
-
-        Configuration.instance().logger().info("Apres\nfocus tour : " + tourActuel.focus() + "\nfocus J1 : " + joueur1.focus() + "\nfocus J2 : " + joueur2.focus());
     }
 
     private void selectionnerPion(int l, int c, Epoque e) {
@@ -234,7 +230,7 @@ public class Jeu extends Observable implements Serializable {
         boolean partieTerminee = partieTerminee();
 
         if (!tourActuel.pionSelectionne()) {
-            System.out.println("        Annuler Focus  ");
+            Configuration.instance().logger().info("        Annuler Focus  ");
             tourActuel = historique.tourPrecedent();
             joueurActuel = (joueurActuel + 1) % 2;
             joueurActuel().fixerFocus(tourActuel.focus());

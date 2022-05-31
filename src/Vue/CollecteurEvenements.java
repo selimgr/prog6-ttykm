@@ -3,7 +3,6 @@ package Vue;
 import Modele.Epoque;
 import Modele.Jeu;
 import Modele.TypeJoueur;
-import Modele.Pion;
 
 public interface CollecteurEvenements {
     void fixerMediateurVues(Vues v);
@@ -44,8 +43,6 @@ public interface CollecteurEvenements {
     void toucheClavier(String touche);
 
     void temps();
-
-    void jouerIA();
 
     void sauvegarderPartie();
 

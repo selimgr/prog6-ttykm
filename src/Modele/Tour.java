@@ -1,5 +1,7 @@
 package Modele;
 
+import Global.Configuration;
+
 import java.io.Serializable;
 
 import static java.util.Objects.requireNonNull;
@@ -83,17 +85,15 @@ class Tour implements Serializable {
         }
 
         if (nombreCoupsRestants == 2) {
-            System.out.println("Jouer coup 1  ");
+            Configuration.instance().logger().info("Jouer coup 1  ");
             coup1 = coup;
             coup2 = null;
-            coup.jouer();
-            if (coup1.pionSelectionnerEstMort()) { nombreCoupsRestants--; System.out.println("HERE");}
         } else {
-            System.out.println("    Jouer coup 2  ");
-            coup2 = coup;
-            coup.jouer();
-        }
+            Configuration.instance().logger().info("    Jouer coup 2  ");
 
+            coup2 = coup;
+        }
+        coup.jouer();
         pion = coup.pion();
         nombreCoupsRestants--;
         prochainFocus = null;
@@ -122,18 +122,13 @@ class Tour implements Serializable {
 
         switch (nombreCoupsRestants) {
             case 0:
-                if (coup2 != null) {
-                    System.out.println("    Annuler coup 2  ");
-                    coup2.annuler();
-                    pion = coup2.pion();
-                }
-                else {
-                    nombreCoupsRestants++;
-                }
+                Configuration.instance().logger().info("    Annuler coup 2  ");
+                coup2.annuler();
+                pion = coup2.pion();
                 nombreCoupsRestants++;
                 break;
             case 1:
-                System.out.println("Annuler coup 1  ");
+                Configuration.instance().logger().info("Annuler coup 1  ");
                 coup1.annuler();
                 pion = coup1.pion();
                 nombreCoupsRestants++;
@@ -142,7 +137,7 @@ class Tour implements Serializable {
                 if (!pionSelectionne()) {
                     return false;
                 }
-                System.out.println("Annuler Selection");
+                Configuration.instance().logger().info("Annuler Selection");
                 pionSelectionne = false;
                 break;
             default:

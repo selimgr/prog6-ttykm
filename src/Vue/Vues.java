@@ -53,8 +53,6 @@ public class Vues {
 
     public void afficherMenuChargerPartie(){afficher(MENU_PARTIES);}
 
-    public void afficherMenuFin(){afficher(MENU_FIN);}
-
     public void close() {
         frame.setVisible(true);
         frame.dispose();

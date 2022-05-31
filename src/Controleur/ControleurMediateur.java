@@ -59,13 +59,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void afficherMenuFin() {
-        verifierMediateurVues("Impossible d'afficher le menu de fin de partie");
-        vues.afficherMenuFin();
-    }
-
-
-    @Override
     public void nouvellePartie(String nomJ1, TypeJoueur typeJ1, int handicapJ1,
                                String nomJ2, TypeJoueur typeJ2, int handicapJ2, int choixJoueurDebut) {
         verifierMediateurVues("Impossible de créer une nouvelle partie");

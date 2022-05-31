@@ -50,4 +50,6 @@ public interface CollecteurEvenements {
     void jouerIA();
 
     void sauvegarderPartie();
+
+    void chargerPartie(String nomSauvegarde);
 }

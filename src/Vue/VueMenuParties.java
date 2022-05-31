@@ -44,7 +44,7 @@ public class VueMenuParties extends JPanel {
 
         chargerPartie.addActionListener((e) -> {
             System.out.println("Chargement de : " + selected[0]);
-            Sauvegarde.charger(selected[0]);
+            controleur.chargerPartie(selected[0]);
         });
 
         supprimerPartie.addActionListener((e) -> {
@@ -199,8 +199,8 @@ public class VueMenuParties extends JPanel {
 
         list1.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 selected[0] = String.valueOf(list1.getSelectedValue());
             }
         });

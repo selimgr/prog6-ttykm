@@ -83,7 +83,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         verifierJeu("Impossible de passer à la partie suivante");
         jeu.nouvellePartie();
         vues.nouvellePartie();
-        vues.afficherJeu();
+        afficherJeu();
     }
 
     @Override
@@ -203,5 +203,12 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void sauvegarderPartie() {
         jeu().sauvegarder();
+    }
+
+    @Override
+    public void chargerPartie(String nomSauvegarde) {
+        jeu = Sauvegarde.charger(nomSauvegarde);
+        vues.nouvellePartie();
+        afficherJeu();
     }
 }

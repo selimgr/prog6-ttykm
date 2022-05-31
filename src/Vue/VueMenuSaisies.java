@@ -61,7 +61,7 @@ public class VueMenuSaisies extends JPanel {
             if (co instanceof JPanel) {
                 for (Component coo : ((JPanel) co).getComponents()) {
                     if (coo instanceof CComboxBox) ((CComboxBox) coo).setEditable(true);
-                    else if (!(coo instanceof CButton)) {
+                    else if (coo instanceof JLabel) {
                         coo.setFont(new Font("Arial", Font.PLAIN, 14));
                         coo.setForeground(Color.WHITE);
                     }

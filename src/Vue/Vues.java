@@ -14,7 +14,6 @@ public class Vues {
     final static String MENU_SAISIES = "Nouvelle Partie";
     final static String MENU_PARTIES = "Charger Partie";
     final static String JEU = "Jeu";
-    final static String MENU_FIN = "Fin";
 
     Vues(JFrame f) {
         frame = f;

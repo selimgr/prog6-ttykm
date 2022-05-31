@@ -167,7 +167,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 refaire();
                 break;
             default:
-                System.out.println("Touche inconnue : " + touche);
+                Configuration.instance().logger().info("Touche inconnue : " + touche);
         }
     }
 

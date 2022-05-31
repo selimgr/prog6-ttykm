@@ -1,5 +1,7 @@
 package Modele;
 
+import Global.Configuration;
+
 import java.io.Serializable;
 
 import static java.util.Objects.requireNonNull;
@@ -83,11 +85,11 @@ class Tour implements Serializable {
         }
 
         if (nombreCoupsRestants == 2) {
-            System.out.println("Jouer coup 1  ");
+            Configuration.instance().logger().info("Jouer coup 1  ");
             coup1 = coup;
             coup2 = null;
         } else {
-            System.out.println("    Jouer coup 2  ");
+            Configuration.instance().logger().info("    Jouer coup 2  ");
 
             coup2 = coup;
         }
@@ -120,13 +122,13 @@ class Tour implements Serializable {
 
         switch (nombreCoupsRestants) {
             case 0:
-                System.out.println("    Annuler coup 2  ");
+                Configuration.instance().logger().info("    Annuler coup 2  ");
                 coup2.annuler();
                 pion = coup2.pion();
                 nombreCoupsRestants++;
                 break;
             case 1:
-                System.out.println("Annuler coup 1  ");
+                Configuration.instance().logger().info("Annuler coup 1  ");
                 coup1.annuler();
                 pion = coup1.pion();
                 nombreCoupsRestants++;
@@ -135,7 +137,7 @@ class Tour implements Serializable {
                 if (!pionSelectionne()) {
                     return false;
                 }
-                System.out.println("Annuler Selection");
+                Configuration.instance().logger().info("Annuler Selection");
                 pionSelectionne = false;
                 break;
             default:

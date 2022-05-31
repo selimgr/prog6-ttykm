@@ -1,5 +1,6 @@
 package Controleur;
 
+import Global.Configuration;
 import Modele.*;
 
 import java.util.ArrayList;
@@ -117,10 +118,10 @@ public abstract class IA {
             //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Second coup
-            System.out.print("JOUER C2 :");
+            Configuration.instance().logger().info("JOUER C2 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             valeur = choixFocus(arr, j, c, c2, valeur, horizon);
-            System.out.print("Annuler C2 ? :");
+            Configuration.instance().logger().info("Annuler C2 ? :");
             ctrl.annuler();
         }
         return valeur;

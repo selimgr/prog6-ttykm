@@ -1,12 +1,13 @@
 package Modele;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
 import static java.util.Objects.requireNonNull;
 
-public class Historique {
+public class Historique implements Serializable {
     private final Deque<Tour> precedents;
     private Tour actuel;
     private Deque<Tour> suivants;

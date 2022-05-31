@@ -1,12 +1,9 @@
 package Controleur;
 
+import Global.Sauvegarde;
 import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
-
-// TODO: A tester
-
-// TODO: Compléter le controleur
 
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
@@ -201,5 +198,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             case IA_FACILE:
                 ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);break;
         }
+    }
+
+    @Override
+    public void sauvegarderPartie() {
+        jeu().sauvegarder();
     }
 }

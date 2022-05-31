@@ -1,13 +1,15 @@
 package Modele;
 
 import Global.Configuration;
+import Global.Sauvegarde;
 import Patterns.Observable;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import static java.util.Objects.requireNonNull;
 
-public class Jeu extends Observable {
+public class Jeu extends Observable implements Serializable {
     private Plateau plateau;
     private Joueur joueur1;
     private Joueur joueur2;
@@ -17,6 +19,7 @@ public class Jeu extends Observable {
     private TypeCoup prochainCoup;
     private final Random rand;
     private int choixJoueurDebut = -1;
+    private Sauvegarde sauvegarde;
 
     public Jeu() {
         rand = new Random();
@@ -29,6 +32,7 @@ public class Jeu extends Observable {
         }
         else if (joueur2 == null) {
             joueur2 = new Joueur(nom, type, handicap);
+            sauvegarde = new Sauvegarde(this);
         }
         else {
             throw new IllegalStateException("Impossible d'ajouter un nouveau joueur : tous les joueurs ont déjà été ajoutés");
@@ -322,5 +326,9 @@ public class Jeu extends Observable {
 
     public Case pion() {
         return tourActuel.pion();
+    }
+
+    public void sauvegarder() {
+        sauvegarde.enregistrer();
     }
 }

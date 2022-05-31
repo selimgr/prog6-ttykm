@@ -41,7 +41,7 @@ public class VueMenuSaisies extends JPanel {
         niveauJ1 = new CComboxBox();
         niveauJ2 = new CComboxBox();
         menuPrincipalButton = new CButton();
-        jouerButton = new CButton().vert();
+        jouerButton = new CButton().blanc();
         comboBox1 = new CComboxBox();
         nomJ1 = new CTextField();
         nomJ2 = new CTextField();

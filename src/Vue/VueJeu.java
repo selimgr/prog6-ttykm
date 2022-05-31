@@ -1,5 +1,6 @@
 package Vue;
 
+import Modele.Joueur;
 import Vue.JComposants.*;
 
 import javax.swing.*;
@@ -15,11 +16,11 @@ class VueJeu extends JPanel {
     private final CInfoJoueur j1;
     private final CInfoJoueur j2;
     private final CGraines seeds;
-    private JLabel texteJeu;
+    private JLabel texteJeu, endGameText;
     private final JPanel backgroundTop, backgroundBottom;
     private JFrame topFrame;
 
-    private JPanel mainPanel;
+    private JPanel mainPanel, endGame;
 
     VueJeu(CollecteurEvenements c) {
         controleur = c;
@@ -29,6 +30,9 @@ class VueJeu extends JPanel {
         seeds = new CGraines();
 
         setLayout(new OverlayLayout(this));
+
+        // Fin partie
+        JPanel endGame = new JPanel();
 
         // Pour les moitiés de couleurs uniquement
         JPanel background = new JPanel(new GridLayout(2, 0));
@@ -47,8 +51,102 @@ class VueJeu extends JPanel {
         addMain(contenu);
         addBottom(contenu);
 
+        addEndGame();
         add(contenu);
         add(background);
+    }
+
+    private void addEndGame() {
+        endGame = new JPanel(new GridBagLayout());
+        endGame.setOpaque(true);
+        endGame.setVisible(false);
+        endGame.setBackground(new Color(23, 23, 23, 163));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.fill = BOTH;
+        gbc.anchor = CENTER;
+
+        JPanel banner = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;
+        gbc2.gridy = 0;
+        gbc2.weightx = 1;
+        gbc2.weighty = 1;
+        gbc2.fill = VERTICAL;
+        gbc2.anchor = PAGE_START;
+
+        banner.setBorder(new EmptyBorder(30, 0, 30, 0));
+        banner.setBackground(new Color(100, 183, 68));
+        endGameText = new JLabel("game over t tro nul");
+        endGameText.setFont(new Font("Arial", Font.BOLD, 30));
+        endGameText.setForeground(Color.white);
+        banner.add(endGameText, gbc2);
+
+        gbc2.gridy = 1;
+        gbc2.anchor = CENTER;
+        gbc2.insets = new Insets(10, 0, 0, 0);
+        JPanel endButtons = new JPanel();
+        endButtons.setOpaque(false);
+        JButton menu = new CButton("Menu principal");
+        JButton retry = new CButton("Rejouer?").blanc();
+        endButtons.add(menu);
+        endButtons.add(Box.createRigidArea(new Dimension(5, 0)));
+        endButtons.add(retry);
+        menu.addActionListener((e) -> controleur.afficherMenuPrincipal());
+        retry.addActionListener((e) -> {
+            endGame.setVisible(false);
+            controleur.partieSuivante();
+        });
+
+        banner.add(endButtons, gbc2);
+        endGame.add(banner, gbc);
+
+        add(endGame);
+    }
+
+    void showEnd() {
+        // TODO : Ajout du point du vainqueur
+        Joueur vainqueur = controleur.jeu().vainqueur();
+        Joueur perdant;
+        if (vainqueur == controleur.jeu().joueur1()) {
+            perdant = controleur.jeu().joueur2();
+        } else {
+            perdant = controleur.jeu().joueur1();
+        }
+
+        if (vainqueur.estHumain()) {
+            endGame.getComponent(0).setBackground(new Color(100, 183, 68));
+            if (!perdant.estHumain()) {
+                switch (perdant.type()) {
+                    case IA_FACILE:
+                        endGameText.setText("Tu as gagné contre l'IA facile! C'était \"facile\"..");
+                        break;
+                    case IA_MOYEN:
+                        endGameText.setText("Tu as gagné contre l'IA moyenne! Essaye l'IA difficile!");
+                        break;
+                    case IA_DIFFICILE:
+                        endGameText.setText("Tu as gagné contre l'IA difficile, t'es un roi!");
+                        break;
+                    default:
+                        endGameText.setText("Tu as gagné contre.. un alien?");
+                        break;
+                }
+            } else {
+                endGameText.setText(vainqueur.nom() + " a gagné !\n" + perdant.nom() + " a perdu..");
+            }
+        } else {
+            endGame.getComponent(0).setBackground(new Color(201, 67, 67));
+            if (perdant.estHumain()) {
+                endGameText.setText("Dommage! Tu as perdu contre l'IA.. une prochaine fois!");
+            } else {
+                endGameText.setText("L'IA " + vainqueur.nom() + " a gagné !");
+            }
+        }
+        endGame.setVisible(true);
     }
 
     private void addTop(JPanel contenu) {
@@ -98,16 +196,6 @@ class VueJeu extends JPanel {
             menu_item.setUI(menu_item.getClass().getName().contains("Check") ? new CCheckBoxMenuItemUI() : new CMenuItemUI(true));
             menu.add(menu_item);
         }
-
-//        JMenuItem regles = new JMenuItem("Règles");
-//        regles.setBorderPainted(false);
-//        regles.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        regles.setUI(new CMenuItemUI(false));
-//        regles.setForeground(Color.WHITE);
-//        regles.setFont(new Font("Arial", Font.PLAIN, 14));
-//        regles.setBackground(new Color(23, 23, 23));
-//        regles.addActionListener(e -> controleur.afficherRegles());
-//        regles.setIcon(new ImageIcon(Imager.getScaledImage("assets/Point-d'interrogation.png", 32, 32)));
 
         JButton regles = new CButton("? Règles").blanc();
         regles.addActionListener(e -> controleur.afficherRegles());
@@ -280,7 +368,7 @@ class VueJeu extends JPanel {
     }
 
     void nouvellePartie() {
-        vueNiveau = new VueNiveau(controleur, j1, j2, seeds,texteJeu);
+        vueNiveau = new VueNiveau(controleur, this, j1, j2, seeds,texteJeu);
         controleur.jeu().ajouteObservateur(vueNiveau);
 
         GridBagConstraints c = new GridBagConstraints();

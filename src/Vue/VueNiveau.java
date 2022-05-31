@@ -20,9 +20,11 @@ class VueNiveau extends JPanel implements Observateur {
     CInfoJoueur j1, j2;
     CGraines g;
     JLabel texteJeu;
+    VueJeu parent;
 
-    VueNiveau(CollecteurEvenements c, CInfoJoueur j1, CInfoJoueur j2, CGraines g, JLabel texteJeu) {
+    VueNiveau(CollecteurEvenements c, VueJeu p, CInfoJoueur j1, CInfoJoueur j2, CGraines g, JLabel texteJeu) {
         controleur = c;
+        parent = p;
         passe = new CPlateau(1, controleur);
         present = new CPlateau(2, controleur);
         futur = new CPlateau(3, controleur);
@@ -93,8 +95,9 @@ class VueNiveau extends JPanel implements Observateur {
         texteJeu.setText("Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer !");
 
         if (controleur.jeu().partieTerminee()) {
-            // TODO : Ajout du point du vainqueur
-            controleur.afficherMenuFin();
+            // Laissez le commentaire en hommage à Tom... #ripFinPartieEmoji
+            //controleur.afficherMenuFin();
+            parent.showEnd();
         }
     }
 }

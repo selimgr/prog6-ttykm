@@ -13,14 +13,12 @@ public class Plateau implements Serializable {
     private int nombrePlateauVideBlanc;
     private int nombrePlateauVideNoir;
     private int nombreGrainesReserve;
-    private final int[][][] brillance;
 
     public static final int TAILLE = 4;
     public static final int NOMBRE_MAX_GRAINES = 5;
 
     Plateau() {
         contenu = new int[Epoque.NOMBRE][TAILLE][TAILLE];
-            brillance = new int[Epoque.NOMBRE][TAILLE][TAILLE];
 
         nbBlancParPlateau = new int[Epoque.NOMBRE];
         nbNoirParPlateau = new int[Epoque.NOMBRE];
@@ -361,33 +359,16 @@ public class Plateau implements Serializable {
     }
 
     public String hash2() {
-        String plateauStr = "";
-        for (int i = 0; i < Epoque.NOMBRE; i++) {
-            for (int j = 0; j < TAILLE; j++) {
-                for (int k = 0; k < TAILLE; k++) {
-                    plateauStr += this.contenu(j, k, Epoque.depuisIndice(i)) + " ";
+        StringBuilder plateauStr = new StringBuilder();
+        for (int lig = 0; lig < TAILLE; lig++){
+            for (int ep =0; ep < Epoque.NOMBRE; ep++){
+                for(int col = 0; col < TAILLE; col++){
+                    plateauStr.append(this.contenu(lig, col, Epoque.depuisIndice(ep))).append(" ");
                 }
-                plateauStr += "\n";
+                plateauStr.append("     ");
             }
-            plateauStr += "\n\n";
+            plateauStr.append("\n");
         }
-        return plateauStr;
+        return plateauStr.toString();
     }
-
-    public void briller(int l, int c, Epoque e) {
-        this.brillance[e.indice()][l][c]=1;
-    }
-    public void resetBrillance(){
-        for(int i=0; i<3 ; i++){
-            for(int j=0; j<TAILLE ; j++ ){
-                for(int k=0; k<TAILLE ; k++){
-                    brillance[i][j][k]=0;
-                }
-            }
-        }
-    }
-    public boolean aBrillance(int l, int c, Epoque e){
-        return brillance[e.indice()][l][c]==1;
-    }
-
 }

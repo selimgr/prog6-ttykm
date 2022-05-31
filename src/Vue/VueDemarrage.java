@@ -1,7 +1,5 @@
 package Vue;
 
-import Vue.JComposants.CButton;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -14,7 +12,7 @@ class VueDemarrage extends JPanel {
     int logoHeight;
     int called = 0;
 
-    VueDemarrage(CollecteurEvenements c) {
+    VueDemarrage() {
         setBackground(Color.PINK);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
@@ -22,11 +20,6 @@ class VueDemarrage extends JPanel {
         // Chargement des assets
         t = Imager.getImageBuffer("assets/topbanner.png");
         logo = Imager.getImageBuffer("assets/logo.png");
-
-        JButton boutonMenu = new CButton("JOUER").vert().big();
-        boutonMenu.addActionListener((e) -> c.afficherMenuPrincipal());
-        boutonMenu.setAlignmentX(CENTER_ALIGNMENT);
-        add(boutonMenu);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -59,7 +52,7 @@ class VueDemarrage extends JPanel {
         width = (int) (getWidth() * 0.25);
         logoHeight = (logo.getHeight(null) * width) / logo.getWidth(null);
 
-        int x = (int) ((getWidth() - width) / 2) - 5;
+        int x = ((getWidth() - width) / 2) - 5;
 
         g.drawImage(logo, x, 35, width, logoHeight, null);
         if (called == 0) {

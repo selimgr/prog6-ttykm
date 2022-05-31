@@ -1,8 +1,9 @@
 package Modele;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Case {
+public class Case implements Serializable {
     private final int ligne, colonne;
     private final Epoque epoque;
 

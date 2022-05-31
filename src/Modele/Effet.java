@@ -1,8 +1,10 @@
 package Modele;
 
+import java.io.Serializable;
+
 import static java.util.Objects.requireNonNull;
 
-public class Effet {
+public class Effet implements Serializable {
     private final Piece piece;
     private final Case depart, arrivee;
 

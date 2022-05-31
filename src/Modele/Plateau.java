@@ -1,11 +1,12 @@
 package Modele;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 
-public class Plateau {
+public class Plateau implements Serializable {
     private final int[][][] contenu;
     private final int[] nbBlancParPlateau;
     private final int[] nbNoirParPlateau;

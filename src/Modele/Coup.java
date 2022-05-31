@@ -1,10 +1,11 @@
 package Modele;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-public abstract class Coup {
+public abstract class Coup implements Serializable {
     private final Plateau plateau;
     private final Joueur joueur;
     private final Case pion;

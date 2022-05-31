@@ -88,6 +88,7 @@ class VueJeu extends JPanel {
                 new JMenuItem("Quitter")
         };
 
+        menu_items[1].addActionListener(e -> controleur.sauvegarderPartie());
         menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
         menu_items[3].addActionListener(e -> controleur.toClose());
 

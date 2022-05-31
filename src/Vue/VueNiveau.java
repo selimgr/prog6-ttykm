@@ -87,44 +87,6 @@ class VueNiveau extends JPanel implements Observateur {
 
     @Override
     public void miseAJour() {
-        CompoundBorder passe_focus = null;
-        CompoundBorder present_focus = null;
-        CompoundBorder futur_focus = null;
-
-        boolean[][] focus = {
-            {false, false},
-            {false, false},
-            {false, false}
-        };
-
-        focus[controleur.jeu().joueur1().focus().indice()][controleur.jeu().joueur1().pions().valeur() - 1] = true;
-        focus[controleur.jeu().joueur2().focus().indice()][controleur.jeu().joueur2().pions().valeur() - 1] = true;
-
-        for (int p = 0; p < 3; p++) {
-            boolean[] pp = focus[p];
-
-            CompoundBorder b = new CompoundBorder(
-                (pp[0] ? top : null),
-                (pp[1] ? bottom : null)
-            );
-
-            switch (p) {
-                case 0:
-                    passe_focus = b;
-                    break;
-                case 1:
-                    present_focus = b;
-                    break;
-                case 2:
-                    futur_focus = b;
-                    break;
-            }
-        }
-
-        passe.setBorder(passe_focus);
-        present.setBorder(present_focus);
-        futur.setBorder(futur_focus);
-
         j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
         j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());

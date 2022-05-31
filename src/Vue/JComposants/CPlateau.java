@@ -9,6 +9,7 @@ import Vue.Theme;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class CPlateau extends JPanel implements Observateur {
     CollecteurEvenements controleur;
@@ -29,14 +30,17 @@ public class CPlateau extends JPanel implements Observateur {
         switch (num) {
             case 1:
                 drawContenu(g,Epoque.PASSE);
+                drawFocus(g,Epoque.PASSE);
                 drawBrillance(g,Epoque.PASSE);
                 break;
             case 2:
                 drawContenu(g,Epoque.PRESENT);
+                drawFocus(g,Epoque.PRESENT);
                 drawBrillance(g,Epoque.PRESENT);
                 break;
             case 3:
                 drawContenu(g,Epoque.FUTUR);
+                drawFocus(g,Epoque.FUTUR);
                 drawBrillance(g,Epoque.FUTUR);
                 break;
         }
@@ -114,6 +118,16 @@ public class CPlateau extends JPanel implements Observateur {
             }
             y += hauteurCase;
             x = bordureGauche;
+        }
+    }
+
+    public void drawFocus(Graphics g, Epoque e) {
+        Jeu j = controleur.jeu();
+        if(j.joueurPionsBlancs().focus() == e){
+            g.drawImage(Theme.instance().focus_blanc(),0, 0, getWidth(), getHeight(), this);
+        }
+        if(j.joueurPionsNoirs().focus() == e){
+            g.drawImage(Theme.instance().focus_noir(),0, 0, getWidth(), getHeight(), this);
         }
     }
 

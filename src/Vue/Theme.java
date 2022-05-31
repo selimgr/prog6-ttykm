@@ -87,8 +87,8 @@ public class Theme {
         noir_selectionne_futur = Imager.getImageBuffer(pions + "noir_selectionne_futur.png");
 
         String focus = theme + "/focus/";
-        focus_blanc = Imager.getImageBuffer(focus + "focus_blanc.png");
-        focus_noir = Imager.getImageBuffer(focus + "focus_noir.png");
+        focus_blanc = Imager.getImageBuffer(focus + "focusB.png");
+        focus_noir = Imager.getImageBuffer(focus + "focusN.png");
 
         String chapitre_1 = theme + "/chapitre_1/";
         graine_inactif = Imager.getImageBuffer(chapitre_1 + "graine_inactif.png");

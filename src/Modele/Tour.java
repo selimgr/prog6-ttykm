@@ -1,8 +1,10 @@
 package Modele;
 
+import java.io.Serializable;
+
 import static java.util.Objects.requireNonNull;
 
-class Tour {
+class Tour implements Serializable {
     private final Epoque focus;
     private Case pion;
     private Coup coup1, coup2;

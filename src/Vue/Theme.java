@@ -4,7 +4,6 @@ import Global.Configuration;
 import Modele.Epoque;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -24,8 +23,7 @@ public class Theme {
     private Image noir_inactif, noir_actif_passe, noir_actif_present, noir_actif_futur;
     private Image noir_selectionne_passe, noir_selectionne_present, noir_selectionne_futur;
     private Image focus_blanc, focus_noir;
-    private Image graine_inactif, graine_actif_passe, graine_actif_present, graine_actif_futur;
-    private Image arbuste, arbre, arbre_couche_haut, arbre_couche_droite, arbre_couche_bas, arbre_couche_gauche;
+    private Image graine, arbuste, arbre, arbre_couche_haut, arbre_couche_droite, arbre_couche_bas, arbre_couche_gauche;
     private Image surbrillance_passe, surbrillance_present, surbrillance_futur;
 
     private Theme() {
@@ -42,7 +40,7 @@ public class Theme {
     private void chargerDimensions(String theme) {
         Properties p = new Properties();
 
-        InputStream in = chargerFichier(theme + File.separator + "plateaux" + File.separator + "dimensions.cfg");
+        InputStream in = chargerFichier(theme + "/plateaux/dimensions.cfg");
 
         try {
             p.load(in);
@@ -60,10 +58,10 @@ public class Theme {
     }
 
     void charger() {
-        String theme = "assets" + File.separator + "themes" + File.separator + Configuration.instance().lirePropriete("Theme");
+        String theme = "assets/themes/" + Configuration.instance().lirePropriete("Theme");
         chargerDimensions(theme);
 
-        String plateaux = theme + File.separator + "plateaux" + File.separator;
+        String plateaux = theme + "/plateaux/";
         plateau_passe_inactif = Imager.getImageBuffer(plateaux + "plateau_passe_inactif-min.png");
         plateau_present_inactif = Imager.getImageBuffer(plateaux + "plateau_present_inactif-min.png");
         plateau_futur_inactif = Imager.getImageBuffer(plateaux + "plateau_futur_inactif-min.png");
@@ -71,7 +69,7 @@ public class Theme {
         plateau_present_actif = Imager.getImageBuffer(plateaux + "plateau_present_actif-min.png");
         plateau_futur_actif = Imager.getImageBuffer(plateaux + "plateau_futur_actif-min.png");
 
-        String pions = theme + File.separator + "pions" + File.separator;
+        String pions = theme + "/pions/";
         blanc_inactif = Imager.getImageBuffer(pions + "blanc_inactif.png");
         blanc_actif_passe = Imager.getImageBuffer(pions + "blanc_actif_passe.png");
         blanc_actif_present = Imager.getImageBuffer(pions + "blanc_actif_present.png");
@@ -87,15 +85,12 @@ public class Theme {
         noir_selectionne_present = Imager.getImageBuffer(pions + "noir_selectionne_present.png");
         noir_selectionne_futur = Imager.getImageBuffer(pions + "noir_selectionne_futur.png");
 
-        String focus = theme + File.separator + "focus" + File.separator;
+        String focus = theme + "/focus/";
         focus_blanc = Imager.getImageBuffer(focus + "focus_blanc.png");
         focus_noir = Imager.getImageBuffer(focus + "focus_noir.png");
 
-        String chapitre_1 = theme + File.separator + "chapitre_1" + File.separator;
-        graine_inactif = Imager.getImageBuffer(chapitre_1 + "graine_inactif.png");
-        graine_actif_passe = Imager.getImageBuffer(chapitre_1 + "graine_actif_passe.png");
-        graine_actif_present = Imager.getImageBuffer(chapitre_1 + "graine_actif_present.png");
-        graine_actif_futur = Imager.getImageBuffer(chapitre_1 + "graine_actif_futur.png");
+        String chapitre_1 = theme + "/chapitre_1/";
+        graine = Imager.getImageBuffer(chapitre_1 + "graine.png");
         arbuste = Imager.getImageBuffer(chapitre_1 + "arbuste.png");
         arbre = Imager.getImageBuffer(chapitre_1 + "arbre.png");
         arbre_couche_haut = Imager.getImageBuffer(chapitre_1 + "arbre_couche_haut.png");
@@ -103,7 +98,7 @@ public class Theme {
         arbre_couche_bas = Imager.getImageBuffer(chapitre_1 + "arbre_couche_bas.png");
         arbre_couche_gauche = Imager.getImageBuffer(chapitre_1 + "arbre_couche_gauche.png");
 
-        String surbrillance = theme + File.separator + "surbrillance" + File.separator;
+        String surbrillance = theme + "/surbrillance/";
         surbrillance_passe = Imager.getImageBuffer(surbrillance + "surbrillance_passe.png");
         surbrillance_present = Imager.getImageBuffer(surbrillance + "surbrillance_present.png");
         surbrillance_futur = Imager.getImageBuffer(surbrillance + "surbrillance_futur.png");
@@ -171,11 +166,11 @@ public class Theme {
 
     public Image blanc_actif(Epoque e) {
         if (e == Epoque.PASSE) {
-            return blanc_actif_passe;
+            return blanc_selectionne_passe;
         } else if (e == Epoque.PRESENT) {
-            return blanc_actif_present;
+            return blanc_selectionne_present;
         } else if (e == Epoque.FUTUR) {
-            return blanc_actif_futur;
+            return blanc_selectionne_futur;
         } else {
             return null;
         }
@@ -183,11 +178,11 @@ public class Theme {
 
     public Image blanc_selectionne(Epoque e) {
         if (e == Epoque.PASSE) {
-            return blanc_selectionne_passe;
+            return blanc_actif_passe;
         } else if (e == Epoque.PRESENT) {
-            return blanc_selectionne_present;
+            return blanc_actif_present;
         } else if (e == Epoque.FUTUR) {
-            return blanc_selectionne_futur;
+            return blanc_actif_futur;
         } else {
             return null;
         }
@@ -199,11 +194,11 @@ public class Theme {
 
     public Image noir_actif(Epoque e) {
         if (e == Epoque.PASSE) {
-            return noir_actif_passe;
+            return noir_selectionne_passe;
         } else if (e == Epoque.PRESENT) {
-            return noir_actif_present;
+            return noir_selectionne_present;
         } else if (e == Epoque.FUTUR) {
-            return noir_actif_futur;
+            return noir_selectionne_futur;
         } else {
             return null;
         }
@@ -211,11 +206,11 @@ public class Theme {
 
     public Image noir_selectionne(Epoque e) {
         if (e == Epoque.PASSE) {
-            return noir_selectionne_passe;
+            return noir_actif_passe;
         } else if (e == Epoque.PRESENT) {
-            return noir_selectionne_present;
+            return noir_actif_present;
         } else if (e == Epoque.FUTUR) {
-            return noir_selectionne_futur;
+            return noir_actif_futur;
         } else {
             return null;
         }
@@ -229,20 +224,8 @@ public class Theme {
         return focus_noir;
     }
 
-    public Image graine_inactif() {
-        return graine_inactif;
-    }
-
-    public Image graine_actif(Epoque e) {
-        if (e == Epoque.PASSE) {
-            return graine_actif_passe;
-        } else if (e == Epoque.PRESENT) {
-            return graine_actif_present;
-        } else if (e == Epoque.FUTUR) {
-            return graine_actif_futur;
-        } else {
-            return null;
-        }
+    public Image graine() {
+        return graine;
     }
 
     public Image arbuste() {

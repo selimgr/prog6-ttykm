@@ -12,6 +12,6 @@ class AdaptateurTemps implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        controleur.temps();
     }
 }

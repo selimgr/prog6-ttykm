@@ -52,7 +52,8 @@ public class InterfaceGraphique implements Runnable {
 
 
         // Ajout du timer
-
+        Timer time = new Timer(16, new AdaptateurTemps(controleur));
+        time.start();
 
         // Un clic sur le bouton de fermeture clos l'application
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +81,7 @@ public class InterfaceGraphique implements Runnable {
 
         switch (nom) {
             case Vues.DEMARRAGE:
-                vue = new VueDemarrage(controleur);
+                vue = new VueDemarrage();
                 break;
             case Vues.MENU_PRINCIPAL:
                 vue = new VueMenuPrincipal(controleur);

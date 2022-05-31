@@ -1,18 +1,17 @@
 package Controleur;
 
+import Global.Configuration;
 import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;
-
-// TODO: A tester
-
-// TODO: Compléter le controleur
 
 public class ControleurMediateur implements CollecteurEvenements {
     Vues vues;
     Jeu jeu;
     IA ia1;
     IA ia2;
+    Animation animIA1, animIA2;
+    Animation animDemarrage;
 
     @Override
     public void fixerMediateurVues(Vues v) {
@@ -157,10 +156,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void toucheClavier(String touche) {
+        if (jeu().partieTerminee()) {
+            return;
+        }
         switch (touche) {
-            case "IA":
-                jouerIA();
-                break;
             case "Annuler":
                 annuler();
                 break;
@@ -174,32 +173,62 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void temps() {
+        if (animDemarrage == null) {
+            int lenteurAnimation = Integer.parseInt(Configuration.instance().lirePropriete("LenteurAnimationDemarrage"));
+            animDemarrage = new AnimationDemarrage(lenteurAnimation, this);
+        }
+        if (!animDemarrage.terminee()) {
+            animDemarrage.temps();
+            return;
+        }
+        if (jeu == null || jeu().joueurActuel().estHumain()) {
+            return;
+        }
+        if (jeu().joueurActuel() == jeu().joueur1()) {
+            animIA1.temps();
+        } else {
+            animIA2.temps();
+        }
+    }
+
+    private void initIA(TypeJoueur typeJ1, TypeJoueur typeJ2){
+        int lenteurAnimationIA = Integer.parseInt(Configuration.instance().lirePropriete("LenteurAnimationIA"));
+
+        switch (typeJ1) {
+            case IA_DIFFICILE:
+                ia1 = new IA_Difficile(jeu(), jeu().joueur1(), jeu().joueur2(), this);
+                break;
+            case IA_MOYEN:
+                ia1 = new IA_Facile(jeu(), jeu().joueur1(), jeu().joueur2(), this);
+                break;
+                ia1 = new IA_Facile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
+            case IA_FACILE:
+                ia1 = new IA_Aleatoire(jeu(), jeu().joueur1(), jeu().joueur2(), this);
+                break;
+        }
+        if (typeJ1 != TypeJoueur.HUMAIN) {
+            animIA1 = new AnimationIA(lenteurAnimationIA, ia1);
+        }
+
+        switch (typeJ2) {
+            case IA_DIFFICILE:
+                ia2 = new IA_Difficile(jeu(),jeu().joueur2(), jeu().joueur1(),this);
+                break;
+            case IA_MOYEN:
+                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);
+                break;
+                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
+            case IA_FACILE:
+                ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);
+                break;
+        }
+        if (typeJ2 != TypeJoueur.HUMAIN) {
+            animIA2 = new AnimationIA(lenteurAnimationIA, ia2);
+        }
     }
 
     @Override
-    public void jouerIA() {
-        if (jeu().joueurActuel().type() != TypeJoueur.HUMAIN && !jeu().pionSelectionne()) {
-            if (jeu().joueurActuel() == jeu().joueur1()) ia1.jouer();
-            else if (jeu().joueurActuel() == jeu().joueur2()) ia2.jouer();
-        }
-    }
-
-    private void initIA(TypeJoueur typeJ1,TypeJoueur typeJ2){
-        switch (typeJ1){
-            case IA_DIFFICILE:
-                ia1 = new IA_Difficile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
-            case IA_MOYEN:
-                ia1 = new IA_Facile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
-            case IA_FACILE:
-                ia1 = new IA_Aleatoire(jeu(),jeu().joueur1(),jeu().joueur2(),this);break;
-        }
-        switch (typeJ2){
-            case IA_DIFFICILE:
-                ia2 = new IA_Difficile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
-            case IA_MOYEN:
-                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
-            case IA_FACILE:
-                ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);break;
-        }
+    public void sauvegarderPartie() {
+        jeu().sauvegarder();
     }
 }

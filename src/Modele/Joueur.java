@@ -1,8 +1,10 @@
 package Modele;
 
+import java.io.Serializable;
+
 import static java.util.Objects.requireNonNull;
 
-public class Joueur {
+public class Joueur implements Serializable {
     private final String nom;
     private final TypeJoueur type;
     private final int handicap;

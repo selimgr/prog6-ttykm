@@ -1,11 +1,13 @@
 package Vue;
 
+import Modele.Joueur;
+import Patterns.Observateur;
 import Vue.JComposants.CButton;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class VueFinPartie extends JPanel {
+public class VueFinPartie extends JPanel{
 
     CollecteurEvenements controleur;
     private JPanel MenuFin;
@@ -99,5 +101,30 @@ public class VueFinPartie extends JPanel {
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
         g.drawImage(t, 0, 0, width, height, null);
+
+        Image tete = changeNom();
+        int width2 = (int) (getWidth() / 4);
+        int height2 = (tete.getHeight(null) * width2) / tete.getWidth(null);
+        g.drawImage(tete, (getWidth()/2 - (width2/2)) , 5, width2, height2, null);
+
+    }
+
+
+    public Image changeNom() {
+        Joueur vainqueur = controleur.jeu().vainqueur();
+        Image tete;
+        if(!vainqueur.estHumain()){
+            tete = Imager.getImageBuffer("assets/robot.jpg");
+        } else {
+            tete = Imager.getImageBuffer("assets/humain.png");
+        }
+
+        bravoJoueurAGagneLabel.setText(controleur.jeu().vainqueur().nom() + " a gagné !");
+        if(controleur.jeu().vainqueur()==controleur.jeu().joueur1()){
+            dommageJoueurAPerduLabel.setText(controleur.jeu().joueur2().nom() + " a perdu");
+        } else{
+            dommageJoueurAPerduLabel.setText(controleur.jeu().joueur1().nom() + " a perdu");
+        }
+        return tete;
     }
 }

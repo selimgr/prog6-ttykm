@@ -263,14 +263,17 @@ public class Jeu extends Observable {
     }
 
     public boolean partieTerminee() {
-        return tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2);
+        boolean ret=false;
+        if (tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2)){
+            ret=true;
+        }
+        return ret;
     }
 
     public Joueur vainqueur() {
         if (!partieTerminee()) {
             return null;
         }
-
         if (plateau.nombrePlateauVide(Pion.BLANC) >= 2) {
             return joueur1.pions() == Pion.NOIR ? joueur1 : joueur2;
         } else {

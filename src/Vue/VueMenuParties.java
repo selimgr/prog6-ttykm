@@ -121,7 +121,7 @@ public class VueMenuParties extends JPanel {
         final com.intellij.uiDesigner.core.Spacer spacer5 = new com.intellij.uiDesigner.core.Spacer();
         MenuParties.add(spacer5, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
-        Font label1Font = this.$$$getFont$$$("Fira Code", Font.BOLD, 20, label1.getFont());
+        Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 20, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
         label1.setForeground(new Color(-8));
         label1.setText("Choisir une partie à charger ou à supprimer :");

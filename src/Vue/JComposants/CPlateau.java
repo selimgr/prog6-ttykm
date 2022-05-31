@@ -44,24 +44,25 @@ public class CPlateau extends JPanel implements Observateur {
 
     private void drawPlateau(Graphics g) {
         Image current;
+        boolean changementFocus = controleur.jeu().prochaineActionChangementFocus();
 
         switch (num) {
             case 1:
-                if (controleur.jeu().joueurActuel().aFocusPasse()) {
+                if (changementFocus && !controleur.jeu().joueurActuel().aFocusPasse()) {
                     current = Theme.instance().plateau_passe_actif();
                 } else {
                     current = Theme.instance().plateau_passe_inactif();
                 }
                 break;
             case 2:
-                if (controleur.jeu().joueurActuel().aFocusPresent()) {
+                if (changementFocus && !controleur.jeu().joueurActuel().aFocusPresent()) {
                     current = Theme.instance().plateau_present_actif();
                 } else {
                     current = Theme.instance().plateau_present_inactif();
                 }
                 break;
             case 3:
-                if (controleur.jeu().joueurActuel().aFocusFutur()) {
+                if (changementFocus && !controleur.jeu().joueurActuel().aFocusFutur()) {
                     current = Theme.instance().plateau_futur_actif();
                 } else {
                     current = Theme.instance().plateau_futur_inactif();
@@ -120,6 +121,10 @@ public class CPlateau extends JPanel implements Observateur {
     public void drawBrillance(Graphics g, Epoque e) {
         Jeu j = controleur.jeu();
         Plateau p = j.plateau();
+
+        if (controleur.jeu().prochaineActionChangementFocus()) {
+            return;
+        }
 
         if (j.pionSelectionne() && j.pion() != null) {
             int x = bordureGauche + j.pion().colonne() * largeurCase;

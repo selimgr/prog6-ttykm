@@ -1,13 +1,16 @@
 package Vue;
 
+import Controleur.IA_Facile;
 import Modele.Joueur;
+import Modele.TypeJoueur;
 import Patterns.Observateur;
 import Vue.JComposants.CButton;
+import org.w3c.dom.Text;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class VueFinPartie extends JPanel {
+public class VueFinPartie extends JPanel{
 
     CollecteurEvenements controleur;
     private JPanel MenuFin;
@@ -15,6 +18,7 @@ public class VueFinPartie extends JPanel {
     private JLabel dommageJoueurAPerduLabel;
     private JButton rejouerButton;
     private JButton menuPrincipalButton;
+    private JLabel TexteIA;
     Image t;
 
     public VueFinPartie(CollecteurEvenements c) {
@@ -22,6 +26,7 @@ public class VueFinPartie extends JPanel {
 
         bravoJoueurAGagneLabel = new JLabel();
         dommageJoueurAPerduLabel = new JLabel();
+        TexteIA = new JLabel();
         menuPrincipalButton = new CButton("");
         rejouerButton = new CButton("").vert();
 
@@ -46,31 +51,29 @@ public class VueFinPartie extends JPanel {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setOpaque(false);
-        MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         bravoJoueurAGagneLabel = new JLabel();
         bravoJoueurAGagneLabel.setOpaque(true);
-        bravoJoueurAGagneLabel.setText(" Bravo, <Joueur> a gagné !");
+        bravoJoueurAGagneLabel.setText("Bravo, <Joueur> a gagné !");
         bravoJoueurAGagneLabel.setVisible(true);
-        panel1.add(bravoJoueurAGagneLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 35), null, 0, false));
+        panel1.add(bravoJoueurAGagneLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         dommageJoueurAPerduLabel = new JLabel();
         dommageJoueurAPerduLabel.setOpaque(true);
-        dommageJoueurAPerduLabel.setText(" Dommage, <Joueur> a perdu !");
-        panel1.add(dommageJoueurAPerduLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 35), null, 0, false));
+        dommageJoueurAPerduLabel.setText("Dommage, <Joueur> a perdu !");
+        panel1.add(dommageJoueurAPerduLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel2.setOpaque(false);
-        MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         rejouerButton.setOpaque(false);
         rejouerButton.setText("Rejouer");
         panel2.add(rejouerButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         menuPrincipalButton.setText("Menu Principal");
         panel2.add(menuPrincipalButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        MenuFin.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTH, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(11, 400), new Dimension(-1, 700), 0, false));
     }
 
     /**
@@ -107,25 +110,47 @@ public class VueFinPartie extends JPanel {
         Image tete = changeNom();
         int width2 = (int) (getWidth() / 4);
         int height2 = (tete.getHeight(null) * width2) / tete.getWidth(null);
-        g.drawImage(tete, (getWidth() / 2 - (width2 / 2)), 5, width2, height2, null);
+        g.drawImage(tete, (getWidth()/2 - (width2/2)) , 5, width2, height2, null);
 
     }
 
 
     public Image changeNom() {
         Joueur vainqueur = controleur.jeu().vainqueur();
+        Joueur perdant;
+        if (vainqueur == controleur.jeu().joueur1()) {
+            perdant = controleur.jeu().joueur2();
+        } else {
+            perdant = controleur.jeu().joueur1();
+        }
         Image tete;
-        if (!vainqueur.estHumain()) {
+        if(!vainqueur.estHumain()){
             tete = Imager.getImageBuffer("assets/robot.png");
+            if(perdant.estHumain()) {
+                TexteIA.setText("Tu as perdu, réessaye une prochaine fois");
+                bravoJoueurAGagneLabel.setText("L'" + vainqueur.type() + " " + vainqueur.nom() + " a gagné !");
+                dommageJoueurAPerduLabel.setText("");
+            } else {
+                TexteIA.setText("L'" + vainqueur.type() + " " + vainqueur.nom() + " a été meilleure");
+                bravoJoueurAGagneLabel.setText("");
+                dommageJoueurAPerduLabel.setText("L'" + perdant.type() + " " + perdant.nom() + " a perdu");
+            }
         } else {
             tete = Imager.getImageBuffer("assets/human.png");
-        }
-
-        bravoJoueurAGagneLabel.setText(controleur.jeu().vainqueur().nom() + " a gagné !");
-        if (controleur.jeu().vainqueur() == controleur.jeu().joueur1()) {
-            dommageJoueurAPerduLabel.setText(controleur.jeu().joueur2().nom() + " a perdu");
-        } else {
-            dommageJoueurAPerduLabel.setText(controleur.jeu().joueur1().nom() + " a perdu");
+            if(perdant.estHumain()) {
+                bravoJoueurAGagneLabel.setText("Félicitations " + vainqueur.nom() + " tu as battu ton adversaire !");
+                dommageJoueurAPerduLabel.setText("Dommage, " + perdant.nom() + " tu as perdu...");
+            } else {
+                TexteIA.setText("");
+                dommageJoueurAPerduLabel.setText("");
+                if (perdant.type()== TypeJoueur.IA_FACILE){
+                    bravoJoueurAGagneLabel.setText("Pas mal " + vainqueur.nom() + " tu as réussi à vaincre l'IA Facile, mais en même temps c'était facile...");
+                } else if(perdant.type()== TypeJoueur.IA_MOYEN){
+                    bravoJoueurAGagneLabel.setText("Pas mal " + vainqueur.nom() + " tu as réussi à vaincre l'IA Moyenne, essaye de vaincre l'IA Difficile maintenant");
+                } else {
+                    bravoJoueurAGagneLabel.setText("Félicitations " + vainqueur.nom()+ ", tu as vaincu l'IA Difficile !");
+                }
+            }
         }
         return tete;
     }

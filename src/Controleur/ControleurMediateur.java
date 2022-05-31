@@ -1,6 +1,7 @@
 package Controleur;
 
 import Global.Configuration;
+import Global.Sauvegarde;
 import Modele.*;
 import Vue.CollecteurEvenements;
 import Vue.Vues;

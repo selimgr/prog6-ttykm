@@ -28,12 +28,12 @@ public class IA_Aleatoire extends IA {
         System.out.println(coups.size() + " !1! " + alea);
         c1 = coups.get(alea);
         System.out.println(( (Mouvement) c1).toString());
-        if (ctrl.jeu().prochaineActionSelectionPion())
+        if (ctrl.jeu().prochaineActionSelectionPion()) {
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque()); // Selection
-        if (ctrl.jeu().prochaineActionJouerCoup())
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque()); // coup 1
+        }
         // Second coup avec pion déjà choisi
-        if (ctrl.jeu().prochaineActionJouerCoup()) {
+        else if (ctrl.jeu().prochaineActionJouerCoup()) {
             coups = ctrl.jeu().plateau().casesJouablesEpoque(ia, true, c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
             if (coups.size() ==0 ) throw new IllegalStateException("Aucun coups jouable");
             alea = r.nextInt(coups.size());
@@ -43,10 +43,12 @@ public class IA_Aleatoire extends IA {
             //System.out.println(( (Mouvement) c2).arrivee().toString());
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque()); // coup 2
 
+        } else if (ctrl.jeu().prochaineActionChangementFocus()) {
+            //Changement de focus
+            alea = r.nextInt(3);
+            gestionFocus(alea);
+
         }
-        //Changement de focus
-        alea = r.nextInt(3);
-        gestionFocus(alea);
         return 1;
     }
 

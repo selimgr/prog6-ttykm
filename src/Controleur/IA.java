@@ -52,7 +52,7 @@ public abstract class IA {
     // TODO : Ajouter les bonnes heuristiques : voir document IA
     //public abstract void heuristic();
 
-    private int isFeuille(int horizon,Plateau p){
+    int isFeuille(int horizon,Plateau p){
         if (ctrl.jeu().plateau().nombrePlateauVide(adversaire.pions()) >=2){
             int r = 1;
             if (ctrl.jeu().joueurActuel() == ia) r =-1;

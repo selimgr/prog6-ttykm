@@ -8,6 +8,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.Locale;
 
@@ -21,6 +23,7 @@ public class VueMenuParties extends JPanel {
     private JScrollPane Allparties;
     private JList list1;
     Image t;
+    final String[] selected = new String[1];
 
     public VueMenuParties(CollecteurEvenements c) {
         controleur = c;
@@ -39,8 +42,15 @@ public class VueMenuParties extends JPanel {
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 
-        chargerPartie.addActionListener((e) -> Sauvegarde.charger((String) (list1.getSelectedValue())));
+        chargerPartie.addActionListener((e) -> {
+            System.out.println("Chargement de : " + selected[0]);
+            Sauvegarde.charger(selected[0]);
+        });
 
+        supprimerPartie.addActionListener((e) -> {
+            System.out.println("Suppression de : " + selected[0]);
+            Sauvegarde.supprimer(selected[0]);
+        });
     }
 
     /**
@@ -64,7 +74,7 @@ public class VueMenuParties extends JPanel {
         supprimerPartie.setText("Supprimer Partie");
         panel1.add(supprimerPartie, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         chargerPartie.setBackground(new Color(-3949375));
-        chargerPartie.setFocusable(false);
+        chargerPartie.setFocusable(true);
         chargerPartie.setForeground(new Color(-16744180));
         chargerPartie.setHideActionText(false);
         chargerPartie.setHorizontalTextPosition(0);
@@ -186,5 +196,13 @@ public class VueMenuParties extends JPanel {
 
         // Assignation du modele créé à la liste courante
         list1.setModel(defaultListModel2);
+
+        list1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                selected[0] = String.valueOf(list1.getSelectedValue());
+            }
+        });
     }
 }

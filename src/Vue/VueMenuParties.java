@@ -26,6 +26,7 @@ public class VueMenuParties extends JPanel {
         menuPrincipalButton = new CButton();
         chargerPartie = new CButton().vert();
         supprimerPartie = new CButton().rouge();
+        list1 = new JList();
 
         // Chargement des assets
         t = Imager.getImageBuffer("assets/topbanner.png");
@@ -33,6 +34,13 @@ public class VueMenuParties extends JPanel {
         MenuParties = this;
 
         $$$setupUI$$$();
+
+        // Création du model avec les string que l'on veut
+        final DefaultListModel defaultListModel2 = new DefaultListModel();
+        defaultListModel2.addElement("Essai 1");
+
+        // Assignation du modele créé à la liste courante
+        list1.setModel(defaultListModel2);
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 
@@ -70,7 +78,6 @@ public class VueMenuParties extends JPanel {
         Allparties.setOpaque(false);
         MenuParties.add(Allparties, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTH, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         Allparties.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        list1 = new JList();
         Font list1Font = this.$$$getFont$$$(null, -1, 14, list1.getFont());
         if (list1Font != null) list1.setFont(list1Font);
         list1.setForeground(new Color(-16777216));

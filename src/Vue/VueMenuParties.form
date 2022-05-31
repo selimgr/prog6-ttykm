@@ -57,7 +57,7 @@
         </properties>
         <border type="none" title=""/>
         <children>
-          <component id="1e544" class="javax.swing.JList" binding="list1" default-binding="true">
+          <component id="1e544" class="javax.swing.JList" binding="list1" custom-create="true">
             <constraints/>
             <properties>
               <font size="14"/>

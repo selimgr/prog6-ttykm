@@ -1,5 +1,6 @@
 package Vue;
 
+import Global.Sauvegarde;
 import Vue.JComposants.CButton;
 
 import javax.swing.*;
@@ -7,6 +8,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.io.*;
 import java.util.Locale;
 
 public class VueMenuParties extends JPanel {
@@ -38,6 +40,12 @@ public class VueMenuParties extends JPanel {
         // Création du model avec les string que l'on veut
         final DefaultListModel defaultListModel2 = new DefaultListModel();
         defaultListModel2.addElement("Essai 1");
+
+        /* Partie récupération des noms de parties sauvegardées
+        for (String s : Sauvegarde.liste()) {
+            defaultListModel2.addElement(s);
+        }
+        */
 
         // Assignation du modele créé à la liste courante
         list1.setModel(defaultListModel2);

@@ -57,11 +57,18 @@ public class VueMenuSaisies extends JPanel {
         MenuSaisies = this;
         $$$setupUI$$$();
 
-        typeJ1.setEditable(true);
-        typeJ2.setEditable(true);
-        niveauJ1.setEditable(true);
-        niveauJ2.setEditable(true);
-        comboBox1.setEditable(true);
+        for (Component co : MenuSaisies.getComponents()) {
+            if (co instanceof JPanel) {
+                for (Component coo : ((JPanel) co).getComponents()) {
+                    if (coo instanceof CComboxBox) ((CComboxBox) coo).setEditable(true);
+                    else {
+                        coo.setFont(new Font("Arial", Font.PLAIN, 14));
+                        coo.setForeground(Color.WHITE);
+                    }
+                }
+            }
+
+        }
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 

@@ -11,7 +11,6 @@ public class CComboxBox extends JComboBox {
         super();
         setEditor(new CComboxBoxEditor());
         setRenderer(new CComboxBoxRenderer());
-
         setUI(new BasicComboBoxUI(){
             @Override
             protected JButton createArrowButton() {

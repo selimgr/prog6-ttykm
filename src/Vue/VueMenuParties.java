@@ -37,19 +37,6 @@ public class VueMenuParties extends JPanel {
 
         $$$setupUI$$$();
 
-        // Création du model avec les string que l'on veut
-        final DefaultListModel defaultListModel2 = new DefaultListModel();
-        defaultListModel2.addElement("Essai 1");
-
-        /* Partie récupération des noms de parties sauvegardées
-        for (String s : Sauvegarde.liste()) {
-            defaultListModel2.addElement(s);
-        }
-        */
-
-        // Assignation du modele créé à la liste courante
-        list1.setModel(defaultListModel2);
-
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 
     }
@@ -180,5 +167,21 @@ public class VueMenuParties extends JPanel {
         int height = (t.getHeight(null) * width) / t.getWidth(null);
 
         g.drawImage(t, 0, 0, width, height, null);
+
+        // Création du model avec les string que l'on veut
+        final DefaultListModel defaultListModel2 = new DefaultListModel();
+        //defaultListModel2.addElement("Essai 1");
+
+        // Partie récupération des noms de parties sauvegardées
+        if (Sauvegarde.liste() == null) {
+            defaultListModel2.addElement("");
+        } else {
+            for (String s : Sauvegarde.liste()) {
+                defaultListModel2.addElement(s);
+            }
+        }
+
+        // Assignation du modele créé à la liste courante
+        list1.setModel(defaultListModel2);
     }
 }

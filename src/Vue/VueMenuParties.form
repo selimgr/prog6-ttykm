@@ -38,6 +38,7 @@
             </constraints>
             <properties>
               <background color="-3949375"/>
+              <focusable value="true"/>
               <foreground color="-16744180"/>
               <hideActionText value="false"/>
               <horizontalTextPosition value="0"/>

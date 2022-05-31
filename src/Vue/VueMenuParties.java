@@ -39,6 +39,8 @@ public class VueMenuParties extends JPanel {
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 
+        chargerPartie.addActionListener((e) -> Sauvegarde.charger((String) (list1.getSelectedValue())));
+
     }
 
     /**
@@ -62,6 +64,7 @@ public class VueMenuParties extends JPanel {
         supprimerPartie.setText("Supprimer Partie");
         panel1.add(supprimerPartie, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         chargerPartie.setBackground(new Color(-3949375));
+        chargerPartie.setFocusable(false);
         chargerPartie.setForeground(new Color(-16744180));
         chargerPartie.setHideActionText(false);
         chargerPartie.setHorizontalTextPosition(0);

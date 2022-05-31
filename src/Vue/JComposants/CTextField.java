@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class CTextField extends JTextField {
 
-    private int radius = 5;
+    private int radius = 0;
 
     public CTextField() {
 
@@ -15,7 +15,7 @@ public class CTextField extends JTextField {
         // Customise le style du bouton
         setBackground(Color.white);
         setForeground(Color.black);
-        setFont(new Font("Arial", Font.BOLD, 14));
+        setFont(new Font("Arial", Font.PLAIN, 15));
         setBorder(new EmptyBorder(5, 5, 5, 5));
         setCursor(new Cursor(Cursor.TEXT_CURSOR));
     }

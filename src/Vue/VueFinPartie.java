@@ -7,7 +7,7 @@ import Vue.JComposants.CButton;
 import javax.swing.*;
 import java.awt.*;
 
-public class VueFinPartie extends JPanel{
+public class VueFinPartie extends JPanel {
 
     CollecteurEvenements controleur;
     private JPanel MenuFin;
@@ -46,29 +46,31 @@ public class VueFinPartie extends JPanel{
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        MenuFin.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setOpaque(false);
-        MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        MenuFin.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         bravoJoueurAGagneLabel = new JLabel();
         bravoJoueurAGagneLabel.setOpaque(true);
-        bravoJoueurAGagneLabel.setText("Bravo, <Joueur> a gagné !");
+        bravoJoueurAGagneLabel.setText(" Bravo, <Joueur> a gagné !");
         bravoJoueurAGagneLabel.setVisible(true);
-        panel1.add(bravoJoueurAGagneLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        panel1.add(bravoJoueurAGagneLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 35), null, 0, false));
         dommageJoueurAPerduLabel = new JLabel();
         dommageJoueurAPerduLabel.setOpaque(true);
-        dommageJoueurAPerduLabel.setText("Dommage, <Joueur> a perdu !");
-        panel1.add(dommageJoueurAPerduLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, -1), null, 0, false));
+        dommageJoueurAPerduLabel.setText(" Dommage, <Joueur> a perdu !");
+        panel1.add(dommageJoueurAPerduLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(300, 35), null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel2.setOpaque(false);
-        MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        MenuFin.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         rejouerButton.setOpaque(false);
         rejouerButton.setText("Rejouer");
         panel2.add(rejouerButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         menuPrincipalButton.setText("Menu Principal");
         panel2.add(menuPrincipalButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
+        MenuFin.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_NORTH, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(11, 400), new Dimension(-1, 700), 0, false));
     }
 
     /**
@@ -105,7 +107,7 @@ public class VueFinPartie extends JPanel{
         Image tete = changeNom();
         int width2 = (int) (getWidth() / 4);
         int height2 = (tete.getHeight(null) * width2) / tete.getWidth(null);
-        g.drawImage(tete, (getWidth()/2 - (width2/2)) , 5, width2, height2, null);
+        g.drawImage(tete, (getWidth() / 2 - (width2 / 2)), 5, width2, height2, null);
 
     }
 
@@ -113,16 +115,16 @@ public class VueFinPartie extends JPanel{
     public Image changeNom() {
         Joueur vainqueur = controleur.jeu().vainqueur();
         Image tete;
-        if(!vainqueur.estHumain()){
+        if (!vainqueur.estHumain()) {
             tete = Imager.getImageBuffer("assets/robot.png");
         } else {
             tete = Imager.getImageBuffer("assets/human.png");
         }
 
         bravoJoueurAGagneLabel.setText(controleur.jeu().vainqueur().nom() + " a gagné !");
-        if(controleur.jeu().vainqueur()==controleur.jeu().joueur1()){
+        if (controleur.jeu().vainqueur() == controleur.jeu().joueur1()) {
             dommageJoueurAPerduLabel.setText(controleur.jeu().joueur2().nom() + " a perdu");
-        } else{
+        } else {
             dommageJoueurAPerduLabel.setText(controleur.jeu().joueur1().nom() + " a perdu");
         }
         return tete;

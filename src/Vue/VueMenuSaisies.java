@@ -1,14 +1,11 @@
 package Vue;
 
-import Modele.Pion;
 import Modele.TypeJoueur;
 import Vue.JComposants.CButton;
 import Vue.JComposants.CComboxBox;
-import Vue.JComposants.CComboxBoxUI;
 import Vue.JComposants.CTextField;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -40,12 +37,12 @@ public class VueMenuSaisies extends JPanel {
         controleur = c;
 
         typeJ1 = new CComboxBox();
-        typeJ2 = new JComboBox();
-        niveauJ1 = new JComboBox();
-        niveauJ2 = new JComboBox();
+        typeJ2 = new CComboxBox();
+        niveauJ1 = new CComboxBox();
+        niveauJ2 = new CComboxBox();
         menuPrincipalButton = new CButton();
         jouerButton = new CButton().vert();
-        comboBox1 = new JComboBox();
+        comboBox1 = new CComboxBox();
         nomJ1 = new CTextField();
         nomJ2 = new CTextField();
 
@@ -59,6 +56,12 @@ public class VueMenuSaisies extends JPanel {
 
         MenuSaisies = this;
         $$$setupUI$$$();
+
+        typeJ1.setEditable(true);
+        typeJ2.setEditable(true);
+        niveauJ1.setEditable(true);
+        niveauJ2.setEditable(true);
+        comboBox1.setEditable(true);
 
         menuPrincipalButton.addActionListener((e) -> controleur.afficherMenuPrincipal());
 
@@ -204,7 +207,6 @@ public class VueMenuSaisies extends JPanel {
         JoueurCommence = new JLabel();
         JoueurCommence.setText("Qui commence ?");
         panel1.add(JoueurCommence, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        comboBox1 = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel5 = new DefaultComboBoxModel();
         defaultComboBoxModel5.addElement("Aléatoire");
         defaultComboBoxModel5.addElement("Joueur 1");

@@ -143,6 +143,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicSouris(int l, int c, Epoque e) {
+        if (jeu().partieTerminee()) {
+            return;
+        }
         if (jeu().joueurActuel().estHumain()) {
             jouer(l, c, e);
         }
@@ -175,7 +178,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             animDemarrage.temps();
             return;
         }
-        if (jeu == null || jeu().joueurActuel().estHumain()) {
+        if (jeu == null || jeu().partieTerminee() || jeu().joueurActuel().estHumain()) {
             return;
         }
         if (jeu().joueurActuel() == jeu().joueur1()) {
@@ -227,6 +230,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void chargerPartie(String nomSauvegarde) {
         jeu = Sauvegarde.charger(nomSauvegarde);
+        initIA(jeu().joueur1().type(), jeu().joueur2().type());
         vues.nouvellePartie();
         afficherJeu();
     }

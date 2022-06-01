@@ -14,9 +14,10 @@ public class CComboxBox extends JComboBox {
         setUI(new BasicComboBoxUI(){
             @Override
             protected JButton createArrowButton() {
-                JButton b = super.createArrowButton();
+                JButton b = new CButton().carre();
                 b.setBackground(new Color(47, 47, 47, 255));
-                b.setText("cc");
+                b.setText("▼");
+                b.setFocusPainted(false);
                 b.setFocusable(false);
                 b.setBorder(new EmptyBorder(0,0,0,0));
                 b.setBorderPainted(false);

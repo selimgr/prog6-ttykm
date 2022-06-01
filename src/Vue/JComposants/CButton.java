@@ -56,7 +56,7 @@ public class CButton extends JButton {
             if (getModel().isRollover()) g2.setColor(highlightBackgroundColor); else g2.setColor(normalBackgroundColor);
             setForeground(textColor);
         }
-        g2.fillRoundRect(0, 0, getSize().width-1, getSize().height-1, radius, radius);
+        g2.fillRoundRect(0, 0, radius > 0 ? getSize().width-1 : getSize().width, radius > 0 ? getSize().height-1 : getSize().height, radius, radius);
 
         super.paintComponent(g);
     }
@@ -111,6 +111,11 @@ public class CButton extends JButton {
         setFont(new Font("Arial", Font.BOLD, 24));
         setBorder(new EmptyBorder(10, 35, 10, 35));
 
+        return this;
+    }
+
+    public CButton carre() {
+        radius = 0;
         return this;
     }
 

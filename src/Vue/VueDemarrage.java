@@ -36,7 +36,7 @@ class VueDemarrage extends JPanel {
         super.paintComponent(g);
 
         int w = getWidth(), h = getHeight();
-        g.setColor(new Color(14, 14, 14));
+        g.setColor(new Color(21, 21, 21));
         g.fillRect(0, 0, w, h);
         // --
 

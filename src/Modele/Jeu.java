@@ -3,7 +3,14 @@ package Modele;
 import Global.Configuration;
 import Global.Sauvegarde;
 import Patterns.Observable;
+import Vue.Imager;
+import Vue.JComposants.CButton;
 
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.Random;
 
@@ -325,6 +332,20 @@ public class Jeu extends Observable implements Serializable {
     }
 
     public void sauvegarder() {
-        sauvegarde.enregistrer();
+        try {
+            sauvegarde.enregistrer();
+            JButton button = new CButton("OK");
+            button.addActionListener(e -> JOptionPane.getRootFrame().dispose());
+
+            JOptionPane.showOptionDialog(null,
+                    "Sauvegarde réussie",
+                    "Sauvegarde",
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    new ImageIcon(Imager.getScaledImage("assets/ok.png", 24, 24)),
+                    new JButton[]{button}, button);
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la sauvegarde");
+        }
     }
 }

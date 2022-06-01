@@ -126,6 +126,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     public void jouer(int l, int c, Epoque e) {
+        if (jeu().partieTerminee()) {
+            return;
+        }
         //System.out.print("Jouer   :" + jeu.joueurActuel().nom() + " (l,c,e)=("+l+","+c+","+e+") ");
         jeu().jouer(l, c, e);
     }
@@ -223,8 +226,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void sauvegarderPartie() {
-        jeu().sauvegarder();
+    public boolean sauvegarderPartie() {
+        return jeu().sauvegarder();
     }
 
     @Override

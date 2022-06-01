@@ -6,11 +6,6 @@ import Patterns.Observable;
 import Vue.Imager;
 import Vue.JComposants.CButton;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.Random;
 
@@ -270,11 +265,8 @@ public class Jeu extends Observable implements Serializable {
     }
 
     public boolean partieTerminee() {
-        boolean ret=false;
-        if (tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2)){
-            ret=true;
-        }
-        return ret;
+        return tourActuel.termine() && (plateau.nombrePlateauVide(Pion.BLANC) >= 2 || plateau.nombrePlateauVide(Pion.NOIR) >= 2);
+
     }
 
     public Joueur vainqueur() {
@@ -331,29 +323,12 @@ public class Jeu extends Observable implements Serializable {
         return tourActuel.pion();
     }
 
-    public void sauvegarder() {
-        JButton button = new CButton("OK");
-        button.addActionListener(e -> JOptionPane.getRootFrame().dispose());
+    public boolean sauvegarder() {
         try {
             sauvegarde.enregistrer();
-
-            JOptionPane.showOptionDialog(null,
-                    "Sauvegarde réussie",
-                    "Sauvegarde",
-                    JOptionPane.OK_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    new ImageIcon(Imager.getScaledImage("assets/ok.png", 24, 24)),
-                    new JButton[]{button}, button);
+            return true;
         } catch (Exception e) {
-            System.out.println("Erreur lors de la sauvegarde: " + e);
-
-            JOptionPane.showOptionDialog(null,
-                    "Échec de la sauvegarde",
-                    "Sauvegarde",
-                    JOptionPane.OK_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    new ImageIcon(Imager.getScaledImage("assets/err.png", 24, 24)),
-                    new JButton[]{button}, button);
+            return false;
         }
     }
 }

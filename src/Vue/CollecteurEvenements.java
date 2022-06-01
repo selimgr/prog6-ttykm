@@ -44,7 +44,7 @@ public interface CollecteurEvenements {
 
     void temps();
 
-    void sauvegarderPartie();
+    boolean sauvegarderPartie();
 
     void chargerPartie(String nomSauvegarde);
 }

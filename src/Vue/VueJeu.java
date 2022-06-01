@@ -403,7 +403,7 @@ class VueJeu extends JPanel {
         topFrame.requestFocus();
 
         vueNiveau.miseAJour();
-        texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
+        //texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
 
         JButton button = new CButton("OK");
         button.addActionListener(e -> JOptionPane.getRootFrame().dispose());

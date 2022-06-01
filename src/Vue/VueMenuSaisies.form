@@ -47,7 +47,7 @@
               <focusCycleRoot value="false"/>
               <focusTraversalPolicyProvider value="false"/>
               <focusable value="true"/>
-              <text value="Ate"/>
+              <text value="J1"/>
               <visible value="true"/>
             </properties>
           </component>
@@ -112,7 +112,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="Tom"/>
+              <text value="J2"/>
             </properties>
           </component>
           <component id="1aeba" class="javax.swing.JComboBox" binding="typeJ2" custom-create="true">

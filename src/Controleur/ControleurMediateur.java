@@ -193,14 +193,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         switch (typeJ1) {
             case IA_DIFFICILE:
-                ia1 = new IA_Difficile(jeu(), jeu().joueur1(), jeu().joueur2(), this);
-                break;
+                ia1 = new IA_Difficile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
             case IA_MOYEN:
-                ia1 = new IA_Moyen(jeu(), jeu().joueur1(), jeu().joueur2(), this);
-                break;
+                ia1 = new IA_Facile(jeu(),jeu().joueur1(), jeu().joueur2(),this);break;
             case IA_FACILE:
-                ia1 = new IA_Facile(jeu(), jeu().joueur1(), jeu().joueur2(), this);
-                break;
+                ia1 = new IA_Aleatoire(jeu(),jeu().joueur1(),jeu().joueur2(),this);break;
         }
         if (typeJ1 != TypeJoueur.HUMAIN) {
             animIA1 = new AnimationIA(lenteurAnimationIA, ia1);
@@ -208,17 +205,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         switch (typeJ2) {
             case IA_DIFFICILE:
-                ia2 = new IA_Difficile(jeu(),jeu().joueur2(), jeu().joueur1(),this);
-                break;
+                ia2 = new IA_Difficile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
             case IA_MOYEN:
-                ia2 = new IA_Moyen(jeu(),jeu().joueur2(), jeu().joueur1(),this);
-                break;
+                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(),this);break;
             case IA_FACILE:
-                ia2 = new IA_Facile(jeu(),jeu().joueur2(), jeu().joueur1(), this);
-                break;
-        }
-        if (typeJ2 != TypeJoueur.HUMAIN) {
-            animIA2 = new AnimationIA(lenteurAnimationIA, ia2);
+                ia2 = new IA_Aleatoire(jeu(),jeu().joueur2(), jeu().joueur1(), this);break;
         }
     }
 

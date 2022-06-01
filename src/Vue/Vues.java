@@ -60,7 +60,7 @@ public class Vues {
 
     public void afficherR(){
         try {
-            File rules = new File("./resources/assets/regles_du_jeu_FR.pdf");
+            File rules = new File("assets/regles_du_jeu_FR.pdf");
             Desktop.getDesktop().open(rules);
         } catch (IOException e1) {
             e1.printStackTrace();

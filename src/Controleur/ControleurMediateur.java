@@ -234,4 +234,10 @@ public class ControleurMediateur implements CollecteurEvenements {
         vues.nouvellePartie();
         afficherJeu();
     }
+    public boolean isIACalculating(){
+        boolean calcul = false;
+        if (ia1 != null) calcul |= ia1.is_calculating();
+        if (ia2 != null) calcul |= ia2.is_calculating();
+        return calcul;
+    }
 }

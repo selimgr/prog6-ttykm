@@ -1,6 +1,5 @@
 package Controleur;
 
-import Global.Configuration;
 import Modele.*;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ public abstract class IA {
     Epoque focusChangement,coupFocus;
     int minmax;
     boolean nouveauTour;
+    boolean is_calculating;
 
     IA(Jeu jeu,Joueur ia, Joueur adversaire,ControleurMediateur ctrl) {
         this.ia =ia;
@@ -27,6 +27,7 @@ public abstract class IA {
         this.ctrl =ctrl;
         minmax = 1;
         nouveauTour = true;
+        is_calculating =false;
     }
 
 
@@ -118,10 +119,10 @@ public abstract class IA {
             //if (c.estPlantation()) ctrl.selectionnerPlanterGraine();
             //if (c.estRecolte()) ctrl.selectionnerRecolterGraine();
             // Second coup
-            Configuration.instance().logger().info("JOUER C2 :");
+            System.out.print("JOUER C2 :");
             ctrl.jouer(arr.ligne(), arr.colonne(), arr.epoque());
             valeur = choixFocus(arr, j, c, c2, valeur, horizon);
-            Configuration.instance().logger().info("Annuler C2 ? :");
+            System.out.print("Annuler C2 ? :");
             ctrl.annuler();
         }
         return valeur;
@@ -133,8 +134,7 @@ public abstract class IA {
         for (int foc = 0; foc < 3; foc++) {
             if (j.focus().indice() != foc){
                 //System.out.print("JOUER FOC :");
-                Epoque prec = ctrl.jeu().joueurActuel().focus();
-                ctrl.jeu().joueurActuel().fixerFocus(Epoque.depuisIndice(foc));
+                ctrl.jouer(0,0,Epoque.depuisIndice(foc));
                 valeur2 = valeur;
                 if (j == ia         ) valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
                 if (j == adversaire ) valeur = Math.min(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
@@ -146,7 +146,7 @@ public abstract class IA {
                     coupFocus = Epoque.depuisIndice(foc);
                 }
                 //System.out.print("Annuler Foc ? :");
-                ctrl.jeu().joueurActuel().fixerFocus(prec);
+                ctrl.annuler();
             }
         }
         return valeur;
@@ -155,18 +155,20 @@ public abstract class IA {
     void jouer() {
         // Calcul du meilleur coup et stockage dans c1 et c2
         if (nouveauTour) {
+            is_calculating =true;
             this.calcul(ctrl.jeu().plateau(), horizon, 1);
             nouveauTour = false;
+            is_calculating =false;
+
         }
         if (ctrl.jeu().prochaineActionSelectionPion()) {
             //Selection
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
-        }
-        else if (ctrl.jeu().prochaineActionJouerCoup() && ctrl.jeu().nombreCoupsRestantsTour() == 2) {
             // Coup 1
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
-            // Coup 2
-        } else if (ctrl.jeu().prochaineActionJouerCoup()) {
+        }
+        // Coup 2
+        else if (ctrl.jeu().prochaineActionJouerCoup()) {
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
         }
         //focus
@@ -174,5 +176,9 @@ public abstract class IA {
             ctrl.jouer(0, 0, focusChangement);
             nouveauTour = true;
         }
+    }
+
+    public boolean is_calculating(){
+        return is_calculating;
     }
 }

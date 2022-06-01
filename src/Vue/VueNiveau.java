@@ -1,5 +1,6 @@
 package Vue;
 
+import Controleur.ControleurMediateur;
 import Patterns.Observateur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
@@ -88,7 +89,7 @@ class VueNiveau extends JPanel implements Observateur {
 
     @Override
     public void miseAJour() {
-        if (controleur.jeu().partieTerminee()) {
+        if (controleur.jeu().partieTerminee() && !((ControleurMediateur)controleur).isIACalculating()) {
             // Laissez le commentaire en hommage à Tom... #ripFinPartieEmoji
             //controleur.afficherMenuFin();
             parent.showEnd();

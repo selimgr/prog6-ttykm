@@ -4,6 +4,7 @@ import Patterns.Observateur;
 import Vue.JComposants.CGraines;
 import Vue.JComposants.CInfoJoueur;
 import Vue.JComposants.CPlateau;
+import Vue.JComposants.CTexteJeu;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -17,10 +18,10 @@ class VueNiveau extends JPanel implements Observateur {
     MatteBorder top, bottom;
     CInfoJoueur j1, j2;
     CGraines g;
-    JLabel texteJeu;
+    CTexteJeu texteJeu;
     VueJeu parent;
 
-    VueNiveau(CollecteurEvenements c, VueJeu p, CInfoJoueur j1, CInfoJoueur j2, CGraines g, JLabel texteJeu) {
+    VueNiveau(CollecteurEvenements c, VueJeu p, CInfoJoueur j1, CInfoJoueur j2, CGraines g, CTexteJeu texteJeu) {
         controleur = c;
         parent = p;
         passe = new CPlateau(1, controleur);
@@ -91,6 +92,7 @@ class VueNiveau extends JPanel implements Observateur {
         j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
         texteJeu.setText(" Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer ! ");
+
         // Actualisation de l'affichage du joueur courant
         if(controleur.jeu().joueurActuel().aPionsBlancs()) {
             texteJeu.setBackground(new Color(255, 116, 87));

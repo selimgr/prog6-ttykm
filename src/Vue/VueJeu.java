@@ -16,7 +16,8 @@ class VueJeu extends JPanel {
     private final CInfoJoueur j1;
     private final CInfoJoueur j2;
     private final CGraines seeds;
-    private JLabel texteJeu, endGameText;
+    private JLabel endGameText;
+    private CTexteJeu texteJeu;
     private final JPanel backgroundTop, backgroundBottom;
     private JFrame topFrame;
 
@@ -217,12 +218,12 @@ class VueJeu extends JPanel {
         topPanel.add(buttonsPanel, c);
 
         // --
+        c.insets = new Insets(8, 0, 0, 0);
         JPanel textPanel = new JPanel();
         textPanel.setOpaque(false);
-        texteJeu = new JLabel("");
+        texteJeu = new CTexteJeu();
         texteJeu.setFont(new Font("Arial", Font.PLAIN, 18));
         texteJeu.setForeground(Color.white);
-        texteJeu.setBorder(new EmptyBorder(10,0,0,0));
         textPanel.add(texteJeu);
 
         c.fill = GridBagConstraints.BOTH;

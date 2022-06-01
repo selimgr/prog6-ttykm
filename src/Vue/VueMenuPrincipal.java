@@ -44,7 +44,6 @@ class VueMenuPrincipal extends JPanel {
                 chargerPartie,
                 regles,
                 Box.createRigidArea(new Dimension(10, 30)),
-                didacticiel,
                 quitter
         };
 

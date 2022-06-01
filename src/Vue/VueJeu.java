@@ -295,9 +295,8 @@ class VueJeu extends JPanel {
         controlsPanel.setOpaque(false);
 
         JButton[] controls = {
-            new CButton(new ImageIcon(Imager.getScaledImage("assets/undo.png", 18, 18))),
-            new CButton(new ImageIcon(Imager.getScaledImage("assets/redo.png", 18, 18))),
-//            new CButton("Fin tour")
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/undo.png", 18, 18))).blanc(),
+            new CButton(new ImageIcon(Imager.getScaledImage("assets/redo.png", 18, 18))).blanc(),
         };
 
         controls[0].addActionListener(e -> controleur.annuler());
@@ -309,7 +308,7 @@ class VueJeu extends JPanel {
         }
 
         c.fill = GridBagConstraints.VERTICAL;
-        c.anchor = GridBagConstraints.LINE_END;
+        c.anchor = CENTER;
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 1;

@@ -133,7 +133,8 @@ public abstract class IA {
         for (int foc = 0; foc < 3; foc++) {
             if (j.focus().indice() != foc){
                 //System.out.print("JOUER FOC :");
-                ctrl.jouer(0,0,Epoque.depuisIndice(foc));
+                Epoque prec = ctrl.jeu().joueurActuel().focus();
+                ctrl.jeu().joueurActuel().fixerFocus(Epoque.depuisIndice(foc));
                 valeur2 = valeur;
                 if (j == ia         ) valeur = Math.max(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
                 if (j == adversaire ) valeur = Math.min(valeur, calcul(ctrl.jeu().plateau(), horizon - 1, minmax * -1));
@@ -145,7 +146,7 @@ public abstract class IA {
                     coupFocus = Epoque.depuisIndice(foc);
                 }
                 //System.out.print("Annuler Foc ? :");
-                ctrl.annuler();
+                ctrl.jeu().joueurActuel().fixerFocus(prec);
             }
         }
         return valeur;
@@ -160,11 +161,12 @@ public abstract class IA {
         if (ctrl.jeu().prochaineActionSelectionPion()) {
             //Selection
             ctrl.jouer(c1.depart().ligne(), c1.depart().colonne(), c1.depart().epoque());
+        }
+        else if (ctrl.jeu().prochaineActionJouerCoup() && ctrl.jeu().nombreCoupsRestantsTour() == 2) {
             // Coup 1
             ctrl.jouer(c1.arrivee().ligne(), c1.arrivee().colonne(), c1.arrivee().epoque());
-        }
-        // Coup 2
-        else if (ctrl.jeu().prochaineActionJouerCoup()) {
+            // Coup 2
+        } else if (ctrl.jeu().prochaineActionJouerCoup()) {
             ctrl.jouer(c2.arrivee().ligne(), c2.arrivee().colonne(), c2.arrivee().epoque());
         }
         //focus

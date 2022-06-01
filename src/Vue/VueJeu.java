@@ -197,7 +197,29 @@ class VueJeu extends JPanel {
         }
 
         JButton sauvegarder = new CButton(new ImageIcon(Imager.getScaledImage("assets/Disquette.png", 20, 20))).blanc();
-        sauvegarder.addActionListener(e -> controleur.sauvegarderPartie());
+        sauvegarder.addActionListener(e -> {
+            JButton button = new CButton("OK");
+            button.addActionListener(f -> JOptionPane.getRootFrame().dispose());
+            if (controleur.sauvegarderPartie()) {
+                JOptionPane.showOptionDialog(null,
+                        "Sauvegarde réussie",
+                        "Sauvegarde",
+                        JOptionPane.OK_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon(Imager.getScaledImage("assets/ok.png", 24, 24)),
+                        new JButton[]{button}, button);
+            } else {
+                System.out.println("Erreur lors de la sauvegarde: " + e);
+
+                JOptionPane.showOptionDialog(null,
+                        "Échec de la sauvegarde",
+                        "Sauvegarde",
+                        JOptionPane.OK_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon(Imager.getScaledImage("assets/err.png", 24, 24)),
+                        new JButton[]{button}, button);
+            }
+        });
 
         JButton regles = new CButton("? Règles").blanc();
         regles.addActionListener(e -> controleur.afficherRegles());

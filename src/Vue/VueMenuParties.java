@@ -10,7 +10,6 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
 import java.util.Locale;
 
 public class VueMenuParties extends JPanel {

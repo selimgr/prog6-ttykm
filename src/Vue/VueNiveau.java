@@ -90,7 +90,16 @@ class VueNiveau extends JPanel implements Observateur {
         j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
         j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
-        texteJeu.setText("Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer !");
+        texteJeu.setText(" Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer ! ");
+        // Actualisation de l'affichage du joueur courant
+        if(controleur.jeu().joueurActuel().aPionsBlancs()) {
+            texteJeu.setBackground(Color.BLUE);
+            texteJeu.setForeground(Color.WHITE);
+        } else {
+            texteJeu.setBackground(Color.WHITE);
+            texteJeu.setForeground(Color.BLACK);
+        }
+        texteJeu.setOpaque(true);
 
         if (controleur.jeu().partieTerminee()) {
             // Laissez le commentaire en hommage à Tom... #ripFinPartieEmoji

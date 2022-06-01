@@ -1,17 +1,11 @@
 package Vue;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 class VueDemarrage extends JPanel {
-
-    Image t;
     Image logo;
     int logoHeight;
-    int called = 0;
 
     VueDemarrage() {
         setBackground(Color.PINK);

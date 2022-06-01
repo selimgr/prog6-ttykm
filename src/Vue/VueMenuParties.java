@@ -158,6 +158,7 @@ public class VueMenuParties extends JPanel {
         return MenuParties;
     }
 
+
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }

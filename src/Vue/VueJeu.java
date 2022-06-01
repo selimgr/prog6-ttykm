@@ -180,14 +180,14 @@ class VueJeu extends JPanel {
         menuBar.add(menu);
 
         JMenuItem[] menu_items = {
-                new JMenuItem("Sauvegarder"),
+                //new JMenuItem("Sauvegarder"),
                 new JMenuItem("Menu principal"),
                 new JMenuItem("Quitter")
         };
 
-        menu_items[0].addActionListener(e -> controleur.sauvegarderPartie());
-        menu_items[1].addActionListener(e -> controleur.afficherMenuPrincipal());
-        menu_items[2].addActionListener(e -> controleur.toClose());
+        //menu_items[0].addActionListener(e -> controleur.sauvegarderPartie());
+        menu_items[0].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[1].addActionListener(e -> controleur.toClose());
 
         for (JMenuItem menu_item: menu_items) {
             menu_item.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -196,11 +196,18 @@ class VueJeu extends JPanel {
             menu.add(menu_item);
         }
 
+        JButton sauvegarder = new CButton(new ImageIcon(Imager.getScaledImage("assets/Disquette.png", 20, 20))).blanc();
+        sauvegarder.addActionListener(e -> controleur.sauvegarderPartie());
+
         JButton regles = new CButton("? Règles").blanc();
         regles.addActionListener(e -> controleur.afficherRegles());
 
         menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
+        menuBar.add(sauvegarder);
+
+        menuBar.add(Box.createRigidArea(new Dimension(10, 0)));
         menuBar.add(regles);
+
 
         c.fill = GridBagConstraints.VERTICAL;
         c.anchor = GridBagConstraints.LINE_START;

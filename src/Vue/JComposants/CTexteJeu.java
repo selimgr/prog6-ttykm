@@ -28,7 +28,7 @@ public class CTexteJeu extends JPanel {
 
     @Override
     public void setForeground(Color fg) {
-        super.setForeground(fg);
+//        super.setForeground(fg);
         if (text != null) text.setForeground(fg);
     }
 

@@ -185,7 +185,30 @@ class VueJeu extends JPanel {
                 new JMenuItem("Quitter")
         };
 
-        menu_items[0].addActionListener(e -> controleur.sauvegarderPartie());
+        menu_items[0].addActionListener(e -> {
+            JButton button = new CButton("OK");
+            button.addActionListener(f -> JOptionPane.getRootFrame().dispose());
+
+                if (controleur.sauvegarderPartie()) {
+                    JOptionPane.showOptionDialog(null,
+                            "Sauvegarde réussie",
+                            "Sauvegarde",
+                            JOptionPane.OK_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(Imager.getScaledImage("assets/ok.png", 24, 24)),
+                            new JButton[]{button}, button);
+                } else {
+                        System.out.println("Erreur lors de la sauvegarde: " + e);
+
+                        JOptionPane.showOptionDialog(null,
+                                "Échec de la sauvegarde",
+                                "Sauvegarde",
+                                JOptionPane.OK_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE,
+                                new ImageIcon(Imager.getScaledImage("assets/err.png", 24, 24)),
+                                new JButton[]{button}, button);
+                }
+        });
         menu_items[1].addActionListener(e -> controleur.afficherMenuPrincipal());
         menu_items[2].addActionListener(e -> controleur.toClose());
 

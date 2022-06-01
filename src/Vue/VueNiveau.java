@@ -87,6 +87,12 @@ class VueNiveau extends JPanel implements Observateur {
 
     @Override
     public void miseAJour() {
+        if (controleur.jeu().partieTerminee()) {
+            // Laissez le commentaire en hommage à Tom... #ripFinPartieEmoji
+            //controleur.afficherMenuFin();
+            parent.showEnd();
+        }
+
         j1.setPions(controleur.jeu().joueurPionsBlancs().nombrePionsReserve());
         j2.setPions(controleur.jeu().joueurPionsNoirs().nombrePionsReserve());
         g.setSeeds(controleur.jeu().plateau().nombreGrainesReserve());
@@ -100,11 +106,5 @@ class VueNiveau extends JPanel implements Observateur {
             texteJeu.setForeground(Color.BLACK);
         }
         texteJeu.setOpaque(true);
-
-        if (controleur.jeu().partieTerminee()) {
-            // Laissez le commentaire en hommage à Tom... #ripFinPartieEmoji
-            //controleur.afficherMenuFin();
-            parent.showEnd();
-        }
     }
 }

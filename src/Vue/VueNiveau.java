@@ -93,7 +93,7 @@ class VueNiveau extends JPanel implements Observateur {
         texteJeu.setText(" Au tour de " + controleur.jeu().joueurActuel().nom() + " de jouer ! ");
         // Actualisation de l'affichage du joueur courant
         if(controleur.jeu().joueurActuel().aPionsBlancs()) {
-            texteJeu.setBackground(Color.BLUE);
+            texteJeu.setBackground(new Color(255, 116, 87));
             texteJeu.setForeground(Color.WHITE);
         } else {
             texteJeu.setBackground(Color.WHITE);

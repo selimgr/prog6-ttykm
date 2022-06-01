@@ -180,20 +180,19 @@ class VueJeu extends JPanel {
         menuBar.add(menu);
 
         JMenuItem[] menu_items = {
-                new JCheckBoxMenuItem("Musique"),
                 new JMenuItem("Sauvegarder"),
                 new JMenuItem("Menu principal"),
                 new JMenuItem("Quitter")
         };
 
-        menu_items[1].addActionListener(e -> controleur.sauvegarderPartie());
-        menu_items[2].addActionListener(e -> controleur.afficherMenuPrincipal());
-        menu_items[3].addActionListener(e -> controleur.toClose());
+        menu_items[0].addActionListener(e -> controleur.sauvegarderPartie());
+        menu_items[1].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[2].addActionListener(e -> controleur.toClose());
 
         for (JMenuItem menu_item: menu_items) {
             menu_item.setFont(new Font("Arial", Font.PLAIN, 14));
             menu_item.setBorderPainted(false);
-            menu_item.setUI(menu_item.getClass().getName().contains("Check") ? new CCheckBoxMenuItemUI() : new CMenuItemUI(true));
+            menu_item.setUI(new CMenuItemUI(true));
             menu.add(menu_item);
         }
 
@@ -398,6 +397,19 @@ class VueJeu extends JPanel {
 
         vueNiveau.miseAJour();
         texteJeu.setText(controleur.jeu().joueurActuel().nom() + " débute la partie !");
+
+        JButton button = new CButton("OK");
+        button.addActionListener(e -> JOptionPane.getRootFrame().dispose());
+
+        if (controleur.jeu().joueurActuel().estHumain() && controleur.jeu().joueurSuivant().estHumain()) {
+            JOptionPane.showOptionDialog(null,
+                    (controleur.jeu().joueurActuel().estHumain() ? controleur.jeu().joueurActuel().nom() : "L'IA " + controleur.jeu().joueurActuel().nom()) + " débute la partie avec les pions " + (controleur.jeu().joueurActuel().aPionsBlancs() ? "blancs" : "noirs") + " sur le plateau " + controleur.jeu().joueurActuel().focus().name() + ".\n" + (controleur.jeu().joueurSuivant().estHumain() ? "Le joueur " + controleur.jeu().joueurSuivant().nom() : "L'IA " + controleur.jeu().joueurSuivant().nom()) + " a les pions " + (controleur.jeu().joueurSuivant().aPionsBlancs() ? "blancs" : "noirs") + " et débutera sur le plateau " + (controleur.jeu().joueurSuivant().focus().name()) + ".",
+                    "Début de la partie",
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    new ImageIcon(Imager.getScaledImage("assets/info.png", 24, 24)),
+                    new JButton[]{button}, button);
+        }
     }
 
 }

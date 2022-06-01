@@ -2,8 +2,11 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class Vues {
     JFrame frame;
@@ -58,12 +61,17 @@ public class Vues {
         frame.dispose();
     }
 
-    public void afficherR(){
+    public void afficherR() {
         try {
-            File rules = new File("assets/regles_du_jeu_FR.pdf");
-            Desktop.getDesktop().open(rules);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            String inputPdf = "assets/regles_du_jeu_FR.pdf";
+            Path tempOutput = Files.createTempFile("TempManual", ".pdf");
+            tempOutput.toFile().deleteOnExit();
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream(inputPdf)) {
+                Files.copy(is, tempOutput, StandardCopyOption.REPLACE_EXISTING);
+            }
+            Desktop.getDesktop().open(tempOutput.toFile());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

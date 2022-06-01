@@ -6,11 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 class VueMenuPrincipal extends JPanel {
-
-    int logoHeight;
     Image t;
     Image logo;
-    int called = 0;
 
     VueMenuPrincipal(CollecteurEvenements c) {
         setBackground(Color.PINK);

@@ -332,10 +332,10 @@ public class Jeu extends Observable implements Serializable {
     }
 
     public void sauvegarder() {
+        JButton button = new CButton("OK");
+        button.addActionListener(e -> JOptionPane.getRootFrame().dispose());
         try {
             sauvegarde.enregistrer();
-            JButton button = new CButton("OK");
-            button.addActionListener(e -> JOptionPane.getRootFrame().dispose());
 
             JOptionPane.showOptionDialog(null,
                     "Sauvegarde réussie",
@@ -345,7 +345,15 @@ public class Jeu extends Observable implements Serializable {
                     new ImageIcon(Imager.getScaledImage("assets/ok.png", 24, 24)),
                     new JButton[]{button}, button);
         } catch (Exception e) {
-            System.out.println("Erreur lors de la sauvegarde");
+            System.out.println("Erreur lors de la sauvegarde: " + e);
+
+            JOptionPane.showOptionDialog(null,
+                    "Échec de la sauvegarde",
+                    "Sauvegarde",
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    new ImageIcon(Imager.getScaledImage("assets/err.png", 24, 24)),
+                    new JButton[]{button}, button);
         }
     }
 }

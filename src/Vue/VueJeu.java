@@ -180,14 +180,14 @@ class VueJeu extends JPanel {
         menuBar.add(menu);
 
         JMenuItem[] menu_items = {
-                //new JMenuItem("Sauvegarder"),
+                new JMenuItem("Nouvelle Partie"),
                 new JMenuItem("Menu principal"),
                 new JMenuItem("Quitter")
         };
 
-        //menu_items[0].addActionListener(e -> controleur.sauvegarderPartie());
-        menu_items[0].addActionListener(e -> controleur.afficherMenuPrincipal());
-        menu_items[1].addActionListener(e -> controleur.toClose());
+        menu_items[0].addActionListener(e -> controleur.afficherMenuNouvellePartie());
+        menu_items[1].addActionListener(e -> controleur.afficherMenuPrincipal());
+        menu_items[2].addActionListener(e -> controleur.toClose());
 
         for (JMenuItem menu_item: menu_items) {
             menu_item.setFont(new Font("Arial", Font.PLAIN, 14));
